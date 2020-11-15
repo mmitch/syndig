@@ -10,6 +10,8 @@ binary  := synth
 
 all:	build
 
+.PHONY: all build clean
+
 build:	$(binary)
 
 $(binary): $(objects)

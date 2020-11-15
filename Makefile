@@ -4,30 +4,43 @@ warnings   := -Wall -Wextra
 CFLAGS  += $(shell pkg-config --cflags $(pkgconfigs)) $(warnings)
 LDFLAGS += $(shell pkg-config --libs $(pkgconfigs))
 
-sources := $(wildcard *.c)
-objects := $(sources:.c=.o)
-depends := $(sources:.c=.d)
-binary  := synth
+srcdir   := ./src
+builddir := ./build
+bindir   := ./bin
 
-all:	build
+sources := $(wildcard $(srcdir)/*.c)
+objects := $(addprefix $(builddir)/,$(notdir $(sources:.c=.o)))
+depends := $(objects:.o=.d))
+binary  := $(bindir)/synth
+
+all:	$(binary)
 
 include $(depends)
 
-.PHONY: all build clean
+.PHONY: all clean
 
-build:	$(binary)
-
-$(binary): $(objects)
+$(binary): $(objects) | $(bindir)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
-clean:
-	rm -f *~
-	rm -f $(binary)
-	rm -f $(objects)
-	rm -f $(depends)
+$(bindir):
+	mkdir -p $@
 
-%.d: %.c
+$(builddir):
+	mkdir -p $@
+
+$(objects) $(depends): | $(builddir)
+
+clean:
+	rm -f  *~
+	rm -f  $(srcdir)/*~
+	rm -rf $(bindir)
+	rm -rf $(builddir)
+
+$(builddir)/%.o: $(srcdir)/%.c
+	$(CC) $(CFLAGS) -c -o $@ $^
+
+$(builddir)/%.d: $(srcdir)/%.c
 	@set -e; rm -f $@; \
-	$(CC) -MM $(CPPFLAGS) $< > $@.$$$$; \
+	$(CC) -MM $(CFLAGS) $< > $@.$$$$; \
 	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$

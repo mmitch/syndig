@@ -10,8 +10,7 @@
 static snd_seq_t *sequencer;
 static int port;
 
-static const midi_event NOTE_ON  = { .onoff = true  };
-static const midi_event NOTE_OFF = { .onoff = false };
+static midi_event event;
 
 static int alsa_open()
 {
@@ -50,9 +49,9 @@ static int alsa_open()
 static midi_event* alsa_read()
 {
 	int bytes_left;
-	snd_seq_event_t *event;
+	snd_seq_event_t *alsa_event;
 
-	bytes_left = snd_seq_event_input(sequencer, &event);
+	bytes_left = snd_seq_event_input(sequencer, &alsa_event);
 
 	if (bytes_left == -EAGAIN) {
 		return NULL;
@@ -65,13 +64,17 @@ static midi_event* alsa_read()
 
 	// FIXME: this listens on all MIDI channels
 	// all types: https://www.alsa-project.org/alsa-doc/alsa-lib/group___seq_events.html#gaef39e1f267006faf7abc91c3cb32ea40
-	switch (event->type) {
+	switch (alsa_event->type) {
 
 	case SND_SEQ_EVENT_NOTEON:
-		return &NOTE_ON;
+		event.onoff = true;
+		event.note  = alsa_event->data.note.note;
+		return &event;
 	
 	case SND_SEQ_EVENT_NOTEOFF:
-		return &NOTE_OFF;
+		event.onoff = false;
+		event.note  = alsa_event->data.note.note;
+		return &event;
 	}
 
 	return NULL;

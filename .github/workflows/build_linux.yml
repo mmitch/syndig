@@ -1,0 +1,31 @@
+# This workflow will build and test gbsplay in various configurations on Linux.
+
+name: Linux Build
+
+on:
+  push:
+  pull_request:
+    types: [opened]
+  schedule:
+    - cron: '23 4 5 * *'
+
+jobs:
+  build-linux:
+    name: Build on Linux
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        compiler: [gcc, clang]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        sudo apt-get install libpulse-dev
+    - name: Build
+      env:
+        CC: ${{ matrix.compiler }}
+      run: |
+        make

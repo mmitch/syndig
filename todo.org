@@ -5,9 +5,9 @@
 - [ ] MIDI in
 - [ ] note on/note off
 
-* [0/3] todos
+* [1/3] todos
 
-- [ ] build pipeline
+- [X] build pipeline
 - [ ] play corresponding notes on note on/note off
 - [ ] find a better name than /synth/
 

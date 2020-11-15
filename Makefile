@@ -13,6 +13,7 @@ all:	build
 build:	$(binary)
 
 $(binary): $(objects)
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 clean:
 	rm -f *~

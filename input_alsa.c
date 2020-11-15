@@ -6,7 +6,7 @@
 
 #include "input.h"
 
-static snd_rawmidi_t* midi_in = NULL;
+static snd_rawmidi_t *midi_in = NULL;
 
 static uint8_t buffer[1024];
 static const size_t buffer_size = sizeof(buffer);

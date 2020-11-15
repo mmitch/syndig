@@ -9,8 +9,8 @@ static int16_t sawtooth[BUFSIZE];
 
 
 int main() {
-	sound_output* sound = get_sound_output();
-	midi_input* midi = get_midi_input();
+	sound_output *sound = get_sound_output();
+	midi_input *midi = get_midi_input();
 	
 	sound->open();
 	midi->open();
@@ -23,7 +23,7 @@ int main() {
 
 	bool playing = false;
 	while(true) {
-		midi_event* input = midi->read();
+		midi_event *input = midi->read();
 		if (input != NULL) {
 			playing = input->onoff;
 		}

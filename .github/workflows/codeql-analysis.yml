@@ -49,6 +49,10 @@ jobs:
         # Prefix the list here with "+" to use these queries and those in the config file.
         # queries: ./path/to/local/query, your-org/your-repo/queries@main
 
+    - name: Install dependencies
+      run: |
+        sudo apt-get install libpulse-dev
+
     - name: Build
       run: |
         make

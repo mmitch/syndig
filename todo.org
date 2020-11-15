@@ -1,0 +1,16 @@
+* [2/4] prototyping
+
+- [X] working pulse sound output
+- [X] simple oscillator
+- [ ] MIDI in
+- [ ] note on/note off
+
+* [0/3] todos
+
+- [ ] build pipeline
+- [ ] play corresponding notes on note on/note off
+- [ ] find a better name than /synth/
+
+* [0/1] features
+
+- [ ] variable sample rate

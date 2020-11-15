@@ -11,6 +11,7 @@
 - [ ] play corresponding notes on note on/note off
 - [ ] find a better name than /synth/
 
-* [0/1] features
+* [0/2] features
 
 - [ ] variable sample rate
+- [ ] refactor duplicated code in error handling (in input and output)

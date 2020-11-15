@@ -1,9 +1,9 @@
-* [2/4] prototyping
+* [4/4] prototyping
 
 - [X] working pulse sound output
 - [X] simple oscillator
-- [ ] MIDI in
-- [ ] note on/note off
+- [X] MIDI in
+- [X] note on/note off
 
 * [1/3] todos
 

@@ -1,4 +1,4 @@
-pkgconfigs := libpulse-simple
+pkgconfigs := libpulse-simple alsa
 warnings   := -Wall -Wextra
 
 CFLAGS  += $(shell pkg-config --cflags $(pkgconfigs)) $(warnings)

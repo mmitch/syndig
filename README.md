@@ -1,6 +1,9 @@
 a simple software synthesizer in C
 ==================================
 
+[![Linux Build status](https://github.com/mmitch/synth/workflows/Linux%20Build/badge.svg?branch=master)](https://github.com/mmitch/synth/actions?query=workflow%3A%22Linux+Build%22)
+[![CodeQL status](https://github.com/mmitch/synth/workflows/CodeQL/badge.svg?branch=master)](https://github.com/mmitch/synth/actions?query=workflow%3ACodeQL)
+
 I started to make some music using (analog) synths, but I only have
 monophonic synthesizers and a drum machine.  I still need something
 simple and polyphonic for strings and chords.
@@ -10,11 +13,8 @@ to roll my own soft-synth?  It's a lot more fun to tinker than to
 choose an existing soft-synth and read a manual ;-)
 
 
-project
--------
-
- * project home: https://github.com/mmitch/synth
-                 (for now, project name subject to change)
+project home: https://github.com/mmitch/synth
+              (for now, project name subject to change)
 
 
 copyright

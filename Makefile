@@ -5,7 +5,7 @@ CFLAGS  += $(shell pkg-config --cflags $(pkgconfigs)) $(warnings)
 LDFLAGS += $(shell pkg-config --libs $(pkgconfigs))
 
 sources := $(wildcard *.c)
-objects := $(patsubst %.c,%.o,$(sources))
+objects := $(sources:.c=.o)
 binary  := synth
 
 all:	build

@@ -5,14 +5,31 @@
 - [X] MIDI in
 - [X] note on/note off
 
-* [2/4] todos
+* [2/5] todos
 
 - [X] build pipeline
 - [X] play corresponding notes on note on/note off
 - [ ] play smooth sounds (it's currently awful)
+- [ ] switch to mono output as long as there is no stereo data
 - [ ] find a better name than /synth/
 
-* [0/2] features
+* [0/13] features
 
 - [ ] variable sample rate
 - [ ] refactor duplicated code in error handling (in input and output)
+- [ ] [0/5] more oscillators
+  - [ ] sine
+  - [ ] triangle
+  - [ ] sawtooth up
+  - [ ] sawtooth down
+  - [ ] wavelets (which?)
+- [ ] use MIDI program change to switch oscillators
+- [ ] multiple oscillators simultaneously?
+- [ ] polyphony
+- [ ] switch stop oldest/newest note on polyphony overflow
+- [ ] phazor effect?  find out how to make atmospheric strings
+- [ ] stereo output?
+- [ ] ADSR envelope
+- [ ] configure ADSR parameters via MIDI controls
+- [ ] support velocity on note on/note off
+- [ ] support aftertouch?

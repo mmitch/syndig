@@ -43,7 +43,6 @@ int main() {
 				if (phase == wavelength_half) {
 					value = 1 << 15;
 				}
-				square[i++] = value;  // twice for stereo
 				square[i]   = value;
 			}
 			sound->write(&square, BUFSIZE);

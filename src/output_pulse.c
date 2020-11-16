@@ -16,7 +16,7 @@ static int pulse_open()
 
 	pulse_spec.format = PA_SAMPLE_S16NE;
 	pulse_spec.rate = 44100;
-	pulse_spec.channels = 2;
+	pulse_spec.channels = 1;
 
 	pulse_handle = pa_simple_new(NULL, PROGRAM_NAME, PA_STREAM_PLAYBACK, NULL, PROGRAM_NAME, &pulse_spec, NULL, NULL, &err);
 	if (!pulse_handle) {

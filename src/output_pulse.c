@@ -7,7 +7,7 @@
 #include "common.h"
 #include "output.h"
 
-pa_simple *pulse_handle;
+static pa_simple *pulse_handle;
 
 static int pulse_open()
 {

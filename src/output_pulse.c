@@ -8,16 +8,15 @@
 #include "output.h"
 
 pa_simple *pulse_handle;
-pa_sample_spec pulse_spec;
 
 static int pulse_open()
 {
-	int err;
-
-	pulse_spec.format = PA_SAMPLE_S16NE;
+	pa_sample_spec pulse_spec;
+	pulse_spec.format = PA_SAMPLE_FLOAT32NE;
 	pulse_spec.rate = 44100;
 	pulse_spec.channels = 1;
 
+	int err;
 	pulse_handle = pa_simple_new(NULL, PROGRAM_NAME, PA_STREAM_PLAYBACK, NULL, PROGRAM_NAME, &pulse_spec, NULL, NULL, &err);
 	if (!pulse_handle) {
 		fprintf(stderr, "pulse: %s\n", pa_strerror(err));

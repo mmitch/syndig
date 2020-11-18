@@ -4,9 +4,11 @@
 #include "input.h"
 #include "output.h"
 
-#define BUFSIZE 1024
-static uint16_t silence[BUFSIZE];
-static uint16_t square[BUFSIZE];
+#define BUFSIZE 128
+#define BUFTYPE uint16_t
+#define BUFBYTES ( BUFSIZE * sizeof( BUFTYPE ) )
+static BUFTYPE silence[BUFSIZE];
+static BUFTYPE square[BUFSIZE];
 
 int main() {
 	sound_output *sound = get_sound_output();
@@ -15,14 +17,11 @@ int main() {
 	sound->open();
 	midi->open();
 
-	// init buffer with simple sawwave
-
 	bool playing = false;
-	// FIXME: this needs floating point arithmetic or other tricks, it sounds awful
 	uint16_t wavelength;
 	uint16_t wavelength_half;
 	uint16_t phase = 0;
-	uint16_t value = 1;
+	BUFTYPE value = 1;
 	while(true) {
 		midi_event *input = midi->read();
 		if (input != NULL) {
@@ -38,17 +37,17 @@ int main() {
 				phase++;
 				if (phase >= wavelength) {
 					phase = 0;
-					value = 0;
+					value = 1;
 				}
 				if (phase == wavelength_half) {
-					value = 1 << 15;
+					value = 1 << 14;
 				}
 				square[i]   = value;
 			}
-			sound->write(&square, BUFSIZE);
+			sound->write(&square, BUFBYTES);
 		} else {
 			// FIXME: use usleep() instead of silent output
-			sound->write(&silence, BUFSIZE);
+			sound->write(&silence, BUFBYTES);
 		}
 	}
 	

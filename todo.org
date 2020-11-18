@@ -13,7 +13,7 @@
 - [X] switch to mono output as long as there is no stereo data
 - [ ] find a better name than /synth/
 
-* [0/13] features
+* [0/15] features
 
 - [ ] variable sample rate
 - [ ] refactor duplicated code in error handling (in input and output)
@@ -33,3 +33,5 @@
 - [ ] configure ADSR parameters via MIDI controls
 - [ ] support velocity on note on/note off
 - [ ] support aftertouch?
+- [ ] add some status output
+- [ ] use main thread for some commands (like quit)

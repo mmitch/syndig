@@ -1,59 +1,35 @@
-#include <stdint.h>
+#include <stdio.h>
+#include <string.h>
 
-#include "hertz.h"
-#include "input.h"
-#include "output.h"
-
-#define BUFSIZE 128
-#define BUFTYPE uint16_t
-#define BUFBYTES ( BUFSIZE * sizeof( BUFTYPE ) )
-static BUFTYPE silence[BUFSIZE];
-static BUFTYPE square[BUFSIZE];
+#include "midi.h"
+#include "oscillator.h"
 
 int main() {
-	sound_output *sound = get_sound_output();
-	midi_input *midi = get_midi_input();
-	
-	sound->open();
-	midi->open();
-
-	bool playing = false;
-	uint16_t wavelength;
-	uint16_t wavelength_half;
-	uint16_t phase = 0;
-	BUFTYPE value = 1;
-	while(true) {
-		midi_event *input = midi->read();
-		if (input != NULL) {
-			playing = input->onoff;
-			if (playing) {
-				// FIXME: get samplerate from somehwere else
-				wavelength = 44100.0 / hertz[input->note];
-				wavelength_half = wavelength / 2;
-			}
-		}
-		if (playing) {
-			for (int i = 0; i < BUFSIZE; i++) {
-				phase++;
-				if (phase >= wavelength) {
-					phase = 0;
-					value = 1;
-				}
-				if (phase == wavelength_half) {
-					value = 1 << 14;
-				}
-				square[i]   = value;
-			}
-			sound->write(&square, BUFBYTES);
-		} else {
-			// FIXME: use usleep() instead of silent output
-			sound->write(&silence, BUFBYTES);
-		}
+	sound_output *sound = NULL;
+	sound = get_sound_output();
+	if (sound->open() != 0) {
+		goto SHUTDOWN;
 	}
-	
-	
-	sound->close();
-	midi->close();
+
+	midi_input *midi  = NULL;
+	midi = get_midi_input();
+	if (midi->open() != 0) {
+		goto SHUTDOWN;
+	}
+
+	while(1) {
+		receive_midi(midi);
+		run_oscillator(sound);
+	}
+
+SHUTDOWN:
+	if (midi != NULL) {
+		midi->close();
+	}
+
+	if (sound != NULL) {
+		sound->close();
+	}
 
 	return 0;
 }

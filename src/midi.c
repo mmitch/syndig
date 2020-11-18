@@ -1,13 +1,18 @@
-#include "input.h"
+#include "envelope.h"
 #include "hertz.h"
+#include "input.h"
 #include "oscillator.h"
 
 extern oscillator_input oscillator;
 
-void receive_midi(midi_input *midi) {
+void receive_midi(midi_input *midi, envelope *envelope) {
 	midi_event *input;
 	while ((input = midi->read()) != NULL) {
-		oscillator.active    = input->onoff;
-		oscillator.frequency = hertz[input->note];
+		if (input->onoff) {
+			oscillator.frequency = hertz[input->note];
+			envelope->trigger();
+		} else {
+			envelope->release();
+		}
 	}
 }

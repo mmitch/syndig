@@ -1,27 +1,21 @@
 #include <stdint.h>
 
+#include "envelope.h"
 #include "oscillator.h"
 #include "output.h"
 
 #define BUFSIZE 128
-#define BUFTYPE uint16_t
+#define BUFTYPE float
 #define BUFBYTES (BUFSIZE * sizeof(BUFTYPE))
-static BUFTYPE silence[BUFSIZE];
-static BUFTYPE square[BUFSIZE];
+static BUFTYPE samples[BUFSIZE];
 
 
 oscillator_input oscillator = {
-	.active    = false,
 	.frequency = 440,
 };
 
 static float phase = 0;
-void run_oscillator(sound_output *sound) {
-
-	if (!oscillator.active) {
-		sound->write(&silence, BUFBYTES);
-		return;
-	}
+void run_oscillator(sound_output *sound, envelope *envelope) {
 
 	// FIXME: get samplerate from somewhere else
 	float wavelength = 44100.0 / oscillator.frequency;
@@ -31,7 +25,7 @@ void run_oscillator(sound_output *sound) {
 		while (phase >= wavelength) {
 			phase -= wavelength;
 		}
-		square[i] = (phase < wavelength_half) ? 1 << 14 : 1;
+		samples[i] = ((phase < wavelength_half) ? 1 : -1) * envelope->nextval();
 	}
-	sound->write(&square, BUFBYTES);
+	sound->write(&samples, BUFBYTES);
 }

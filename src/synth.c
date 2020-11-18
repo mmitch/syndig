@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "common.h"
+#include "envelope.h"
 #include "midi.h"
 #include "oscillator.h"
 
@@ -22,9 +23,12 @@ int main() {
 	}
 	puts("MIDI input opened");
 
+	envelope *envelope = get_envelope();
+	puts("envelope aquired");
+
 	while(1) {
-		receive_midi(midi);
-		run_oscillator(sound);
+		receive_midi(midi, envelope);
+		run_oscillator(sound, envelope);
 	}
 
 SHUTDOWN:

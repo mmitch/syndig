@@ -3,13 +3,13 @@
 
 #include <stdbool.h>
 
+#include "envelope.h"
 #include "output.h"
 
 typedef struct {
-	bool active;
 	float frequency;
 } oscillator_input;
 
-void run_oscillator(sound_output *sound);
+void run_oscillator(sound_output *sound, envelope *envelope);
 
 #endif

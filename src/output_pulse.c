@@ -12,7 +12,7 @@ static pa_simple *pulse_handle;
 static int pulse_open()
 {
 	pa_sample_spec pulse_spec;
-	pulse_spec.format = PA_SAMPLE_S16NE;
+	pulse_spec.format = PA_SAMPLE_FLOAT32;
 	pulse_spec.rate = 44100;
 	pulse_spec.channels = 1;
 

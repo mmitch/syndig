@@ -9,16 +9,17 @@
 #define BUFBYTES (BUFSIZE * sizeof(BUFTYPE))
 static BUFTYPE samples[BUFSIZE];
 
+static float frequency = 440;
+static float phase     = 0;
 
-oscillator_input oscillator = {
-	.frequency = 440,
-};
+void set_oscillator_frequency(float new_frequency) {
+	frequency = new_frequency;
+}
 
-static float phase = 0;
 void run_oscillator(sound_output *sound) {
 
 	// FIXME: get samplerate from somewhere else
-	float wavelength = 44100.0 / oscillator.frequency;
+	float wavelength = 44100.0 / frequency;
 	float wavelength_half = wavelength / 2.0;
 	for (int i = 0; i < BUFSIZE; i++) {
 		phase++;

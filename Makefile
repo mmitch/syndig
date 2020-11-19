@@ -36,10 +36,11 @@ clean:
 	rm -rf $(bindir)
 	rm -rf $(builddir)
 
-$(builddir)/%.o: $(srcdir)/%.c
-	$(CC) $(CFLAGS) -c -o $@ $^
+$(builddir)/%.o: $(srcdir)/%.c $(builddir)/%.d
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(builddir)/%.d: $(srcdir)/%.c
+	@echo dep $@
 	@set -e; rm -f $@; \
 	$(CC) -MM $(CFLAGS) $< > $@.$$$$; \
 	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \

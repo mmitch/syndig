@@ -5,11 +5,11 @@
 #include <stdint.h>
 #include <unistd.h>
 
-enum midi_event_type {
+typedef enum {
 	NOTE_ON,
 	NOTE_OFF,
 	PROGRAM_CHANGE,
-};
+} midi_event_type;
 
 typedef struct {
 	uint8_t note;
@@ -26,7 +26,7 @@ typedef struct {
 } midi_data_program_change;
 
 typedef struct {
-	enum midi_event_type type;
+	midi_event_type type;
 	union {
 		midi_data_note_on        note_on;
 		midi_data_note_off       note_off;

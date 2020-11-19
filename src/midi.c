@@ -3,7 +3,7 @@
 #include "input.h"
 #include "oscillator.h"
 
-static enum oscillator_type program_map[256] = {
+static oscillator_type program_map[256] = {
 	SQUARE,
 	SAW_DOWN,
 	SAW_UP,

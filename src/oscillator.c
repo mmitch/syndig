@@ -17,7 +17,7 @@ static float frequency       = 1;
 static float wavelength      = 1;
 static float wavelength_half = 1;
 
-static enum oscillator_type type = SQUARE;
+static oscillator_type type = SQUARE;
 
 void init_oscillator() {
 	set_oscillator_frequency(440);
@@ -34,7 +34,7 @@ void set_oscillator_frequency(float new_frequency) {
 	phase = relative_phase * wavelength;
 }
 
-void change_oscillator_type(enum oscillator_type new_type) {
+void change_oscillator_type(oscillator_type new_type) {
 	type = new_type;
 }
 

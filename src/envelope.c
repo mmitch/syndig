@@ -5,8 +5,6 @@
 #define MIN(x, y) ((x) < (y) ? (x) : (y))
 #define MAX(x, y) ((x) > (y) ? (x) : (y))
 
-#define MAX_MIDI 128.0
-
 static uint8_t  attack  = 30;
 static uint8_t  decay   = 50;
 static float    sustain = 0.3;
@@ -20,11 +18,13 @@ typedef enum {
 	OFF
 } states;
 
-static states state = OFF;
-static float  value = 0;
+static states state    = OFF;
+static float  value    = 0;
+static float  velocity = 0;
 
-void trigger_envelope() {
-	state = ATTACK;
+void trigger_envelope(float new_velocity) {
+	state    = ATTACK;
+	velocity = new_velocity;
 }
 
 void release_envelope() {
@@ -37,19 +37,19 @@ float envelope_nextval() {
 	}
 
 	if (state == ATTACK) {
-		if (attack == 0 || value >= 1) {
-			value = 1;
+		if (attack == 0 || value >= velocity) {
+			value = velocity;
 			state = DECAY;
 		} else {
-			value = MIN( value + ((MAX_MIDI - attack) / (MAX_MIDI * 100)), 1);
+			value = MIN( value + ((MAX_MIDI - attack * velocity) / (MAX_MIDI * 100)), velocity);
 		}
 	}
 	if (state == DECAY) {
-		if (decay == 0 || value <= sustain) {
-			value = sustain;
+		if (decay == 0 || value <= sustain * velocity) {
+			value = sustain * velocity;
 			state = SUSTAIN;
 		} else {
-			value = MAX( value - ((MAX_MIDI - decay) / (MAX_MIDI * 100)), sustain);
+			value = MAX( value - ((MAX_MIDI - decay * velocity) / (MAX_MIDI * 100)), sustain * velocity);
 		}
 	}
 	if (state == RELEASE) {
@@ -57,7 +57,7 @@ float envelope_nextval() {
 			value = 0;
 			state = OFF;
 		} else {
-			value = MAX( value - ((MAX_MIDI - release) / (MAX_MIDI * 100)), 0);
+			value = MAX( value - ((MAX_MIDI - release * velocity) / (MAX_MIDI * 100)), 0);
 		}
 	}
 

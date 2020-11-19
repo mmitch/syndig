@@ -8,6 +8,7 @@
 struct _midi_event {
 	bool onoff;
 	uint8_t note;
+	uint8_t velocity;
 };
 
 typedef struct _midi_event midi_event;

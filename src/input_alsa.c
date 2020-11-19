@@ -67,15 +67,15 @@ static midi_event* alsa_read()
 	switch (alsa_event->type) {
 
 	case SND_SEQ_EVENT_NOTEON:
-		event.onoff    = true;
-		event.note     = alsa_event->data.note.note;
-		event.velocity = alsa_event->data.note.velocity;
+		event.type = NOTE_ON;
+		event.data.note_on.note     = alsa_event->data.note.note;
+		event.data.note_on.velocity = alsa_event->data.note.velocity;
 		return &event;
 	
 	case SND_SEQ_EVENT_NOTEOFF:
-		event.onoff    = false;
-		event.note     = alsa_event->data.note.note;
-		event.velocity = alsa_event->data.note.velocity;
+		event.type = NOTE_OFF;
+		event.data.note_off.note     = alsa_event->data.note.note;
+		event.data.note_off.velocity = alsa_event->data.note.velocity;
 		return &event;
 	}
 

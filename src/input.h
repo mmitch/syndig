@@ -5,10 +5,27 @@
 #include <stdint.h>
 #include <unistd.h>
 
+enum midi_event_type {
+	NOTE_ON,
+	NOTE_OFF,
+};
+
 typedef struct {
-	bool onoff;
 	uint8_t note;
 	uint8_t velocity;
+} midi_data_note_on;
+
+typedef struct {
+	uint8_t note;
+	uint8_t velocity;
+} midi_data_note_off;
+
+typedef struct {
+	enum midi_event_type type;
+	union {
+		midi_data_note_on        note_on;
+		midi_data_note_off       note_off;
+	} data;
 } midi_event;
 
 typedef int         (*midi_open_fn )(void);

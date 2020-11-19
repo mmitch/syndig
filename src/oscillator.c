@@ -12,11 +12,10 @@ static BUFTYPE samples[BUFSIZE];
 // FIXME: get samplerate from somewhere else
 #define SAMPLERATE 44100.0
 
-static float frequency;
-static float wavelength;
-static float wavelength_half;
-
-static float phase = 0;
+static float phase           = 1;
+static float frequency       = 1;
+static float wavelength      = 1;
+static float wavelength_half = 1;
 
 void init_oscillator() {
 	set_oscillator_frequency(440);
@@ -24,8 +23,13 @@ void init_oscillator() {
 
 void set_oscillator_frequency(float new_frequency) {
 	frequency = new_frequency;
+
+	float relative_phase = phase / wavelength;
+
 	wavelength = SAMPLERATE / frequency;
 	wavelength_half = wavelength / 2.0;
+
+	phase = relative_phase * wavelength;
 }
 
 void run_oscillator(sound_output *sound) {

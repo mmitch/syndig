@@ -23,6 +23,9 @@ int main() {
 	}
 	puts("MIDI input opened");
 
+	init_oscillator();
+	puts("oscillator initialized");
+
 	while(1) {
 		receive_midi(midi);
 		run_oscillator(sound);

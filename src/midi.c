@@ -5,14 +5,14 @@
 
 extern oscillator_input oscillator;
 
-void receive_midi(midi_input *midi, envelope *envelope) {
+void receive_midi(midi_input *midi) {
 	midi_event *input;
 	while ((input = midi->read()) != NULL) {
 		if (input->onoff) {
 			oscillator.frequency = hertz[input->note];
-			envelope->trigger();
+			trigger_envelope();
 		} else {
-			envelope->release();
+			release_envelope();
 		}
 	}
 }

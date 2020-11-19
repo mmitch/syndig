@@ -10,6 +10,6 @@ typedef struct {
 	float frequency;
 } oscillator_input;
 
-void run_oscillator(sound_output *sound, envelope *envelope);
+void run_oscillator(sound_output *sound);
 
 #endif

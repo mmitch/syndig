@@ -15,7 +15,7 @@ oscillator_input oscillator = {
 };
 
 static float phase = 0;
-void run_oscillator(sound_output *sound, envelope *envelope) {
+void run_oscillator(sound_output *sound) {
 
 	// FIXME: get samplerate from somewhere else
 	float wavelength = 44100.0 / oscillator.frequency;
@@ -25,7 +25,7 @@ void run_oscillator(sound_output *sound, envelope *envelope) {
 		while (phase >= wavelength) {
 			phase -= wavelength;
 		}
-		samples[i] = ((phase < wavelength_half) ? 1 : -1) * envelope->nextval();
+		samples[i] = ((phase < wavelength_half) ? 1 : -1) * envelope_nextval();
 	}
 	sound->write(&samples, BUFBYTES);
 }

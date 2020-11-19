@@ -23,12 +23,9 @@ int main() {
 	}
 	puts("MIDI input opened");
 
-	envelope *envelope = get_envelope();
-	puts("envelope aquired");
-
 	while(1) {
-		receive_midi(midi, envelope);
-		run_oscillator(sound, envelope);
+		receive_midi(midi);
+		run_oscillator(sound);
 	}
 
 SHUTDOWN:

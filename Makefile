@@ -1,3 +1,6 @@
+# bash is only needed for autobuild target (read needs -t)
+SHELL := bash
+
 pkgconfigs := libpulse-simple alsa
 warnings   := -Wall -Wextra
 
@@ -15,9 +18,17 @@ binary  := $(bindir)/synth
 
 all:	$(binary)
 
+autobuild:
+	-$(MAKE) all
+	inotifywait -m -e modify -e create -e delete -e close_write -e move -r . | \
+	while read -r EVENT; do \
+		while read -r -t 0.1 EVENT; do :; done; \
+		$(MAKE) all; \
+	done
+
 include $(depends)
 
-.PHONY: all clean
+.PHONY: all clean autobuild
 
 $(binary): $(objects) | $(bindir)
 	$(CC) -o $@ $^ $(LDFLAGS)

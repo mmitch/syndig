@@ -17,6 +17,8 @@ static float frequency       = 1;
 static float wavelength      = 1;
 static float wavelength_half = 1;
 
+static enum oscillator_type type = SQUARE;
+
 void init_oscillator() {
 	set_oscillator_frequency(440);
 }
@@ -33,12 +35,39 @@ void set_oscillator_frequency(float new_frequency) {
 }
 
 void run_oscillator(sound_output *sound) {
-	for (int i = 0; i < BUFSIZE; i++) {
-		phase++;
-		while (phase >= wavelength) {
-			phase -= wavelength;
+	switch (type) {
+
+	case SQUARE:
+		for (int i = 0; i < BUFSIZE; i++) {
+			phase++;
+			while (phase >= wavelength) {
+				phase -= wavelength;
+			}
+			samples[i] = ((phase < wavelength_half) ? 1 : -1) * envelope_nextval();
 		}
-		samples[i] = ((phase < wavelength_half) ? 1 : -1) * envelope_nextval();
+		break;
+
+	case SAW_DOWN:
+		for (int i = 0; i < BUFSIZE; i++) {
+			phase++;
+			while (phase >= wavelength) {
+				phase -= wavelength;
+			}
+			samples[i] = (1 - (phase / wavelength) * 2) * envelope_nextval();
+		}
+		break;
+
+	case SAW_UP:
+		for (int i = 0; i < BUFSIZE; i++) {
+			phase++;
+			while (phase >= wavelength) {
+				phase -= wavelength;
+			}
+			samples[i] = (-1 + (phase / wavelength) * 2) * envelope_nextval();
+		}
+		break;
+
 	}
+
 	sound->write(&samples, BUFBYTES);
 }

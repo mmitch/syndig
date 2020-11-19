@@ -25,6 +25,7 @@ static int alsa_open()
 
 	snd_seq_set_client_event_filter(sequencer, SND_SEQ_EVENT_NOTEON);
 	snd_seq_set_client_event_filter(sequencer, SND_SEQ_EVENT_NOTEOFF);
+	snd_seq_set_client_event_filter(sequencer, SND_SEQ_EVENT_PGMCHANGE);
 
 	port = snd_seq_create_simple_port(sequencer, "Input",
 					  SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SUBS_WRITE,
@@ -71,11 +72,16 @@ static midi_event* alsa_read()
 		event.data.note_on.note     = alsa_event->data.note.note;
 		event.data.note_on.velocity = alsa_event->data.note.velocity;
 		return &event;
-	
+
 	case SND_SEQ_EVENT_NOTEOFF:
 		event.type = NOTE_OFF;
 		event.data.note_off.note     = alsa_event->data.note.note;
 		event.data.note_off.velocity = alsa_event->data.note.velocity;
+		return &event;
+
+	case SND_SEQ_EVENT_PGMCHANGE:
+		event.type = PROGRAM_CHANGE;
+		event.data.program_change.program = alsa_event->data.control.value;
 		return &event;
 	}
 

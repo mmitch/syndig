@@ -13,7 +13,7 @@
 - [X] switch to mono output as long as there is no stereo data
 - [ ] find a better name than /synth/
 
-* [3/16] features
+* [4/16] features
 
 - [ ] variable sample rate
 - [ ] refactor duplicated code in error handling (in input and output)
@@ -24,7 +24,7 @@
   - [X] sawtooth down
   - [ ] wavelets (which?)
 - [ ] support modulation (eg. pulsewidth on squarewave)
-- [ ] use MIDI program change to switch oscillators
+- [X] use MIDI program change to switch oscillators
 - [ ] multiple oscillators simultaneously?
 - [ ] polyphony
 - [ ] switch stop oldest/newest note on polyphony overflow

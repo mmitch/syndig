@@ -3,6 +3,12 @@
 #include "input.h"
 #include "oscillator.h"
 
+static enum oscillator_type program_map[256] = {
+	SQUARE,
+	SAW_DOWN,
+	SAW_UP,
+};
+
 void receive_midi(midi_input *midi) {
 	midi_event *event;
 	while ((event = midi->read()) != NULL) {
@@ -16,6 +22,9 @@ void receive_midi(midi_input *midi) {
 		case NOTE_OFF:
 			release_envelope();
 			break;
+
+		case PROGRAM_CHANGE:
+			change_oscillator_type(program_map[event->data.program_change.program]);
 		}
 	}
 }

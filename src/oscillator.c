@@ -34,6 +34,10 @@ void set_oscillator_frequency(float new_frequency) {
 	phase = relative_phase * wavelength;
 }
 
+void change_oscillator_type(enum oscillator_type new_type) {
+	type = new_type;
+}
+
 void run_oscillator(sound_output *sound) {
 	switch (type) {
 

@@ -11,6 +11,7 @@ enum oscillator_type {
 
 void init_oscillator();
 void set_oscillator_frequency(float new_frequency);
+void change_oscillator_type(enum oscillator_type new_type);
 void run_oscillator(sound_output *sound);
 
 #endif

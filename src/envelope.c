@@ -82,3 +82,7 @@ float envelope_nextval(id id) {
 bool envelope_is_running(id id) {
 	return env[id].state != OFF;
 }
+
+bool  envelope_is_in_release(id id) {
+	return env[id].state == RELEASE;
+}

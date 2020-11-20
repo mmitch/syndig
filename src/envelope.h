@@ -12,5 +12,6 @@ void  trigger_envelope(id id, float velocity);
 void  release_envelope(id id);
 float envelope_nextval(id id);
 bool  envelope_is_running(id id);
+bool  envelope_is_in_release(id id);
 
 #endif

@@ -40,6 +40,22 @@ static id find_lane_with_note(uint8_t note) {
 	return ID_NOT_FOUND;
 }
 
+static id find_free_lane() {
+	for (id id = 0; id < POLYPHONY; id++) {
+		if (! envelope_is_running(id)) {
+			return id;
+		}
+	}
+
+	for (id id = 0; id < POLYPHONY; id++) {
+		if (envelope_is_in_release(id)) {
+			return id;
+		}
+	}
+
+	return ID_NOT_FOUND;
+}
+
 static id find_lane_for(uint8_t note) {
 
 	id id, i;
@@ -48,7 +64,7 @@ static id find_lane_for(uint8_t note) {
 		return id;
 	}
 
-	if ((id = find_lane_with_note(INVALID_NOTE)) != ID_NOT_FOUND) {
+	if ((id = find_free_lane()) != ID_NOT_FOUND) {
 		return id;
 	}
 	
@@ -113,7 +129,6 @@ void receive_midi(midi_input *midi) {
 			id id = find_lane_with_note(event->data.note_on.note);
 			if (id != ID_NOT_FOUND) {
 				release_envelope(id);
-				lane[id].note = INVALID_NOTE;
 			}
 			break;
 		}

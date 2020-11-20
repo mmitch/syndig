@@ -5,6 +5,7 @@
 #include "envelope.h"
 #include "midi.h"
 #include "oscillator.h"
+#include "polyphony.h"
 
 int main() {
 	sound_output *sound = NULL;
@@ -24,8 +25,8 @@ int main() {
 	}
 	puts("MIDI input opened");
 
-	init_midi();
-	puts("MIDI mapper initialized");
+	init_polyphony();
+	puts("polyphony initialized");
 
 	init_envelopes();
 	puts("envelopes initialized");

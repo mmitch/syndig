@@ -5,7 +5,8 @@
 #include "oscillator.h"
 #include "polyphony.h"
 
-#define LAST_INDEX(x) ((sizeof(x) / (sizeof(x[0]))) - 1)
+#define LAST_INDEX(arr)          ((sizeof(arr) / (sizeof(arr[0]))) - 1)
+#define CLAMP_TO_MAP(val, map)   { if (val > LAST_INDEX(map)) { val = 0; } }
 
 #define to_struct(x) { .mode = x, .name = #x }
 static polyphony_mode poly_map[] = {
@@ -47,9 +48,7 @@ void receive_midi(midi_input *midi) {
 		case PROGRAM_CHANGE:
 		{
 			uint8_t program = event->data.program_change.program;
-			if (program > LAST_INDEX(program_map)) {
-				program = 0;
-			}
+			CLAMP_TO_MAP(program, program_map);
 			change_oscillator_type(program_map[program]);
 			break;
 		}
@@ -59,9 +58,7 @@ void receive_midi(midi_input *midi) {
 			uint8_t value = event->data.control_change.value;
 			switch (event->data.control_change.param) {
 			case 3:
-				if (value > LAST_INDEX(poly_map)) {
-					value = 0;
-				}
+				CLAMP_TO_MAP(value, poly_map);
 				set_polyphony_mode(poly_map[value]);
 				break;
 			}

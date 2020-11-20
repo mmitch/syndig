@@ -19,12 +19,12 @@ void receive_midi(midi_input *midi) {
 		case NOTE_ON:
 			note_playing = event->data.note_on.note;
 			set_oscillator_frequency(0, hertz[note_playing]);
-			trigger_envelope(event->data.note_on.velocity / MAX_MIDI);
+			trigger_envelope(0, event->data.note_on.velocity / MAX_MIDI);
 			break;
 
 		case NOTE_OFF:
 			if (event->data.note_on.note == note_playing) {
-				release_envelope();
+				release_envelope(0);
 			}
 			break;
 

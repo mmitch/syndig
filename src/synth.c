@@ -23,6 +23,9 @@ int main() {
 	}
 	puts("MIDI input opened");
 
+	init_envelopes();
+	puts("envelopes initialized");
+
 	init_oscillators();
 	puts("oscillator initialized");
 

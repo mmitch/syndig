@@ -3,11 +3,14 @@
 
 #include <stdbool.h>
 
+#include "common.h"
+
 #define MAX_MIDI 128.0
 
-void  trigger_envelope(float velocity);
-void  release_envelope();
-float envelope_nextval();
-bool  envelope_is_running();
+void  init_envelopes();
+void  trigger_envelope(id id, float velocity);
+void  release_envelope(id id);
+float envelope_nextval(id id);
+bool  envelope_is_running(id id);
 
 #endif

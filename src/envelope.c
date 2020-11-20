@@ -16,54 +16,69 @@ typedef enum {
 	SUSTAIN,
 	RELEASE,
 	OFF
-} states;
+} state;
 
-static states state    = OFF;
-static float  value    = 0;
-static float  velocity = 0;
+typedef struct {
+	state state;
+	float value;
+	float velocity;
+} envelope;
 
-void trigger_envelope(float new_velocity) {
-	state    = ATTACK;
-	velocity = new_velocity;
+static envelope env[POLYPHONY];
+
+void init_envelopes() {
+	for (id id = 0; id < POLYPHONY; id++) {
+		env[id].state    = OFF;
+		env[id].value    = 0;
+		env[id].velocity = 0;
+	}
 }
 
-void release_envelope() {
-	state = RELEASE;
+void trigger_envelope(id id, float new_velocity) {
+	env[id].state    = ATTACK;
+	env[id].velocity = new_velocity;
 }
 
-float envelope_nextval() {
-	if (state == OFF) {
+void release_envelope(id id) {
+	env[id].state = RELEASE;
+}
+
+float envelope_nextval(id id) {
+
+	envelope *e = &env[id];
+	
+	if (e->state == OFF) {
 		return 0;
 	}
 
-	if (state == ATTACK) {
-		if (attack == 0 || value >= velocity) {
-			value = velocity;
-			state = DECAY;
+	if (e->state == ATTACK) {
+		if (attack == 0 || e->value >= e->velocity) {
+			e->value = e->velocity;
+			e->state = DECAY;
 		} else {
-			value = MIN( value + ((MAX_MIDI - attack * velocity) / (MAX_MIDI * 100)), velocity);
+			e->value = MIN( e->value + ((MAX_MIDI - attack * e->velocity) / (MAX_MIDI * 100)), e->velocity);
 		}
 	}
-	if (state == DECAY) {
-		if (decay == 0 || value <= sustain * velocity) {
-			value = sustain * velocity;
-			state = SUSTAIN;
+	if (e->state == DECAY) {
+		if (decay == 0 || e->value <= sustain * e->velocity) {
+			e->value = sustain * e->velocity;
+			e->state = SUSTAIN;
 		} else {
-			value = MAX( value - ((MAX_MIDI - decay * velocity) / (MAX_MIDI * 100)), sustain * velocity);
+			e->value = MAX( e->value - ((MAX_MIDI - decay * e->velocity) / (MAX_MIDI * 100)), sustain * e->velocity);
 		}
 	}
-	if (state == RELEASE) {
-		if (release == 0 || value <= 0) {
-			value = 0;
-			state = OFF;
+	if (e->state == RELEASE) {
+		if (release == 0 || e->value <= 0) {
+			e->value = 0;
+			e->state = OFF;
 		} else {
-			value = MAX( value - ((MAX_MIDI - release * velocity) / (MAX_MIDI * 100)), 0);
+			e->value = MAX( e->value - ((MAX_MIDI - release * e->velocity) / (MAX_MIDI * 100)), 0);
 		}
 	}
 
-	return value;
+	return e->value;
 }
 
-bool envelope_is_running() {
-	return state != OFF;
+bool envelope_is_running(id id) {
+	return env[id].state != OFF;
 }

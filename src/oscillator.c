@@ -42,7 +42,7 @@ static void run_oscillator(id id) {
 			while (o->phase >= o->wavelength) {
 				o->phase -= o->wavelength;
 			}
-			samples[i] += ((o->phase < wavelength_half) ? 1 : -1) * envelope_nextval();
+			samples[i] += ((o->phase < wavelength_half) ? 1 : -1) * envelope_nextval(id);
 		}
 		break;
 	}
@@ -53,7 +53,7 @@ static void run_oscillator(id id) {
 			while (o->phase >= o->wavelength) {
 				o->phase -= o->wavelength;
 			}
-			samples[i] += (1 - (o->phase / o->wavelength) * 2) * envelope_nextval();
+			samples[i] += (1 - (o->phase / o->wavelength) * 2) * envelope_nextval(id);
 		}
 		break;
 
@@ -63,7 +63,7 @@ static void run_oscillator(id id) {
 			while (o->phase >= o->wavelength) {
 				o->phase -= o->wavelength;
 			}
-			samples[i] += (-1 + (o->phase / o->wavelength) * 2) * envelope_nextval();
+			samples[i] += (-1 + (o->phase / o->wavelength) * 2) * envelope_nextval(id);
 		}
 		break;
 

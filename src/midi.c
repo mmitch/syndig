@@ -40,15 +40,18 @@ static id find_lane_with_note(uint8_t note) {
 	return ID_NOT_FOUND;
 }
 
-static id find_free_lane() {
+static id find_lane_for(uint8_t note) {
 
 	id id, i;
-	uint8_t note;
+
+	if ((id = find_lane_with_note(note)) != ID_NOT_FOUND) {
+		return id;
+	}
 
 	if ((id = find_lane_with_note(INVALID_NOTE)) != ID_NOT_FOUND) {
 		return id;
 	}
-
+	
 	switch (poly_mode) {
 
 	case ROUND_ROBIN:
@@ -97,9 +100,10 @@ void receive_midi(midi_input *midi) {
 
 		case NOTE_ON:
 		{
-			id id = find_free_lane();
-			lane[id].note = event->data.note_on.note;
-			set_oscillator_frequency(id, hertz[event->data.note_on.note]);
+			uint8_t note = event->data.note_on.note;
+			id id = find_lane_for(note);
+			lane[id].note = note;
+			set_oscillator_frequency(id, hertz[note]);
 			trigger_envelope(id, event->data.note_on.velocity / MAX_MIDI);
 			break;
 		}

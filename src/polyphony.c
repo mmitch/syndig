@@ -4,7 +4,7 @@
 #include "envelope.h"
 #include "polyphony.h"
 
-#define INVALID_NOTE 255
+#define NO_NOTE      255
 #define LOWEST_NOTE  0
 #define HIGHEST_NOTE 127
 
@@ -45,18 +45,18 @@ static lane_id find_free_lane() {
 		}
 	}
 
-	return ID_NOT_FOUND;
+	return NO_LANE;
 }
 
 static lane_id find_lane_for(uint8_t note) {
 
 	lane_id lane, i;
 
-	if ((lane = find_lane_with_note(note)) != ID_NOT_FOUND) {
+	if ((lane = find_lane_with_note(note)) != NO_LANE) {
 		return lane;
 	}
 
-	if ((lane = find_free_lane()) != ID_NOT_FOUND) {
+	if ((lane = find_free_lane()) != NO_LANE) {
 		return lane;
 	}
 	
@@ -77,7 +77,7 @@ static lane_id find_lane_for(uint8_t note) {
 	case KILL_LOWEST:
 		note = HIGHEST_NOTE;
 		for (i = 0; i < POLYPHONY; i++) {
-			if (last_note[i] <= note && last_note[i] != INVALID_NOTE) {
+			if (last_note[i] <= note && last_note[i] != NO_NOTE) {
 				lane = i;
 				note = last_note[lane];
 			}
@@ -87,7 +87,7 @@ static lane_id find_lane_for(uint8_t note) {
 	case KILL_HIGHEST:
 		note = LOWEST_NOTE;
 		for (i = 0; i < POLYPHONY; i++) {
-			if (last_note[i] >= note && last_note[i] != INVALID_NOTE) {
+			if (last_note[i] >= note && last_note[i] != NO_NOTE) {
 				lane = i;
 				note = last_note[lane];
 			}
@@ -102,7 +102,7 @@ static lane_id find_lane_for(uint8_t note) {
 void init_polyphony() {
 	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
 		poly_history[lane] = lane;
-		last_note[lane] = INVALID_NOTE;
+		last_note[lane] = NO_NOTE;
 	}
 }
 
@@ -117,7 +117,7 @@ lane_id find_lane_with_note(uint8_t note) {
 			return id;
 		}
 	}
-	return ID_NOT_FOUND;
+	return NO_LANE;
 }
 
 lane_id reserve_lane_for_note(uint8_t note) {

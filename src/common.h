@@ -6,8 +6,8 @@
 #define POLYPHONY 4
 
 typedef uint8_t lane_id;
-// max id + 1 is "not found"
-#define ID_NOT_FOUND POLYPHONY
+// max id + 1 is unknown/not found
+#define NO_LANE POLYPHONY
 
 extern const char *PROGRAM_NAME;
 

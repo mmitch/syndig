@@ -38,7 +38,7 @@ void receive_midi(midi_input *midi) {
 		case NOTE_OFF:
 		{
 			lane_id lane = find_lane_with_note(event->data.note_on.note);
-			if (lane != ID_NOT_FOUND) {
+			if (lane != NO_LANE) {
 				release_envelope(lane);
 			}
 			break;

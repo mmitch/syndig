@@ -26,18 +26,14 @@ typedef enum {
 	ROUND_ROBIN,
 } polyphony_mode;
 
-typedef struct {
-	uint8_t note;
-} lane_t;
-
-static lane_t lane[POLYPHONY];
+static uint8_t last_note[POLYPHONY];
 
 static polyphony_mode poly_mode = KILL_OLDEST;
-static id poly_history[POLYPHONY]; // contains every lane id exactly once; order matters
-static id round_robin;
+static lane_id poly_history[POLYPHONY]; // contains every lane id exactly once; order matters
+static lane_id round_robin;
 
-static void poly_history_set_newest(id newest) {
-	id found;
+static void poly_history_set_newest(lane_id newest) {
+	lane_id found;
 	for (found = POLYPHONY-1; found > 0; found--) {
 		if (poly_history[found] == newest) {
 			break;
@@ -45,50 +41,50 @@ static void poly_history_set_newest(id newest) {
 	}
 	if (found) {
 		// move existing entry to front of queue
-		bcopy(&poly_history[0], &poly_history[1], sizeof(id) * found);
+		bcopy(&poly_history[0], &poly_history[1], sizeof(lane_id) * found);
 		poly_history[0] = newest;
 	}
 }
 
-static id poly_history_get_oldest() {
+static lane_id poly_history_get_oldest() {
 	return poly_history[POLYPHONY-1];
 }
 
-static id find_lane_with_note(uint8_t note) {
-	for (id id = 0; id < POLYPHONY; id++) {
-		if (lane[id].note == note) {
+static lane_id find_lane_with_note(uint8_t note) {
+	for (lane_id id = 0; id < POLYPHONY; id++) {
+		if (last_note[id] == note) {
 			return id;
 		}
 	}
 	return ID_NOT_FOUND;
 }
 
-static id find_free_lane() {
-	for (id id = 0; id < POLYPHONY; id++) {
-		if (! envelope_is_running(id)) {
-			return id;
+static lane_id find_free_lane() {
+	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
+		if (! envelope_is_running(lane)) {
+			return lane;
 		}
 	}
 
-	for (id id = 0; id < POLYPHONY; id++) {
-		if (envelope_is_in_release(id)) {
-			return id;
+	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
+		if (envelope_is_in_release(lane)) {
+			return lane;
 		}
 	}
 
 	return ID_NOT_FOUND;
 }
 
-static id find_lane_for(uint8_t note) {
+static lane_id find_lane_for(uint8_t note) {
 
-	id id, i;
+	lane_id lane, i;
 
-	if ((id = find_lane_with_note(note)) != ID_NOT_FOUND) {
-		return id;
+	if ((lane = find_lane_with_note(note)) != ID_NOT_FOUND) {
+		return lane;
 	}
 
-	if ((id = find_free_lane()) != ID_NOT_FOUND) {
-		return id;
+	if ((lane = find_free_lane()) != ID_NOT_FOUND) {
+		return lane;
 	}
 	
 	switch (poly_mode) {
@@ -98,19 +94,19 @@ static id find_lane_for(uint8_t note) {
 		if (round_robin >= POLYPHONY) {
 			round_robin = 0;
 		}
-		id = round_robin;
+		lane = round_robin;
 		break;
 
 	case KILL_OLDEST:
-		id = poly_history_get_oldest();
+		lane = poly_history_get_oldest();
 		break;
 
 	case KILL_LOWEST:
 		note = HIGHEST_NOTE;
 		for (i = 0; i < POLYPHONY; i++) {
-			if (lane[i].note <= note && lane[i].note != INVALID_NOTE) {
-				id = i;
-				note = lane[id].note;
+			if (last_note[i] <= note && last_note[i] != INVALID_NOTE) {
+				lane = i;
+				note = last_note[lane];
 			}
 		}
 		break;
@@ -118,22 +114,22 @@ static id find_lane_for(uint8_t note) {
 	case KILL_HIGHEST:
 		note = LOWEST_NOTE;
 		for (i = 0; i < POLYPHONY; i++) {
-			if (lane[i].note >= note && lane[i].note != INVALID_NOTE) {
-				id = i;
-				note = lane[id].note;
+			if (last_note[i] >= note && last_note[i] != INVALID_NOTE) {
+				lane = i;
+				note = last_note[lane];
 			}
 		}
 		break;
 	}
 
-	printf("polyphony overflow: killing note %d\n", lane[id].note);
-	return id;
+	printf("polyphony overflow: killing note %d\n", last_note[lane]);
+	return lane;
 }
 
 void init_midi() {
-	for (id id = 0; id < POLYPHONY; id++) {
-		poly_history[id] = id;
-		lane[id].note = INVALID_NOTE;
+	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
+		poly_history[lane] = lane;
+		last_note[lane] = INVALID_NOTE;
 	}
 }
 
@@ -169,19 +165,19 @@ void receive_midi(midi_input *midi) {
 		case NOTE_ON:
 		{
 			uint8_t note = event->data.note_on.note;
-			id id = find_lane_for(note);
-			poly_history_set_newest(id);
-			lane[id].note = note;
-			set_oscillator_frequency(id, hertz[note]);
-			trigger_envelope(id, event->data.note_on.velocity / MAX_MIDI);
+			lane_id lane = find_lane_for(note);
+			poly_history_set_newest(lane);
+			last_note[lane] = note;
+			set_oscillator_frequency(lane, hertz[note]);
+			trigger_envelope(lane, event->data.note_on.velocity / MAX_MIDI);
 			break;
 		}
 
 		case NOTE_OFF:
 		{
-			id id = find_lane_with_note(event->data.note_on.note);
-			if (id != ID_NOT_FOUND) {
-				release_envelope(id);
+			lane_id lane = find_lane_with_note(event->data.note_on.note);
+			if (lane != ID_NOT_FOUND) {
+				release_envelope(lane);
 			}
 			break;
 		}

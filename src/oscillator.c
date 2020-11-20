@@ -25,12 +25,12 @@ static oscillator osc[POLYPHONY];
 
 static oscillator_type type = SQUARE;
 
-static void run_oscillator(id id) {
-	if (! envelope_is_running(id)) {
+static void run_oscillator(lane_id lane) {
+	if (! envelope_is_running(lane)) {
 		return;
 	}
 
-	oscillator *o = &osc[id];
+	oscillator *o = &osc[lane];
 
 	switch (type) {
 
@@ -42,7 +42,7 @@ static void run_oscillator(id id) {
 			while (o->phase >= o->wavelength) {
 				o->phase -= o->wavelength;
 			}
-			samples[i] += ((o->phase < wavelength_half) ? 1 : -1) * envelope_nextval(id);
+			samples[i] += ((o->phase < wavelength_half) ? 1 : -1) * envelope_nextval(lane);
 		}
 		break;
 	}
@@ -53,7 +53,7 @@ static void run_oscillator(id id) {
 			while (o->phase >= o->wavelength) {
 				o->phase -= o->wavelength;
 			}
-			samples[i] += (1 - (o->phase / o->wavelength) * 2) * envelope_nextval(id);
+			samples[i] += (1 - (o->phase / o->wavelength) * 2) * envelope_nextval(lane);
 		}
 		break;
 
@@ -63,7 +63,7 @@ static void run_oscillator(id id) {
 			while (o->phase >= o->wavelength) {
 				o->phase -= o->wavelength;
 			}
-			samples[i] += (-1 + (o->phase / o->wavelength) * 2) * envelope_nextval(id);
+			samples[i] += (-1 + (o->phase / o->wavelength) * 2) * envelope_nextval(lane);
 		}
 		break;
 
@@ -71,10 +71,10 @@ static void run_oscillator(id id) {
 }
 
 void init_oscillators() {
-	for (id id; id < POLYPHONY; id++) {
-		osc[id].type       = type;
-		osc[id].wavelength = 1;
-		set_oscillator_frequency(id, 440);
+	for (lane_id lane; lane < POLYPHONY; lane++) {
+		osc[lane].type       = type;
+		osc[lane].wavelength = 1;
+		set_oscillator_frequency(lane, 440);
 	}
 
 	for (int i = 0; i < BUFSIZE; i++) {
@@ -82,11 +82,11 @@ void init_oscillators() {
 	}
 }
 
-void set_oscillator_frequency(id id, float new_frequency) {
-	osc[id].frequency = new_frequency;
-	float relative_phase = osc[id].phase / osc[id].wavelength;
-	osc[id].wavelength = SAMPLERATE / osc[id].frequency;
-	osc[id].phase = relative_phase * osc[id].wavelength;
+void set_oscillator_frequency(lane_id lane, float new_frequency) {
+	osc[lane].frequency = new_frequency;
+	float relative_phase = osc[lane].phase / osc[lane].wavelength;
+	osc[lane].wavelength = SAMPLERATE / osc[lane].frequency;
+	osc[lane].phase = relative_phase * osc[lane].wavelength;
 }
 
 void change_oscillator_type(oscillator_type new_type) {
@@ -95,8 +95,8 @@ void change_oscillator_type(oscillator_type new_type) {
 
 void run_oscillators(sound_output *sound) {
 	memcpy(samples, silence, BUFBYTES);
-	for (id id; id < POLYPHONY; id++) {
-		run_oscillator(id);
+	for (lane_id lane; lane < POLYPHONY; lane++) {
+		run_oscillator(lane);
 	}
 	sound->write(&samples, BUFBYTES);
 }

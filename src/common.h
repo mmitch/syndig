@@ -5,7 +5,7 @@
 
 #define POLYPHONY 4
 
-typedef uint8_t id;
+typedef uint8_t lane_id;
 // max id + 1 is "not found"
 #define ID_NOT_FOUND POLYPHONY
 

@@ -27,25 +27,25 @@ typedef struct {
 static envelope env[POLYPHONY];
 
 void init_envelopes() {
-	for (id id = 0; id < POLYPHONY; id++) {
-		env[id].state    = OFF;
-		env[id].value    = 0;
-		env[id].velocity = 0;
+	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
+		env[lane].state    = OFF;
+		env[lane].value    = 0;
+		env[lane].velocity = 0;
 	}
 }
 
-void trigger_envelope(id id, float new_velocity) {
-	env[id].state    = ATTACK;
-	env[id].velocity = new_velocity;
+void trigger_envelope(lane_id lane, float new_velocity) {
+	env[lane].state    = ATTACK;
+	env[lane].velocity = new_velocity;
 }
 
-void release_envelope(id id) {
-	env[id].state = RELEASE;
+void release_envelope(lane_id lane) {
+	env[lane].state = RELEASE;
 }
 
-float envelope_nextval(id id) {
+float envelope_nextval(lane_id lane) {
 
-	envelope *e = &env[id];
+	envelope *e = &env[lane];
 	
 	if (e->state == OFF) {
 		return 0;
@@ -79,10 +79,10 @@ float envelope_nextval(id id) {
 	return e->value;
 }
 
-bool envelope_is_running(id id) {
-	return env[id].state != OFF;
+bool envelope_is_running(lane_id lane) {
+	return env[lane].state != OFF;
 }
 
-bool  envelope_is_in_release(id id) {
-	return env[id].state == RELEASE;
+bool  envelope_is_in_release(lane_id lane) {
+	return env[lane].state == RELEASE;
 }

@@ -8,10 +8,10 @@
 #define MAX_MIDI 128.0
 
 void  init_envelopes();
-void  trigger_envelope(id id, float velocity);
-void  release_envelope(id id);
-float envelope_nextval(id id);
-bool  envelope_is_running(id id);
-bool  envelope_is_in_release(id id);
+void  trigger_envelope(lane_id id, float velocity);
+void  release_envelope(lane_id id);
+float envelope_nextval(lane_id id);
+bool  envelope_is_running(lane_id id);
+bool  envelope_is_in_release(lane_id id);
 
 #endif

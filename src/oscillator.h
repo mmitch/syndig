@@ -11,7 +11,7 @@ typedef enum {
 } oscillator_type;
 
 void init_oscillators();
-void set_oscillator_frequency(id id, float new_frequency);
+void set_oscillator_frequency(lane_id id, float new_frequency);
 void change_oscillator_type(oscillator_type new_type);
 void run_oscillators(sound_output *sound);
 

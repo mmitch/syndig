@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "common.h"
 #include "envelope.h"
 #include "hertz.h"
@@ -5,6 +7,8 @@
 #include "oscillator.h"
 
 #define INVALID_NOTE 255
+#define LOWEST_NOTE  0
+#define HIGHEST_NOTE 127
 
 static oscillator_type program_map[256] = {
 	SQUARE,
@@ -12,13 +16,20 @@ static oscillator_type program_map[256] = {
 	SAW_UP,
 };
 
+typedef enum {
+	ROUND_ROBIN,
+	KILL_LOWEST,
+	KILL_HIGHEST,
+} polyphony_mode;
+
 typedef struct {
 	uint8_t note;
 } lane_t;
 
 static lane_t lane[POLYPHONY];
 
-static id current_lane;
+static polyphony_mode poly_mode = KILL_LOWEST;
+static id round_robin;
 
 static id find_lane_with_note(uint8_t note) {
 	for (id id = 0; id < POLYPHONY; id++) {
@@ -29,17 +40,48 @@ static id find_lane_with_note(uint8_t note) {
 	return ID_NOT_FOUND;
 }
 
-static id get_free_lane() {
-	id id;
+static id find_free_lane() {
+
+	id id, i;
+	uint8_t note;
+
 	if ((id = find_lane_with_note(INVALID_NOTE)) != ID_NOT_FOUND) {
 		return id;
 	}
 
-	current_lane++;
-	if (current_lane >= POLYPHONY) {
-		current_lane = 0;
+	switch (poly_mode) {
+
+	case ROUND_ROBIN:
+		round_robin++;
+		if (round_robin >= POLYPHONY) {
+			round_robin = 0;
+		}
+		id = round_robin;
+		break;
+
+	case KILL_LOWEST:
+		note = HIGHEST_NOTE;
+		for (i = 0; i < POLYPHONY; i++) {
+			if (lane[i].note <= note && lane[i].note != INVALID_NOTE) {
+				id = i;
+				note = lane[id].note;
+			}
+		}
+		break;
+
+	case KILL_HIGHEST:
+		note = LOWEST_NOTE;
+		for (i = 0; i < POLYPHONY; i++) {
+			if (lane[i].note >= note && lane[i].note != INVALID_NOTE) {
+				id = i;
+				note = lane[id].note;
+			}
+		}
+		break;
 	}
-	return current_lane;
+
+	printf("polyphony overflow: killing note %d\n", lane[id].note);
+	return id;
 }
 
 void init_midi() {
@@ -55,7 +97,7 @@ void receive_midi(midi_input *midi) {
 
 		case NOTE_ON:
 		{
-			id id = get_free_lane();
+			id id = find_free_lane();
 			lane[id].note = event->data.note_on.note;
 			set_oscillator_frequency(id, hertz[event->data.note_on.note]);
 			trigger_envelope(id, event->data.note_on.velocity / MAX_MIDI);

@@ -71,7 +71,7 @@ static void run_oscillator(lane_id lane) {
 }
 
 void init_oscillators() {
-	for (lane_id lane; lane < POLYPHONY; lane++) {
+	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
 		osc[lane].type       = type;
 		osc[lane].wavelength = 1;
 		set_oscillator_frequency(lane, 440);
@@ -95,7 +95,7 @@ void change_oscillator_type(oscillator_type new_type) {
 
 void run_oscillators(sound_output *sound) {
 	memcpy(samples, silence, BUFBYTES);
-	for (lane_id lane; lane < POLYPHONY; lane++) {
+	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
 		run_oscillator(lane);
 	}
 	sound->write(&samples, BUFBYTES);

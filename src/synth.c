@@ -7,16 +7,17 @@
 #include "oscillator.h"
 
 int main() {
+	sound_output *sound = NULL;
+	midi_input *midi = NULL;
+
 	printf("%s is starting\n", PROGRAM_NAME);
 
-	sound_output *sound = NULL;
 	sound = get_sound_output();
 	if (sound->open() != 0) {
 		goto SHUTDOWN;
 	}
 	puts("sound output opened");
 
-	midi_input *midi  = NULL;
 	midi = get_midi_input();
 	if (midi->open() != 0) {
 		goto SHUTDOWN;

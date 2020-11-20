@@ -2,7 +2,7 @@
 SHELL := bash
 
 pkgconfigs := libpulse-simple alsa
-warnings   := -Wall -Wextra
+warnings   := -Wall -Wextra -Wpedantic -Werror
 
 CFLAGS  += $(shell pkg-config --cflags $(pkgconfigs)) $(warnings)
 LDFLAGS += $(shell pkg-config --libs $(pkgconfigs))

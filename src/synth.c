@@ -23,12 +23,12 @@ int main() {
 	}
 	puts("MIDI input opened");
 
-	init_oscillator();
+	init_oscillators();
 	puts("oscillator initialized");
 
 	while(1) {
 		receive_midi(midi);
-		run_oscillator(sound);
+		run_oscillators(sound);
 	}
 
 SHUTDOWN:

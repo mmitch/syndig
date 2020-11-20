@@ -1,6 +1,7 @@
 #ifndef _OSCILLATOR_H_
 #define _OSCILLATOR_H_
 
+#include "common.h"
 #include "output.h"
 
 typedef enum {
@@ -9,9 +10,9 @@ typedef enum {
 	SAW_UP,
 } oscillator_type;
 
-void init_oscillator();
-void set_oscillator_frequency(float new_frequency);
+void init_oscillators();
+void set_oscillator_frequency(id id, float new_frequency);
 void change_oscillator_type(oscillator_type new_type);
-void run_oscillator(sound_output *sound);
+void run_oscillators(sound_output *sound);
 
 #endif

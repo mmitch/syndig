@@ -23,6 +23,9 @@ int main() {
 	}
 	puts("MIDI input opened");
 
+	init_midi();
+	puts("MIDI mapper initialized");
+
 	init_envelopes();
 	puts("envelopes initialized");
 

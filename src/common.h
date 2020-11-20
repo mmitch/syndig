@@ -3,9 +3,11 @@
 
 #include <stdint.h>
 
-#define POLYPHONY 1
+#define POLYPHONY 4
 
 typedef uint8_t id;
+// max id + 1 is "not found"
+#define ID_NOT_FOUND POLYPHONY
 
 extern const char *PROGRAM_NAME;
 

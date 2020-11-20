@@ -16,7 +16,6 @@ static BUFTYPE silence[BUFSIZE];
 static float phase           = 1;
 static float frequency       = 1;
 static float wavelength      = 1;
-static float wavelength_half = 1;
 
 static oscillator_type type = SQUARE;
 
@@ -30,7 +29,6 @@ void set_oscillator_frequency(float new_frequency) {
 	float relative_phase = phase / wavelength;
 
 	wavelength = SAMPLERATE / frequency;
-	wavelength_half = wavelength / 2.0;
 
 	phase = relative_phase * wavelength;
 }
@@ -48,6 +46,8 @@ void run_oscillator(sound_output *sound) {
 	switch (type) {
 
 	case SQUARE:
+	{
+		float wavelength_half = wavelength / 2.0;
 		for (int i = 0; i < BUFSIZE; i++) {
 			phase++;
 			while (phase >= wavelength) {
@@ -56,6 +56,7 @@ void run_oscillator(sound_output *sound) {
 			samples[i] = ((phase < wavelength_half) ? 1 : -1) * envelope_nextval();
 		}
 		break;
+	}
 
 	case SAW_DOWN:
 		for (int i = 0; i < BUFSIZE; i++) {

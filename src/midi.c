@@ -4,7 +4,7 @@
 #include "input.h"
 #include "oscillator.h"
 
-#define INVALID_NOTE 255;
+#define INVALID_NOTE 255
 
 static oscillator_type program_map[256] = {
 	SQUARE,
@@ -20,14 +20,6 @@ static lane_t lane[POLYPHONY];
 
 static id current_lane;
 
-static id get_free_lane() {
-	current_lane++;
-	if (current_lane >= POLYPHONY) {
-		current_lane = 0;
-	}
-	return current_lane;
-}
-
 static id find_lane_with_note(uint8_t note) {
 	for (id id = 0; id < POLYPHONY; id++) {
 		if (lane[id].note == note) {
@@ -35,6 +27,19 @@ static id find_lane_with_note(uint8_t note) {
 		}
 	}
 	return ID_NOT_FOUND;
+}
+
+static id get_free_lane() {
+	id id;
+	if ((id = find_lane_with_note(INVALID_NOTE)) != ID_NOT_FOUND) {
+		return id;
+	}
+
+	current_lane++;
+	if (current_lane >= POLYPHONY) {
+		current_lane = 0;
+	}
+	return current_lane;
 }
 
 void init_midi() {

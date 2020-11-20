@@ -15,9 +15,9 @@ typedef struct {
 	char*            name;
 } polyphony_mode;
 
-extern void    init_polyphony();
-extern void    set_polyphony_mode(polyphony_mode new_mode);
-extern lane_id find_lane_with_note(uint8_t note);
-extern lane_id reserve_lane_for_note(uint8_t note);
+void    init_polyphony();
+void    set_polyphony_mode(polyphony_mode new_mode);
+lane_id find_lane_with_note(uint8_t note);
+lane_id reserve_lane_for_note(uint8_t note);
 
 #endif

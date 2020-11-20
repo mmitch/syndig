@@ -5,6 +5,8 @@
 #define MIN(x, y) ((x) < (y) ? (x) : (y))
 #define MAX(x, y) ((x) > (y) ? (x) : (y))
 
+#define MAX_MIDI 128.0
+
 static uint8_t  attack  = 30;
 static uint8_t  decay   = 50;
 static float    sustain = 0.3;
@@ -34,9 +36,9 @@ void init_envelopes() {
 	}
 }
 
-void trigger_envelope(lane_id lane, float new_velocity) {
+void trigger_envelope(lane_id lane, uint8_t velocity) {
 	env[lane].state    = ATTACK;
-	env[lane].velocity = new_velocity;
+	env[lane].velocity = velocity / MAX_MIDI;
 }
 
 void release_envelope(lane_id lane) {

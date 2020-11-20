@@ -32,7 +32,7 @@ void receive_midi(midi_input *midi) {
 			uint8_t note = event->data.note_on.note;
 			lane_id lane = reserve_lane_for_note(note);
 			set_oscillator_frequency(lane, hertz[note]);
-			trigger_envelope(lane, event->data.note_on.velocity / MAX_MIDI);
+			trigger_envelope(lane, event->data.note_on.velocity);
 			break;
 		}
 

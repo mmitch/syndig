@@ -9,6 +9,7 @@ typedef enum {
 	NOTE_ON,
 	NOTE_OFF,
 	PROGRAM_CHANGE,
+	CONTROL_CHANGE,
 } midi_event_type;
 
 typedef struct {
@@ -26,11 +27,17 @@ typedef struct {
 } midi_data_program_change;
 
 typedef struct {
+	uint8_t param;
+	uint8_t value;
+} midi_data_control_change;
+
+typedef struct {
 	midi_event_type type;
 	union {
 		midi_data_note_on        note_on;
 		midi_data_note_off       note_off;
 		midi_data_program_change program_change;
+		midi_data_control_change control_change;
 	} data;
 } midi_event;
 

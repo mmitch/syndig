@@ -17,11 +17,13 @@ static oscillator_type program_map[256] = {
 	SAW_UP,
 };
 
+#define to_string(x) (#x)
+
 typedef enum {
-	ROUND_ROBIN,
 	KILL_OLDEST,
 	KILL_LOWEST,
 	KILL_HIGHEST,
+	ROUND_ROBIN,
 } polyphony_mode;
 
 typedef struct {
@@ -135,6 +137,30 @@ void init_midi() {
 	}
 }
 
+static void handle_poly_mode_change(uint8_t value) {
+	switch (value) {
+	case 0:
+		poly_mode = KILL_OLDEST;
+		printf("poly mode = %s\n", to_string(KILL_OLDEST));
+		break;
+
+	case 1:
+		poly_mode = KILL_LOWEST;
+		printf("poly mode = %s\n", to_string(KILL_LOWEST));
+		break;
+
+	case 2:
+		poly_mode = KILL_HIGHEST;
+		printf("poly mode = %s\n", to_string(KILL_HIGHEST));
+		break;
+
+	case 3:
+		poly_mode = ROUND_ROBIN;
+		printf("poly mode = %s\n", to_string(ROUND_ROBIN));
+		break;
+	}
+}
+
 void receive_midi(midi_input *midi) {
 	midi_event *event;
 	while ((event = midi->read()) != NULL) {
@@ -162,6 +188,18 @@ void receive_midi(midi_input *midi) {
 
 		case PROGRAM_CHANGE:
 			change_oscillator_type(program_map[event->data.program_change.program]);
+			break;
+
+		case CONTROL_CHANGE:
+		{
+			uint8_t value = event->data.control_change.value;
+			switch (event->data.control_change.param) {
+			case 3:
+				handle_poly_mode_change(value);
+				break;
+			}
+			break;
+		}
 		}
 	}
 }

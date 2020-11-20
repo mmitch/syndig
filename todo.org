@@ -13,7 +13,7 @@
 - [X] switch to mono output as long as there is no stereo data
 - [ ] find a better name than /synth/
 
-* [6/16] features
+* [7/17] features
 
 - [ ] variable sample rate
 - [ ] refactor duplicated code in error handling (in input and output)
@@ -27,7 +27,7 @@
 - [X] use MIDI program change to switch oscillators
 - [X] multiple oscillators simultaneously?
 - [X] polyphony
-- [ ] switch stop oldest/newest note on polyphony overflow
+- [X] switch stop oldest/newest note on polyphony overflow
 - [ ] phazor effect?  find out how to make atmospheric strings
 - [ ] stereo output?
 - [X] ADSR envelope

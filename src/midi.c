@@ -61,6 +61,19 @@ void receive_midi(midi_input *midi) {
 				CLAMP_TO_MAP(value, poly_map);
 				set_polyphony_mode(poly_map[value]);
 				break;
+
+			case 72:
+				set_envelope_release(value);
+				break;
+				
+			case 73:
+				set_envelope_attack(value);
+				break;
+				
+			case 80:
+				set_envelope_decay(value);
+				break;
+				
 			}
 			break;
 		}

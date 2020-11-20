@@ -83,6 +83,18 @@ bool envelope_is_running(lane_id lane) {
 	return env[lane].state != OFF;
 }
 
-bool  envelope_is_in_release(lane_id lane) {
+bool envelope_is_in_release(lane_id lane) {
 	return env[lane].state == RELEASE;
+}
+
+void set_envelope_attack(uint8_t new_attack) {
+	attack = new_attack;
+}
+
+void set_envelope_decay(uint8_t new_decay) {
+	decay = new_decay;
+}
+
+void set_envelope_release(uint8_t new_release) {
+	release = new_release;
 }

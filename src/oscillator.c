@@ -8,6 +8,7 @@
 #define BUFTYPE float
 #define BUFBYTES (BUFSIZE * sizeof(BUFTYPE))
 static BUFTYPE samples[BUFSIZE];
+static BUFTYPE silence[BUFSIZE];
 
 // FIXME: get samplerate from somewhere else
 #define SAMPLERATE 44100.0
@@ -39,6 +40,11 @@ void change_oscillator_type(oscillator_type new_type) {
 }
 
 void run_oscillator(sound_output *sound) {
+	if (! envelope_is_running()) {
+		sound->write(&silence, BUFBYTES);
+		return;
+	}
+
 	switch (type) {
 
 	case SQUARE:

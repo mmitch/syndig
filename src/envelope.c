@@ -63,3 +63,7 @@ float envelope_nextval() {
 
 	return value;
 }
+
+bool envelope_is_running() {
+	return state != OFF;
+}

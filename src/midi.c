@@ -1,3 +1,4 @@
+#include <string.h>
 #include <stdio.h>
 
 #include "common.h"
@@ -18,6 +19,7 @@ static oscillator_type program_map[256] = {
 
 typedef enum {
 	ROUND_ROBIN,
+	KILL_OLDEST,
 	KILL_LOWEST,
 	KILL_HIGHEST,
 } polyphony_mode;
@@ -28,8 +30,27 @@ typedef struct {
 
 static lane_t lane[POLYPHONY];
 
-static polyphony_mode poly_mode = KILL_LOWEST;
+static polyphony_mode poly_mode = KILL_OLDEST;
+static id poly_history[POLYPHONY]; // contains every lane id exactly once; order matters
 static id round_robin;
+
+static void poly_history_set_newest(id newest) {
+	id found;
+	for (found = POLYPHONY-1; found > 0; found--) {
+		if (poly_history[found] == newest) {
+			break;
+		}
+	}
+	if (found) {
+		// move existing entry to front of queue
+		bcopy(&poly_history[0], &poly_history[1], sizeof(id) * found);
+		poly_history[0] = newest;
+	}
+}
+
+static id poly_history_get_oldest() {
+	return poly_history[POLYPHONY-1];
+}
 
 static id find_lane_with_note(uint8_t note) {
 	for (id id = 0; id < POLYPHONY; id++) {
@@ -78,6 +99,10 @@ static id find_lane_for(uint8_t note) {
 		id = round_robin;
 		break;
 
+	case KILL_OLDEST:
+		id = poly_history_get_oldest();
+		break;
+
 	case KILL_LOWEST:
 		note = HIGHEST_NOTE;
 		for (i = 0; i < POLYPHONY; i++) {
@@ -105,6 +130,7 @@ static id find_lane_for(uint8_t note) {
 
 void init_midi() {
 	for (id id = 0; id < POLYPHONY; id++) {
+		poly_history[id] = id;
 		lane[id].note = INVALID_NOTE;
 	}
 }
@@ -118,6 +144,7 @@ void receive_midi(midi_input *midi) {
 		{
 			uint8_t note = event->data.note_on.note;
 			id id = find_lane_for(note);
+			poly_history_set_newest(id);
 			lane[id].note = note;
 			set_oscillator_frequency(id, hertz[note]);
 			trigger_envelope(id, event->data.note_on.velocity / MAX_MIDI);

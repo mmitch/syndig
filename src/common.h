@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define POLYPHONY 4
+#define POLYPHONY 16
 
 typedef uint8_t lane_id;
 // max id + 1 is unknown/not found

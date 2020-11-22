@@ -116,13 +116,13 @@ void set_polyphony_mode(polyphony_mode new_mode) {
 	printf("polyphony mode set to %s\n", new_mode.name);
 }
 
-void play_note(uint8_t note) {
+void play_note(uint8_t note, uint8_t velocity) {
 	lane_id lane = find_lane_for(note);
 	poly_history_set_newest(lane);
 	last_note[lane] = note;
 
 	set_oscillator_frequency(lane, hertz[note]);
-	trigger_envelope(lane, note);
+	trigger_envelope(lane, velocity);
 }
 
 void stop_note(uint8_t note) {

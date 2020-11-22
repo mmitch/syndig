@@ -38,7 +38,7 @@ void receive_midi(midi_input *midi) {
 
 		case NOTE_ON:
 		{
-			play_note(event->data.note_on.note);
+			play_note(event->data.note_on.note, event->data.note_on.velocity);
 			break;
 		}
 

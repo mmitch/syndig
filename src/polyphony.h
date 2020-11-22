@@ -17,7 +17,7 @@ typedef struct {
 
 void init_polyphony();
 void set_polyphony_mode(polyphony_mode new_mode);
-void play_note(uint8_t note);
+void play_note(uint8_t note, uint8_t velocity);
 void stop_note(uint8_t note);
 
 #endif

@@ -96,26 +96,26 @@ bool envelope_is_running(lane_id lane) {
  *  rate = -----
  *         ticks
  */
-void set_envelope_attack(uint8_t attack_ms) {
+void set_envelope_attack(uint16_t attack_ms) {
 	if (attack_ms == 0) {
 		attack_rate = 0;
 	} else {
-		attack_rate = 1.0 / ( MS_TO_TICKS(attack_ms) * STRETCH );
+		attack_rate = 1.0 / MS_TO_TICKS(attack_ms);
 	}
 }
 
-void set_envelope_decay(uint8_t decay_ms) {
+void set_envelope_decay(uint16_t decay_ms) {
 	if (decay_ms == 0) {
 		decay_rate = 0;
 	} else {
-		decay_rate = 1.0 / ( MS_TO_TICKS(decay_ms) * STRETCH );
+		decay_rate = 1.0 / MS_TO_TICKS(decay_ms);
 	}
 }
 
-void set_envelope_release(uint8_t release_ms) {
+void set_envelope_release(uint16_t release_ms) {
 	if (release_ms == 0) {
 		release_rate = 0;
 	} else {
-		release_rate = 1.0 / ( MS_TO_TICKS(release_ms) * STRETCH );
+		release_rate = 1.0 / MS_TO_TICKS(release_ms);
 	}
 }

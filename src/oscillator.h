@@ -2,7 +2,6 @@
 #define _OSCILLATOR_H_
 
 #include "common.h"
-#include "output.h"
 
 typedef enum {
 	SQUARE,
@@ -13,6 +12,6 @@ typedef enum {
 void init_oscillators();
 void set_oscillator_frequency(lane_id id, float new_frequency);
 void change_oscillator_type(oscillator_type new_type);
-void run_oscillators(sound_output *sound);
+void run_oscillators();
 
 #endif

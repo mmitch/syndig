@@ -1,8 +1,6 @@
 #include "buffer.h"
-#include "compressor.h"
 #include "envelope.h"
 #include "oscillator.h"
-#include "output.h"
 
 typedef struct {
 	oscillator_type type;
@@ -79,11 +77,8 @@ void change_oscillator_type(oscillator_type new_type) {
 	type = new_type;
 }
 
-void run_oscillators(sound_output *sound) {
-	clear_sample_buffer();
+void run_oscillators() {
 	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
 		run_oscillator(lane);
 	}
-	compress_buffer();
-	sound->write();
 }

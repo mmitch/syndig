@@ -1,9 +1,11 @@
 #include <stdio.h>
 
+#include "buffer.h"
 #include "common.h"
-#include "envelope.h"
+#include "compressor.h"
 #include "midi.h"
 #include "oscillator.h"
+#include "output.h"
 #include "polyphony.h"
 
 int main() {
@@ -24,6 +26,9 @@ int main() {
 	}
 	puts("MIDI input opened");
 
+	init_sample_buffer();
+	puts("buffer initialized");
+
 	init_polyphony();
 	puts("polyphony initialized");
 
@@ -35,7 +40,10 @@ int main() {
 
 	while(1) {
 		receive_midi(midi);
-		run_oscillators(sound);
+		clear_sample_buffer();
+		run_oscillators();
+		compress_buffer();
+		sound->write();
 	}
 
 SHUTDOWN:

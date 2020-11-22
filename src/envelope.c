@@ -1,9 +1,7 @@
 #include <stdint.h>
 
+#include "common.h"
 #include "envelope.h"
-
-#define MIN(x, y) ((x) < (y) ? (x) : (y))
-#define MAX(x, y) ((x) > (y) ? (x) : (y))
 
 #define MAX_MIDI 128.0
 

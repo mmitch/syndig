@@ -11,4 +11,12 @@ typedef uint8_t lane_id;
 
 #define PROGRAM_NAME "synth"
 
+// sys/param.h has these too and gets included by PulseAudio
+#ifndef MIN
+#define MIN(x, y)  ((x) < (y) ? (x) : (y))
+#endif
+#ifndef MAX
+#define MAX(x, y)  ((x) > (y) ? (x) : (y))
+#endif
+
 #endif

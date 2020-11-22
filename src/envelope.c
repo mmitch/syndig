@@ -111,6 +111,10 @@ void set_envelope_decay(uint16_t decay_ms) {
 	}
 }
 
+void set_envelope_sustain(float sustain) {
+	sustain_level = sustain;
+}
+
 void set_envelope_release(uint16_t release_ms) {
 	if (release_ms == 0) {
 		release_rate = 0;

@@ -75,6 +75,10 @@ void receive_midi(midi_input *midi) {
 				set_envelope_attack(STRETCH(value));
 				break;
 				
+			case 75:
+				set_envelope_sustain(value / MAX_MIDI);
+				break;
+
 			case 80:
 				set_envelope_decay(STRETCH(value));
 				break;

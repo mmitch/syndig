@@ -40,3 +40,4 @@
   that lane; decide whether that is a bug or a feature
 - [ ] global amplifier
 - [X] compressor
+- [ ] support all notes off command

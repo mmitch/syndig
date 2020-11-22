@@ -4,6 +4,7 @@
 #include <pulse/error.h>
 #include <pulse/simple.h>
 
+#include "buffer.h"
 #include "common.h"
 #include "output.h"
 
@@ -13,7 +14,7 @@ static int pulse_open()
 {
 	pa_sample_spec pulse_spec;
 	pulse_spec.format = PA_SAMPLE_FLOAT32;
-	pulse_spec.rate = 44100;
+	pulse_spec.rate = SAMPLERATE;
 	pulse_spec.channels = 1;
 
 	int err;
@@ -26,9 +27,9 @@ static int pulse_open()
 	return 0;
 }
 
-static ssize_t pulse_write(const void *buf, size_t count)
+static ssize_t pulse_write()
 {
-	return pa_simple_write(pulse_handle, buf, count, NULL);
+	return pa_simple_write(pulse_handle, &samples, BUFBYTES, NULL);
 }
 
 static int pulse_close()

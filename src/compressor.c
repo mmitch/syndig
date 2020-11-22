@@ -2,8 +2,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include "buffer.h"
 #include "common.h"
-#include "output.h"
 
 #define NEUTRAL 1.0
 #define FALLOFF 0.01

@@ -1,3 +1,4 @@
+#include "buffer.h"
 #include "compressor.h"
 #include "envelope.h"
 #include "oscillator.h"
@@ -84,5 +85,5 @@ void run_oscillators(sound_output *sound) {
 		run_oscillator(lane);
 	}
 	compress_buffer();
-	sound->write(&samples, BUFBYTES);
+	sound->write();
 }

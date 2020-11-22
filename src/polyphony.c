@@ -116,7 +116,7 @@ void set_polyphony_mode(polyphony_mode new_mode) {
 	printf("polyphony mode set to %s\n", new_mode.name);
 }
 
-void play_note(uint8_t note, uint8_t velocity) {
+void play_note(uint8_t note, float velocity) {
 	lane_id lane = find_lane_for(note);
 	poly_history_set_newest(lane);
 	last_note[lane] = note;

@@ -6,6 +6,8 @@
 #include "oscillator.h"
 #include "polyphony.h"
 
+#define MAX_MIDI  128.0
+
 #define LAST_INDEX(arr)          ((sizeof(arr) / (sizeof(arr[0]))) - 1)
 #define CLAMP_TO_MAP(val, map)   { if (val > LAST_INDEX(map)) { val = 0; } }
 
@@ -38,7 +40,7 @@ void receive_midi(midi_input *midi) {
 
 		case NOTE_ON:
 		{
-			play_note(event->data.note_on.note, event->data.note_on.velocity);
+			play_note(event->data.note_on.note, event->data.note_on.velocity / MAX_MIDI);
 			break;
 		}
 

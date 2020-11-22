@@ -4,7 +4,6 @@
 #include "common.h"
 #include "envelope.h"
 
-#define MAX_MIDI  128.0
 #define STRETCH   10
 
 #define MS_TO_TICKS(x)  ((x) * SAMPLERATE / 1000.0)
@@ -42,9 +41,9 @@ void init_envelopes() {
 	set_envelope_release(30);
 }
 
-void trigger_envelope(lane_id lane, uint8_t velocity) {
+void trigger_envelope(lane_id lane, float velocity) {
 	env[lane].state    = ATTACK;
-	env[lane].velocity = velocity / MAX_MIDI;
+	env[lane].velocity = velocity;
 }
 
 void release_envelope(lane_id lane) {

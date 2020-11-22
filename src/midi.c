@@ -6,7 +6,7 @@
 #include "oscillator.h"
 #include "polyphony.h"
 
-#define MAX_MIDI  128.0
+#define MAX_MIDI  127.0
 
 #define LAST_INDEX(arr)          ((sizeof(arr) / (sizeof(arr[0]))) - 1)
 #define CLAMP_TO_MAP(val, map)   { if (val > LAST_INDEX(map)) { val = 0; } }

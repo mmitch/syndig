@@ -1,4 +1,4 @@
-#include "common.h"
+#include "compressor.h"
 #include "envelope.h"
 #include "oscillator.h"
 #include "output.h"
@@ -83,5 +83,6 @@ void run_oscillators(sound_output *sound) {
 	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
 		run_oscillator(lane);
 	}
+	compress_buffer();
 	sound->write(&samples, BUFBYTES);
 }

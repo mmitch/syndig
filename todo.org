@@ -13,7 +13,7 @@
 - [X] switch to mono output as long as there is no stereo data
 - [ ] find a better name than /synth/
 
-* [7/17] features
+* [8/19] features
 
 - [ ] variable sample rate
 - [ ] refactor duplicated code in error handling (in input and output)
@@ -39,4 +39,4 @@
 - [ ] re-using an active lane does not reset the envelope.value of
   that lane; decide whether that is a bug or a feature
 - [ ] global amplifier
-- [ ] compressor
+- [X] compressor

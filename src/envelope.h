@@ -6,9 +6,9 @@
 #include "common.h"
 
 void  init_envelopes();
-void  set_envelope_attack(uint8_t new_attack);
-void  set_envelope_decay(uint8_t new_decay);
-void  set_envelope_release(uint8_t new_release);
+void  set_envelope_attack(uint8_t attack_ms);
+void  set_envelope_decay(uint8_t decay_ms);
+void  set_envelope_release(uint8_t release_ms);
 void  trigger_envelope(lane_id id, uint8_t velocity);
 void  release_envelope(lane_id id);
 float envelope_nextval(lane_id id);

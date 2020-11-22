@@ -21,7 +21,7 @@ all:	$(binary)
 autobuild:
 	-$(MAKE) all
 	inotifywait -m -e modify -e create -e delete -e close_write -e move -r . \
-	| grep --line-buffered '\.[cdho]$$' \
+	| grep --line-buffered -E '(Makefile|\.[cdho])$$' \
 	| while read -r EVENT; do \
 		while read -r -t 0.1 EVENT; do :; done; \
 		$(MAKE) all; \

@@ -1,5 +1,5 @@
 #ifndef _COMPRESSOR_H_
-#define _COMPORESSOR_H
+#define _COMPRESSOR_H_
 
 void compress_buffer();
 

@@ -39,12 +39,6 @@ static lane_id find_free_lane() {
 		}
 	}
 
-	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
-		if (envelope_is_in_release(lane)) {
-			return lane;
-		}
-	}
-
 	return NO_LANE;
 }
 

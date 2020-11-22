@@ -13,6 +13,5 @@ void  trigger_envelope(lane_id id, uint8_t velocity);
 void  release_envelope(lane_id id);
 float envelope_nextval(lane_id id);
 bool  envelope_is_running(lane_id id);
-bool  envelope_is_in_release(lane_id id);
 
 #endif

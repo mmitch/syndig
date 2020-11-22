@@ -83,10 +83,6 @@ bool envelope_is_running(lane_id lane) {
 	return env[lane].state != OFF;
 }
 
-bool envelope_is_in_release(lane_id lane) {
-	return env[lane].state == RELEASE;
-}
-
 void set_envelope_attack(uint8_t new_attack) {
 	attack = new_attack;
 }

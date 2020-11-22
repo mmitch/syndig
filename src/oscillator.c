@@ -1,18 +1,7 @@
-#include <string.h>
-
 #include "common.h"
 #include "envelope.h"
 #include "oscillator.h"
 #include "output.h"
-
-#define BUFSIZE 128
-#define BUFTYPE float
-#define BUFBYTES (BUFSIZE * sizeof(BUFTYPE))
-static BUFTYPE samples[BUFSIZE];
-static BUFTYPE silence[BUFSIZE];
-
-// FIXME: get samplerate from somewhere else
-#define SAMPLERATE 44100.0
 
 typedef struct {
 	oscillator_type type;
@@ -76,10 +65,6 @@ void init_oscillators() {
 		osc[lane].wavelength = 1;
 		set_oscillator_frequency(lane, 440);
 	}
-
-	for (int i = 0; i < BUFSIZE; i++) {
-		silence[i] = 0;
-	}
 }
 
 void set_oscillator_frequency(lane_id lane, float new_frequency) {
@@ -94,7 +79,7 @@ void change_oscillator_type(oscillator_type new_type) {
 }
 
 void run_oscillators(sound_output *sound) {
-	memcpy(samples, silence, BUFBYTES);
+	clear_sample_buffer();
 	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
 		run_oscillator(lane);
 	}

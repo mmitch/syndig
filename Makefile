@@ -57,3 +57,5 @@ $(builddir)/%.d: $(srcdir)/%.c
 	$(CC) -MM $(CFLAGS) $< > $@.$$$$; \
 	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$
+
+$(objects) $(depends): Makefile

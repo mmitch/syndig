@@ -2,6 +2,8 @@
 #include <stdio.h>
 
 #include "envelope.h"
+#include "hertz.h"
+#include "oscillator.h"
 #include "polyphony.h"
 
 #define NO_NOTE      255
@@ -39,6 +41,15 @@ static lane_id find_free_lane() {
 		}
 	}
 
+	return NO_LANE;
+}
+
+static lane_id find_lane_with_note(uint8_t note) {
+	for (lane_id id = 0; id < POLYPHONY; id++) {
+		if (last_note[id] == note) {
+			return id;
+		}
+	}
 	return NO_LANE;
 }
 
@@ -105,18 +116,18 @@ void set_polyphony_mode(polyphony_mode new_mode) {
 	printf("polyphony mode set to %s\n", new_mode.name);
 }
 
-lane_id find_lane_with_note(uint8_t note) {
-	for (lane_id id = 0; id < POLYPHONY; id++) {
-		if (last_note[id] == note) {
-			return id;
-		}
-	}
-	return NO_LANE;
-}
-
-lane_id reserve_lane_for_note(uint8_t note) {
+void play_note(uint8_t note) {
 	lane_id lane = find_lane_for(note);
 	poly_history_set_newest(lane);
 	last_note[lane] = note;
-	return lane;
+
+	set_oscillator_frequency(lane, hertz[note]);
+	trigger_envelope(lane, note);
+}
+
+void stop_note(uint8_t note) {
+	lane_id lane = find_lane_with_note(note);
+	if (lane != NO_LANE) {
+		release_envelope(lane);
+	}
 }

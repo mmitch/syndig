@@ -1,6 +1,5 @@
 #include "common.h"
 #include "envelope.h"
-#include "hertz.h"
 #include "input.h"
 #include "oscillator.h"
 #include "polyphony.h"
@@ -29,19 +28,13 @@ void receive_midi(midi_input *midi) {
 
 		case NOTE_ON:
 		{
-			uint8_t note = event->data.note_on.note;
-			lane_id lane = reserve_lane_for_note(note);
-			set_oscillator_frequency(lane, hertz[note]);
-			trigger_envelope(lane, event->data.note_on.velocity);
+			play_note(event->data.note_on.note);
 			break;
 		}
 
 		case NOTE_OFF:
 		{
-			lane_id lane = find_lane_with_note(event->data.note_on.note);
-			if (lane != NO_LANE) {
-				release_envelope(lane);
-			}
+			stop_note(event->data.note_on.note);
 			break;
 		}
 

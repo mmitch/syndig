@@ -38,3 +38,5 @@
 - [ ] use main thread for some commands (like quit)
 - [ ] re-using an active lane does not reset the envelope.value of
   that lane; decide whether that is a bug or a feature
+- [ ] global amplifier
+- [ ] compressor

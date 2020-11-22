@@ -4,8 +4,8 @@ SHELL := bash
 pkgconfigs := libpulse-simple alsa
 warnings   := -Wall -Wextra -Wpedantic -Werror
 
-CFLAGS  += $(shell pkg-config --cflags $(pkgconfigs)) $(warnings)
-LDFLAGS += $(shell pkg-config --libs $(pkgconfigs))
+CFLAGS  += $(shell pkg-config --cflags $(pkgconfigs)) $(warnings) -O3 -fPIC
+LDFLAGS += $(shell pkg-config --libs $(pkgconfigs)) -fPIC
 
 srcdir   := ./src
 builddir := ./build

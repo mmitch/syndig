@@ -4,8 +4,15 @@ SHELL := bash
 pkgconfigs := libpulse-simple alsa
 warnings   := -Wall -Wextra -Wpedantic -Werror
 
-CFLAGS  += $(shell pkg-config --cflags $(pkgconfigs)) $(warnings) -O3 -fPIC
-LDFLAGS += $(shell pkg-config --libs $(pkgconfigs)) -lm -fPIC
+CFLAGS  += $(shell pkg-config --cflags $(pkgconfigs)) $(warnings)
+LDFLAGS += $(shell pkg-config --libs $(pkgconfigs)) -lm
+
+# auto-optimize only when no other optimization level is given
+# this enables -O0 to be set for coverage builds
+ifeq (,$(findstring -O,$(CFLAGS)))
+	CFLAGS  += -O3 -fPIC
+	LDFLAGS += -fPIC
+endif
 
 srcdir   := ./src
 builddir := ./build

@@ -1,6 +1,7 @@
 a simple software synthesizer in C
 ==================================
 
+[![Code coverage status](https://codecov.io/github/mmitch/synth/coverage.svg?branch=master)](https://codecov.io/github/mmitch/synth?branch=master)
 [![Linux Build status](https://github.com/mmitch/synth/workflows/Linux%20Build/badge.svg?branch=master)](https://github.com/mmitch/synth/actions?query=workflow%3A%22Linux+Build%22)
 [![CodeQL status](https://github.com/mmitch/synth/workflows/CodeQL/badge.svg?branch=master)](https://github.com/mmitch/synth/actions?query=workflow%3ACodeQL)
 

@@ -13,7 +13,7 @@
 - [X] switch to mono output as long as there is no stereo data
 - [ ] find a better name than /synth/
 
-* [9/21] features
+* [10/21] features
 
 - [ ] variable sample rate
 - [ ] refactor duplicated code in error handling (in input and output)
@@ -41,4 +41,4 @@
 - [ ] global amplifier
 - [X] compressor
 - [ ] support all notes off command
-- [ ] determine code coverage after tests
+- [X] determine code coverage after tests

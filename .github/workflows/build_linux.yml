@@ -24,7 +24,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get install libpulse-dev libasound2-dev
-    - name: Build
+    - name: Build and Test
       env:
         CC: ${{ matrix.compiler }}
       run: |

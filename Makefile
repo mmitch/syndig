@@ -11,12 +11,37 @@ srcdir   := ./src
 builddir := ./build
 bindir   := ./bin
 
-sources := $(wildcard $(srcdir)/*.c)
-objects := $(addprefix $(builddir)/,$(notdir $(sources:.c=.o)))
-depends := $(objects:.o=.d))
-binary  := $(bindir)/synth
+sources  := $(wildcard $(srcdir)/*.c)
+objects  := $(addprefix $(builddir)/,$(notdir $(sources:.c=.o)))
+depends  := $(objects:.o=.d))
+binary   := $(bindir)/synth
 
-all:	$(binary)
+testsrcdir   := $(srcdir)/test
+testbuilddir := $(builddir)/test
+testbindir   := $(bindir)/test
+
+testsources  := $(wildcard $(testsrcdir)/*.c)
+testobjects  := $(addprefix $(testbuilddir)/,$(notdir $(testsources:.c=.o)))
+testdepends  := $(testobjects:.o=.d))
+testbinaries := $(addprefix $(testbindir)/,$(notdir $(testsources:.c=)))
+
+define gendep =
+@echo dep $@
+@set -e; rm -f $@; \
+$(CC) -MM $(CFLAGS) $< > $@.$$$$; \
+sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+rm -f $@.$$$$
+endef
+
+define compile =
+$(CC) $(CFLAGS) -c -o $@ $<
+endef
+
+define link =
+$(CC) -o $@ $^ $(LDFLAGS)
+endef
+
+all:	$(binary) test
 
 autobuild:
 	-$(MAKE) all
@@ -27,20 +52,27 @@ autobuild:
 		$(MAKE) all; \
 	done
 
-include $(depends)
+include $(depends) $(testdeps)
 
-.PHONY: all clean autobuild
+.PHONY: all clean autobuild test
+
+test: $(testbinaries)
+	@for TEST in $<; do $$TEST || exit 1; rm $$TEST; done
 
 $(binary): $(objects) | $(bindir)
-	$(CC) -o $@ $^ $(LDFLAGS)
+	$(link)
 
-$(bindir):
-	mkdir -p $@
+$(testbindir)/%: $(testbuilddir)/%.o
+	$(link)
 
-$(builddir):
+$(bindir) $(builddir) $(testbindir) $(testbuilddir):
 	mkdir -p $@
 
 $(objects) $(depends): | $(builddir)
+
+$(testobjects) $(testdeepends): | $(testbuilddir)
+
+$(testbinaries): | $(testbindir)
 
 clean:
 	rm -f  *~
@@ -49,13 +81,15 @@ clean:
 	rm -rf $(builddir)
 
 $(builddir)/%.o: $(srcdir)/%.c $(builddir)/%.d
-	$(CC) $(CFLAGS) -c -o $@ $<
+	$(compile)
+
+$(testbuilddir)/%.o: $(testsrcdir)/%.c $(testbuilddir)/%.d
+	$(compile)
 
 $(builddir)/%.d: $(srcdir)/%.c
-	@echo dep $@
-	@set -e; rm -f $@; \
-	$(CC) -MM $(CFLAGS) $< > $@.$$$$; \
-	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
-	rm -f $@.$$$$
+	$(gendep)
 
-$(objects) $(depends): Makefile
+$(testbuilddir)/%.d: $(testsrcdir)/%.c
+	$(gendep)
+
+$(objects) $(depends) $(testdepends): Makefile

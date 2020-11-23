@@ -1,4 +1,3 @@
 *~
-*.o
-*.d
-synth
+bin/
+build/

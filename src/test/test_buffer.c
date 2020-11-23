@@ -8,7 +8,7 @@ static char* init_sample_buffer_sets_buffer_to_zero() {
 	// when
 	init_sample_buffer();
 
-	// when
+	// then
 	for (int i=0; i<BUFSIZE; i++) {
 		ASSERT(samples[i] == 0.0);
 	}
@@ -24,7 +24,7 @@ static char* clear_sample_buffer_sets_buffer_to_zero() {
 	// when
 	clear_sample_buffer();
 
-	// when
+	// then
 	for (int i=0; i<BUFSIZE; i++) {
 		ASSERT(samples[i] == 0.0);
 	}

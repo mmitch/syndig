@@ -1,0 +1,32 @@
+# This workflow will determine the code coverage of a build and upload it to CodeCov.io
+
+name: Code Coverage
+
+on:
+  push:
+  pull_request:
+    types: [opened]
+
+jobs:
+  coverage-linux:
+    name: Code Coverage under Linux
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        sudo apt-get install libpulse-dev libasound2-dev
+    - name: Build and Test with coverage
+      env:
+        CFLAGS: '-O0 -coverage -fprofile-arcs -ftest-coverage'
+        LDFLAGS: '-lgcov -coverage -fprofile-arcs'
+      run: |
+        make
+    - name: Process coverage
+      run: |
+        gcov build/*.o build/test/*.o
+    - name: Upload coverage
+      run: |
+        bash <(curl -s https://codecov.io/bash)

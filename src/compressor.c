@@ -41,7 +41,7 @@ void compress_buffer() {
 
 	if (compressing) {
 		for (uint8_t i = 0; i < BUFSIZE; i++) {
-			samples[i] /= compressing;
+			samples[i] /= compression;
 		}
 	}
 }

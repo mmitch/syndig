@@ -77,7 +77,7 @@ $(bindir) $(builddir) $(testbindir) $(testbuilddir):
 
 $(objects) $(depends): | $(builddir)
 
-$(testobjects) $(testdeepends): | $(testbuilddir)
+$(testobjects) $(testdepends): | $(testbuilddir)
 
 $(testbinaries): | $(testbindir)
 

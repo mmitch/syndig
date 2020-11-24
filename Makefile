@@ -84,7 +84,7 @@ include $(depends) $(testdeps)
 .PHONY: all clean autobuild test
 
 test: $(testbinaries)
-	@for TEST in $^; do $$TEST || exit 1; rm $$TEST; done
+	@for TEST in $^; do echo test $$TEST; $$TEST || exit 1; rm $$TEST; done
 
 $(binary): $(objects) | $(bindir)
 	$(link)

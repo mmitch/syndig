@@ -22,9 +22,9 @@
 
 #include "../buffer.c"
 
-#include "test.h"
+#include "../thirdparty/greatest.h"
 
-static char* init_sample_buffer_sets_buffer_to_zero() {
+TEST init_sample_buffer_sets_buffer_to_zero() {
 	// given
 
 	// when
@@ -32,13 +32,13 @@ static char* init_sample_buffer_sets_buffer_to_zero() {
 
 	// then
 	for (int i=0; i<BUFSIZE; i++) {
-		ASSERT(samples[i] == 0.0);
+		ASSERT_EQ(samples[i], 0.0);
 	}
 
-	return NULL;
+	PASS();
 }
 
-static char* clear_sample_buffer_sets_buffer_to_zero() {
+TEST clear_sample_buffer_sets_buffer_to_zero() {
 	// given
 	init_sample_buffer();
 	samples[0] = 1337;
@@ -48,15 +48,19 @@ static char* clear_sample_buffer_sets_buffer_to_zero() {
 
 	// then
 	for (int i=0; i<BUFSIZE; i++) {
-		ASSERT(samples[i] == 0.0);
+		ASSERT_EQ(samples[i], 0.0);
 	}
 
-	return NULL;
+	PASS();
 }
 
-int main() {
-	START_TESTS;
+GREATEST_MAIN_DEFS();
+
+int main(int argc, char **argv) {
+	GREATEST_MAIN_BEGIN();
+
 	RUN_TEST(init_sample_buffer_sets_buffer_to_zero);
 	RUN_TEST(clear_sample_buffer_sets_buffer_to_zero);
-	END_TESTS;
+
+	GREATEST_MAIN_END();
 }

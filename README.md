@@ -15,7 +15,6 @@ choose an existing soft-synth and read a manual ;-)
 
 
 project home: https://github.com/mmitch/syndig
-              (for now, project name subject to change)
 
 
 copyright

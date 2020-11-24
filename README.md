@@ -1,9 +1,9 @@
 a simple software synthesizer in C
 ==================================
 
-[![Code coverage status](https://codecov.io/github/mmitch/synth/coverage.svg?branch=master)](https://codecov.io/github/mmitch/synth?branch=master)
-[![Linux Build status](https://github.com/mmitch/synth/workflows/Linux%20Build/badge.svg?branch=master)](https://github.com/mmitch/synth/actions?query=workflow%3A%22Linux+Build%22)
-[![CodeQL status](https://github.com/mmitch/synth/workflows/CodeQL/badge.svg?branch=master)](https://github.com/mmitch/synth/actions?query=workflow%3ACodeQL)
+[![Code coverage status](https://codecov.io/github/mmitch/syndig/coverage.svg?branch=master)](https://codecov.io/github/mmitch/syndig?branch=master)
+[![Linux Build status](https://github.com/mmitch/syndig/workflows/Linux%20Build/badge.svg?branch=master)](https://github.com/mmitch/syndig/actions?query=workflow%3A%22Linux+Build%22)
+[![CodeQL status](https://github.com/mmitch/syndig/workflows/CodeQL/badge.svg?branch=master)](https://github.com/mmitch/syndig/actions?query=workflow%3ACodeQL)
 
 I started to make some music using (analog) synths, but I only have
 monophonic synthesizers and a drum machine.  I still need something
@@ -14,15 +14,14 @@ to roll my own soft-synth?  It's a lot more fun to tinker than to
 choose an existing soft-synth and read a manual ;-)
 
 
-project home: https://github.com/mmitch/synth
+project home: https://github.com/mmitch/syndig
               (for now, project name subject to change)
 
 
 copyright
 ---------
 
-
-synth  -  a simple software synthesizer in C  
+syndig  -  a simple software synthesizer in C  
 Copyright (C) 2020  Christian Garbs <mitch@cgarbs.de>  
 Licensed under GNU GPL v3 (or later)  
 

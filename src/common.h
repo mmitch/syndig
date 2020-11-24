@@ -9,7 +9,7 @@ typedef uint8_t lane_id;
 // max id + 1 is unknown/not found
 #define NO_LANE POLYPHONY
 
-#define PROGRAM_NAME "synth"
+#define PROGRAM_NAME "syndig"
 
 // sys/param.h has these too and gets included by PulseAudio
 #ifndef MIN

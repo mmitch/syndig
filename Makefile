@@ -21,7 +21,7 @@ bindir   := ./bin
 sources  := $(wildcard $(srcdir)/*.c)
 objects  := $(addprefix $(builddir)/,$(notdir $(sources:.c=.o)))
 depends  := $(objects:.o=.d))
-binary   := $(bindir)/synth
+binary   := $(bindir)/syndig
 
 testsrcdir   := $(srcdir)/test
 testbuilddir := $(builddir)/test

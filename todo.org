@@ -5,13 +5,13 @@
 - [X] MIDI in
 - [X] note on/note off
 
-* [4/5] todos
+* [5/5] todos
 
 - [X] build pipeline
 - [X] play corresponding notes on note on/note off
 - [X] play smooth sounds (it's currently awful)
 - [X] switch to mono output as long as there is no stereo data
-- [ ] find a better name than /synth/
+- [X] find a better name than /synth/
 
 * [10/21] features
 

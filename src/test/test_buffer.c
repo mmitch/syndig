@@ -32,7 +32,7 @@ TEST init_sample_buffer_sets_buffer_to_zero() {
 
 	// then
 	for (int i=0; i<BUFSIZE; i++) {
-		ASSERT_EQ(samples[i], 0.0);
+		ASSERT_EQ(0.0, samples[i]);
 	}
 
 	PASS();
@@ -48,7 +48,7 @@ TEST clear_sample_buffer_sets_buffer_to_zero() {
 
 	// then
 	for (int i=0; i<BUFSIZE; i++) {
-		ASSERT_EQ(samples[i], 0.0);
+		ASSERT_EQ(0.0, samples[i]);
 	}
 
 	PASS();

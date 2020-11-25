@@ -40,11 +40,11 @@ TEST compression_of_empty_buffer_does_nothing() {
 
 	// then
 	for (int i=0; i<BUFSIZE; i++) {
-		ASSERT_EQ(samples[i], 0.0);
+		ASSERT_EQ(0.0, samples[i]);
 	}
 
-	ASSERT_EQ(compression, NEUTRAL);
-	ASSERT_EQ(compressing, false);
+	ASSERT_EQ(NEUTRAL, compression);
+	ASSERT_EQ(false,   compressing);
 
 	PASS();
 }
@@ -60,12 +60,12 @@ TEST compression_does_not_kick_in_with_max_values() {
 	compress_buffer();
 
 	// then
-	ASSERT_EQ(samples[0],  1.0);
-	ASSERT_EQ(samples[1], -1.0);
-	ASSERT_EQ(samples[2],  0.0);
+	ASSERT_EQ( 1.0, samples[0]);
+	ASSERT_EQ(-1.0, samples[1]);
+	ASSERT_EQ( 1.0, samples[2]);
 
-	ASSERT_EQ(compression, NEUTRAL);
-	ASSERT_EQ(compressing, false);
+	ASSERT_EQ(NEUTRAL, compression);
+	ASSERT_EQ(false,   compressing);
 
 	PASS();
 }
@@ -81,12 +81,12 @@ TEST compression_kicks_in_with_overflown_values() {
 	compress_buffer();
 
 	// then
-	ASSERT_EQ(samples[0],  1.0);
-	ASSERT_EQ(samples[1], -0.5);
-	ASSERT_EQ(samples[2],  0.0);
+	ASSERT_EQ( 1.0, samples[0]);
+	ASSERT_EQ(-0.5, samples[1]);
+	ASSERT_EQ( 0.0, samples[2]);
 
-	ASSERT_EQ(compression, 2.0);
-	ASSERT_EQ(compressing, true);
+	ASSERT_EQ(2.0,  compression);
+	ASSERT_EQ(true, compressing);
 
 	PASS();
 }
@@ -126,11 +126,11 @@ TEST compression_continues_on_next_call_but_reduced() {
 	// then
 	const float expected_compression = (2.0 - FALLOFF);       // == 1.99
 	const float expected_sample = 1.0 / expected_compression; // =~ 0.502513
-	ASSERT_EQ(samples[0],  expected_sample);
-	ASSERT_EQ(samples[1], -expected_sample);
+	ASSERT_EQ( expected_sample, samples[0]);
+	ASSERT_EQ(-expected_sample, samples[1]);
 
-	ASSERT_EQ(compression, expected_compression);
-	ASSERT_EQ(compressing, true);
+	ASSERT_EQ(expected_compression, compression);
+	ASSERT_EQ(true,                 compressing);
 
 	PASS();
 }
@@ -150,11 +150,11 @@ TEST active_compression_can_raise_compression_level_if_needed() {
 	compress_buffer();
 
 	// then
-	ASSERT_EQ(samples[0],  1.0);
-	ASSERT_EQ(samples[1], -0.25);
+	ASSERT_EQ( 1.0,  samples[0]);
+	ASSERT_EQ(-0.25, samples[1]);
 
-	ASSERT_EQ(compression, 4.0);
-	ASSERT_EQ(compressing, true);
+	ASSERT_EQ(4.0,  compression);
+	ASSERT_EQ(true, compressing);
 
 	PASS();
 }
@@ -173,10 +173,10 @@ TEST compression_can_run_out() {
 	compress_buffer();
 
 	// then
-	ASSERT_EQ(samples[0],  1.0);
+	ASSERT_EQ(1.0, samples[0]);
 
-	ASSERT_EQ(compression, NEUTRAL);
-	ASSERT_EQ(compressing, false);
+	ASSERT_EQ(NEUTRAL, compression);
+	ASSERT_EQ(false,   compressing);
 
 	PASS();
 }

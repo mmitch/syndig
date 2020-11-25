@@ -62,7 +62,7 @@ TEST compression_does_not_kick_in_with_max_values() {
 	// then
 	ASSERT_EQ( 1.0, samples[0]);
 	ASSERT_EQ(-1.0, samples[1]);
-	ASSERT_EQ( 1.0, samples[2]);
+	ASSERT_EQ( 0.0, samples[2]);
 
 	ASSERT_EQ(NEUTRAL, compression);
 	ASSERT_EQ(false,   compressing);

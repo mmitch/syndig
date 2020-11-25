@@ -58,7 +58,7 @@ define gendep =
 @echo dep $@
 @set -e; rm -f $@; \
 $(CC) -MM $(CFLAGS) $< > $@.$$$$; \
-sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+sed -e 's,\($*\)\.o[ :]*,\1.o $@ : ,g' -e ':loop;s,/[^/]\+/\.\./,/,g;t loop' < $@.$$$$ > $@; \
 rm -f $@.$$$$
 endef
 

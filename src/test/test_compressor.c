@@ -91,6 +91,24 @@ TEST compression_kicks_in_with_overflown_values() {
 	PASS();
 }
 
+TEST compression_normalizes_the_whole_buffer() {
+	// given
+	reset_compressor();
+	for (int i=0; i<BUFSIZE; i++) {
+		samples[i] = i;
+	}
+
+	// when
+	compress_buffer();
+
+	// then
+	for (int i=0; i<BUFSIZE; i++) {
+		ASSERT(samples[i] <= 1.0);
+	}
+
+	PASS();
+}
+
 TEST compression_continues_on_next_call_but_reduced() {
 	// given
 	reset_compressor();
@@ -171,6 +189,7 @@ int main(int argc, char **argv) {
 	RUN_TEST(compression_of_empty_buffer_does_nothing);
 	RUN_TEST(compression_does_not_kick_in_with_max_values);
 	RUN_TEST(compression_kicks_in_with_overflown_values);
+	RUN_TEST(compression_normalizes_the_whole_buffer);
 	RUN_TEST(compression_continues_on_next_call_but_reduced);
 	RUN_TEST(active_compression_can_raise_compression_level_if_needed);
 	RUN_TEST(compression_can_run_out);

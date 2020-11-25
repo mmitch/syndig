@@ -23,56 +23,28 @@
 #include "../midi.c"
 
 #include "../thirdparty/greatest.h"
-#include "../thirdparty/fff.h"
-DEFINE_FFF_GLOBALS
 
-FAKE_VOID_FUNC(set_envelope_attack,  uint16_t)
-FAKE_VOID_FUNC(set_envelope_release, uint16_t)
-FAKE_VOID_FUNC(set_envelope_decay,   uint16_t)
-FAKE_VOID_FUNC(set_envelope_sustain, float)
-
-FAKE_VOID_FUNC(change_oscillator_type, oscillator_type)
-
-FAKE_VOID_FUNC(play_note, uint8_t, float)
-FAKE_VOID_FUNC(stop_note, uint8_t)
-FAKE_VOID_FUNC(set_polyphony_mode, polyphony_mode)
-
-FAKE_VALUE_FUNC0(midi_event *, read_midi)
-midi_event* read_midi_proxy() {
-	return read_midi();
-}
-midi_input midi = {
-	.read = read_midi_proxy,
-};
+#include "mock/mock_envelope.h"
+#include "mock/mock_input.h"
+#include "mock/mock_oscillator.h"
+#include "mock/mock_polyphony.h"
 
 static midi_event event;
 
-static midi_event* events[] = { NULL, NULL };
-
 void setup() {
-	RESET_FAKE(set_envelope_attack)
-	RESET_FAKE(set_envelope_release)
-	RESET_FAKE(set_envelope_decay)
-	RESET_FAKE(set_envelope_sustain)
-	RESET_FAKE(change_oscillator_type)
-	RESET_FAKE(play_note)
-	RESET_FAKE(stop_note)
-	RESET_FAKE(set_polyphony_mode)
-	RESET_FAKE(read_midi)
+	reset_envelope_mocks();
+	reset_input_mocks();
+	reset_oscillator_mocks();
+	reset_polyphony_mocks();
 		
 	FFF_RESET_HISTORY()
 }
 
-void send_fake_event(midi_event *e) {
-	events[0] = e;
-	SET_RETURN_SEQ(read_midi, events, 2)
-}
-	
 TEST empty_event_does_nothing() {
 	// given
 	setup();
 
-	send_fake_event(NULL);
+	mock_incoming_midi_event(NULL);
 
 	// when
 	receive_midi(&midi);
@@ -91,7 +63,7 @@ TEST note_on_is_passed_to_polyphony() {
 	event.data.note_on.note     = 37;
 	event.data.note_on.velocity = 90;
 
-	send_fake_event(&event);
+	mock_incoming_midi_event(&event);
 
 	// when
 	receive_midi(&midi);
@@ -113,7 +85,7 @@ TEST note_off_is_passed_to_polyphony() {
 	event.type = NOTE_OFF;
 	event.data.note_off.note = 76;
 
-	send_fake_event(&event);
+	mock_incoming_midi_event(&event);
 
 	// when
 	receive_midi(&midi);
@@ -134,7 +106,7 @@ TEST program_change_is_passed_to_oscillator() {
 	event.type = PROGRAM_CHANGE;
 	event.data.program_change.program = 2;
 
-	send_fake_event(&event);
+	mock_incoming_midi_event(&event);
 
 	// when
 	receive_midi(&midi);
@@ -155,7 +127,7 @@ TEST program_change_unmapped_values_map_to_square() {
 	event.type = PROGRAM_CHANGE;
 	event.data.program_change.program = 99;
 
-	send_fake_event(&event);
+	mock_incoming_midi_event(&event);
 
 	// when
 	receive_midi(&midi);
@@ -177,7 +149,7 @@ TEST controller_3_sets_polyphony_mode() {
 	event.data.control_change.param = 3;
 	event.data.control_change.value = 3;
 
-	send_fake_event(&event);
+	mock_incoming_midi_event(&event);
 
 	// when
 	receive_midi(&midi);
@@ -199,7 +171,7 @@ TEST controller_3_unmapped_values_map_to_kill_oldest() {
 	event.data.control_change.param = 3;
 	event.data.control_change.value = 99;
 
-	send_fake_event(&event);
+	mock_incoming_midi_event(&event);
 
 	// when
 	receive_midi(&midi);

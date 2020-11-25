@@ -52,6 +52,8 @@ testobjects  := $(addprefix $(testbuilddir)/,$(notdir $(testsources:.c=.o)))
 testdepends  := $(testobjects:.o=.d))
 testbinaries := $(addprefix $(testbindir)/,$(notdir $(testsources:.c=)))
 
+mocksrcdir   := $(testsrcdir)/mock
+
 define gendep =
 @echo dep $@
 @set -e; rm -f $@; \
@@ -103,7 +105,7 @@ $(testbinaries): | $(testbindir)
 
 clean:
 	rm -f  *~
-	rm -f  $(srcdir)/*~
+	rm -f  $(srcdir)/*~ $(testsrcdir)/*~ $(mocksrcdir)/*~
 	rm -rf $(bindir)
 	rm -rf $(builddir)
 

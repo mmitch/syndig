@@ -37,7 +37,7 @@ FAKE_VOID_FUNC(play_note, uint8_t, float)
 FAKE_VOID_FUNC(stop_note, uint8_t)
 FAKE_VOID_FUNC(set_polyphony_mode, polyphony_mode)
 
-FAKE_VALUE_FUNC(midi_event *, read_midi)
+FAKE_VALUE_FUNC0(midi_event *, read_midi)
 midi_event* read_midi_proxy() {
 	return read_midi();
 }

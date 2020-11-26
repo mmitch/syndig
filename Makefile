@@ -54,6 +54,11 @@ testbinaries := $(addprefix $(testbindir)/,$(notdir $(testsources:.c=)))
 
 mocksrcdir   := $(testsrcdir)/mock
 
+term_green  := $(shell tput setaf 2 2>/dev/null)
+term_red    := $(shell tput setaf 1 2>/dev/null)
+term_yellow := $(shell tput setaf 3 2>/dev/null)
+term_reset  := $(shell tput sgr0 2>/dev/null)
+
 define gendep =
 @echo dep $@
 @set -e; rm -f $@; \
@@ -68,6 +73,12 @@ endef
 
 define link =
 $(CC) -o $@ $^ $(LDFLAGS)
+endef
+
+define colorize =
+sed -e "s/^PASS/$(term_green)PASS$(term_reset)/" \
+    -e "s/^SKIP/$(term_yellow)SKIP$(term_reset)/" \
+    -e "s/^FAIL/$(term_red)FAIL$(term_reset)/"
 endef
 
 all:	$(binary) test
@@ -86,7 +97,7 @@ include $(depends) $(testdeps)
 .PHONY: all clean autobuild test
 
 test: $(testbinaries)
-	@for TEST in $^; do echo test $$TEST; $$TEST || exit 1; rm $$TEST; done
+	@( for TEST in $^; do echo test $$TEST; $$TEST || exit 1; rm $$TEST; done; echo PASS ) | $(colorize)
 
 $(binary): $(objects) | $(bindir)
 	$(link)

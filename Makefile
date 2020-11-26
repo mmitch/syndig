@@ -92,12 +92,12 @@ autobuild:
 		$(MAKE) all; \
 	done
 
-include $(depends) $(testdeps)
+include $(depends) $(testdepends)
 
 .PHONY: all clean autobuild test
 
 test: $(testbinaries)
-	@( for TEST in $^; do echo test $$TEST; $$TEST || exit 1; rm $$TEST; done; echo PASS ) | $(colorize)
+	@( for TEST in $^; do echo test $$TEST; $$TEST || exit 1; done; echo PASS ) | $(colorize)
 
 $(binary): $(objects) | $(bindir)
 	$(link)

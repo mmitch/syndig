@@ -31,6 +31,8 @@ typedef uint8_t lane_id;
 // max id + 1 is unknown/not found
 #define NO_LANE POLYPHONY
 
+typedef double frequency;
+
 #define PROGRAM_NAME "syndig"
 
 // sys/param.h has these too and gets included by PulseAudio

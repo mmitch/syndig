@@ -23,6 +23,8 @@
 #ifndef _HERTZ_H_
 #define _HERTZ_H_
 
-extern const double hertz[];
+#include "common.h"
+
+extern const frequency hertz[];
 
 #endif

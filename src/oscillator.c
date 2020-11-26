@@ -27,7 +27,7 @@
 typedef struct {
 	oscillator_type type;
 	float phase;
-	float frequency;
+	frequency frequency;
 	float wavelength;
 } oscillator;
 
@@ -88,7 +88,7 @@ void init_oscillators() {
 	}
 }
 
-void set_oscillator_frequency(lane_id lane, float new_frequency) {
+void set_oscillator_frequency(lane_id lane, frequency new_frequency) {
 	osc[lane].frequency = new_frequency;
 	float relative_phase = osc[lane].phase / osc[lane].wavelength;
 	osc[lane].wavelength = SAMPLERATE / osc[lane].frequency;

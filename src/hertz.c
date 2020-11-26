@@ -36,7 +36,7 @@ foreach my $midi_note (0 .. 127) {
 
  **/
 
-const double hertz[] = {
+const frequency hertz[] = {
 	    8.1757989156, //   0
 	    8.6619572180, //   1
 	    9.1770239974, //   2

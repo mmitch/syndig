@@ -135,4 +135,4 @@ $(builddir)/%.d: $(srcdir)/%.c
 $(testbuilddir)/%.d: $(testsrcdir)/%.c
 	$(gendep)
 
-$(objects) $(depends) $(testdepends): Makefile
+$(objects) $(testobjects) $(depends) $(testdepends): Makefile

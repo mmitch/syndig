@@ -29,7 +29,7 @@
 
 const double hertz[128] = { 111.0, 222.0, 333.0 };
 
-void setup() {
+static void setup() {
 	reset_envelope_mocks();
 	reset_oscillator_mocks();
 		
@@ -38,6 +38,7 @@ void setup() {
 
 TEST init_polyphony_resets_last_notes() {
 	// given
+	setup();
 
 	// when
 	init_polyphony();
@@ -52,6 +53,7 @@ TEST init_polyphony_resets_last_notes() {
 
 TEST init_polyphony_resets_poly_history() {
 	// given
+	setup();
 
 	// when
 	init_polyphony();

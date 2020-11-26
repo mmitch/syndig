@@ -31,7 +31,7 @@
 
 static midi_event event;
 
-void setup() {
+static void setup() {
 	reset_envelope_mocks();
 	reset_input_mocks();
 	reset_oscillator_mocks();

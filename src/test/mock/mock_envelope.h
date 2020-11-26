@@ -29,6 +29,8 @@ FAKE_VOID_FUNC(set_envelope_attack,  uint16_t)
 FAKE_VOID_FUNC(set_envelope_release, uint16_t)
 FAKE_VOID_FUNC(set_envelope_decay,   uint16_t)
 FAKE_VOID_FUNC(set_envelope_sustain, float)
+FAKE_VOID_FUNC(trigger_envelope, lane_id, float)
+FAKE_VOID_FUNC(release_envelope, lane_id)
 FAKE_VALUE_FUNC(float, envelope_nextval, lane_id)
 FAKE_VALUE_FUNC(bool, envelope_is_running, lane_id)
 
@@ -37,6 +39,8 @@ void reset_envelope_mocks() {
 	RESET_FAKE(set_envelope_release)
 	RESET_FAKE(set_envelope_decay)
 	RESET_FAKE(set_envelope_sustain)
+	RESET_FAKE(trigger_envelope)
+	RESET_FAKE(release_envelope)
 	RESET_FAKE(envelope_nextval)
 	RESET_FAKE(envelope_is_running)
 }

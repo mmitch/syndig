@@ -40,7 +40,7 @@ bindir   := ./bin
 
 sources  := $(wildcard $(srcdir)/*.c)
 objects  := $(addprefix $(builddir)/,$(notdir $(sources:.c=.o)))
-depends  := $(objects:.o=.d))
+depends  := $(objects:.o=.d)
 binary   := $(bindir)/syndig
 
 testsrcdir   := $(srcdir)/test
@@ -49,7 +49,7 @@ testbindir   := $(bindir)/test
 
 testsources  := $(wildcard $(testsrcdir)/*.c)
 testobjects  := $(addprefix $(testbuilddir)/,$(notdir $(testsources:.c=.o)))
-testdepends  := $(testobjects:.o=.d))
+testdepends  := $(testobjects:.o=.d)
 testbinaries := $(addprefix $(testbindir)/,$(notdir $(testsources:.c=)))
 
 mocksrcdir   := $(testsrcdir)/mock

@@ -114,13 +114,18 @@ TEST init_oscillators_changes_type_on_all_lanes() {
 GREATEST_MAIN_DEFS();
 
 int main(int argc, char **argv) {
+	time_t t;
+	srand((unsigned) time(&t));
+
 	GREATEST_MAIN_BEGIN();
 
-	RUN_TEST(default_oscillator_type_is_square);
-	RUN_TEST(change_oscillator_type_works);
-	RUN_TEST(change_oscillator_type_does_not_change_type_on_lanes);
-	RUN_TEST(init_oscillators_resets_all_lanes);
-	RUN_TEST(init_oscillators_changes_type_on_all_lanes);
+	SHUFFLE_TESTS(rand(), {
+			RUN_TEST(default_oscillator_type_is_square);
+			RUN_TEST(change_oscillator_type_works);
+			RUN_TEST(change_oscillator_type_does_not_change_type_on_lanes);
+			RUN_TEST(init_oscillators_resets_all_lanes);
+			RUN_TEST(init_oscillators_changes_type_on_all_lanes);
+		});
 
 	GREATEST_MAIN_END();
 }

@@ -188,15 +188,20 @@ TEST controller_3_unmapped_values_map_to_kill_oldest() {
 GREATEST_MAIN_DEFS();
 
 int main(int argc, char **argv) {
+	time_t t;
+	srand((unsigned) time(&t));
+
 	GREATEST_MAIN_BEGIN();
 
-	RUN_TEST(empty_event_does_nothing);
-	RUN_TEST(note_on_is_passed_to_polyphony);
-	RUN_TEST(note_off_is_passed_to_polyphony);
-	RUN_TEST(program_change_is_passed_to_oscillator);
-	RUN_TEST(program_change_unmapped_values_map_to_square);
-	RUN_TEST(controller_3_sets_polyphony_mode);
-	RUN_TEST(controller_3_unmapped_values_map_to_kill_oldest);
+	SHUFFLE_TESTS(rand(), {
+			RUN_TEST(empty_event_does_nothing);
+			RUN_TEST(note_on_is_passed_to_polyphony);
+			RUN_TEST(note_off_is_passed_to_polyphony);
+			RUN_TEST(program_change_is_passed_to_oscillator);
+			RUN_TEST(program_change_unmapped_values_map_to_square);
+			RUN_TEST(controller_3_sets_polyphony_mode);
+			RUN_TEST(controller_3_unmapped_values_map_to_kill_oldest);
+		});
 
 	GREATEST_MAIN_END();
 }

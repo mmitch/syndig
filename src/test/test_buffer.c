@@ -57,10 +57,15 @@ TEST clear_sample_buffer_sets_buffer_to_zero() {
 GREATEST_MAIN_DEFS();
 
 int main(int argc, char **argv) {
+	time_t t;
+	srand((unsigned) time(&t));
+
 	GREATEST_MAIN_BEGIN();
 
-	RUN_TEST(init_sample_buffer_sets_buffer_to_zero);
-	RUN_TEST(clear_sample_buffer_sets_buffer_to_zero);
+	SHUFFLE_TESTS(rand(), {
+			RUN_TEST(init_sample_buffer_sets_buffer_to_zero);
+			RUN_TEST(clear_sample_buffer_sets_buffer_to_zero);
+		});
 
 	GREATEST_MAIN_END();
 }

@@ -97,7 +97,10 @@ include $(depends) $(testdepends)
 .PHONY: all clean autobuild test
 
 test: $(testbinaries)
-	@( for TEST in $^; do echo test $$TEST; $$TEST || exit 1; done; echo PASS ) | $(colorize)
+	@echo
+	@echo starting tests
+	@echo --------------
+	@( for TEST in $^; do echo; echo test $$TEST:; $$TEST || exit 1; done; echo; echo PASS ) | $(colorize)
 
 $(binary): $(objects) | $(bindir)
 	$(link)

@@ -29,6 +29,7 @@ typedef enum {
 	SQUARE,
 	SAW_DOWN,
 	SAW_UP,
+	TRIANGLE,
 } oscillator_type;
 
 void init_oscillators();

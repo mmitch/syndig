@@ -77,6 +77,23 @@ static void run_oscillator(lane_id lane) {
 		}
 		break;
 
+	case TRIANGLE:
+	{
+		float wavelength_half = o->wavelength / 2.0;
+		for (int i = 0; i < BUFSIZE; i++) {
+			o->phase++;
+			while (o->phase >= o->wavelength) {
+				o->phase -= o->wavelength;
+			}
+			if (o->phase < wavelength_half) {
+				samples[i] += (1 - (o->phase / o->wavelength) * 4) * envelope_nextval(lane);
+			} else {
+				samples[i] += (-1 + ((o->phase - wavelength_half) / o->wavelength) * 4) * envelope_nextval(lane);
+			}
+		}
+		break;
+	}
+
 	}
 }
 

@@ -13,7 +13,7 @@
 - [X] switch to mono output as long as there is no stereo data
 - [X] find a better name than /synth/
 
-* [10/21] features
+* [10/23] features
 
 - [ ] variable sample rate
 - [ ] refactor duplicated code in error handling (in input and output)
@@ -42,3 +42,5 @@
 - [X] compressor
 - [ ] support all notes off command
 - [X] determine code coverage after tests
+- [ ] phase-shift all oscillators so they start at 0
+- [ ] provide arpeggiator instead of polyphony

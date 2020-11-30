@@ -34,9 +34,28 @@ typedef struct {
 	float last_random;
 } oscillator;
 
+#define WAVELET_LENGTH 8
+
+static float wavelet_square_25[WAVELET_LENGTH] = { 0, 1, 0.99, -1, -0.99, -0.98, -0.96, -0.94 };
+
+static float wavelet_square_50[WAVELET_LENGTH] = { 0, 1, 0.99, 0.97, 0, -1, -0.99, -0.98 };
+
+static float wavelet_noise[WAVELET_LENGTH] = { 0.751, -0.4151, 0.3319, 0.685, -0.1561, -3.786, -0.0093, -0.5787 };
+
 static oscillator osc[POLYPHONY];
 
 static oscillator_type type = SQUARE;
+
+static void calculate_wavelet(lane_id lane, oscillator *o, float *wavelet) {
+	for (int i = 0; i < BUFSIZE; i++) {
+		o->phase++;
+		while (o->phase >= o->wavelength) {
+			o->phase -= o->wavelength;
+		}
+		int idx = o->phase * WAVELET_LENGTH / o->wavelength;
+		samples[i] += wavelet[ idx ] * envelope_nextval(lane);
+	}
+}
 
 static void run_oscillator(lane_id lane) {
 	if (! envelope_is_running(lane)) {
@@ -112,6 +131,19 @@ static void run_oscillator(lane_id lane) {
 		o->last_random = hold;
 		break;
 	}
+
+	case WAVELET_SQUARE_25:
+		calculate_wavelet(lane, o, wavelet_square_25);
+		break;
+
+	case WAVELET_SQUARE_50:
+		calculate_wavelet(lane, o, wavelet_square_50);
+		break;
+
+	case WAVELET_NOISE:
+		calculate_wavelet(lane, o, wavelet_noise);
+		break;
+
 	}
 }
 

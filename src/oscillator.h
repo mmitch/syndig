@@ -31,6 +31,9 @@ typedef enum {
 	SAW_UP,
 	TRIANGLE,
 	NOISE,
+	WAVELET_SQUARE_25,
+	WAVELET_SQUARE_50,
+	WAVELET_NOISE,
 } oscillator_type;
 
 void init_oscillators();

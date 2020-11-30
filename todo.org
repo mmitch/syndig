@@ -17,12 +17,12 @@
 
 - [ ] variable sample rate
 - [ ] refactor duplicated code in error handling (in input and output)
-- [-] [3/5] more oscillators
+- [-] [4/5] more oscillators
   - [ ] sine
   - [X] triangle
   - [X] sawtooth up
   - [X] sawtooth down
-  - [ ] wavelets (which?)
+  - [X] wavelets (which?)
 - [ ] support modulation (eg. pulsewidth on squarewave)
 - [X] use MIDI program change to switch oscillators
 - [X] multiple oscillators simultaneously?

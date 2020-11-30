@@ -55,6 +55,9 @@ static oscillator_type program_map[] = {
 	SAW_UP,
 	TRIANGLE,
 	NOISE,
+	WAVELET_SQUARE_25,
+	WAVELET_SQUARE_50,
+	WAVELET_NOISE,
 };
 
 void receive_midi(midi_input *midi) {

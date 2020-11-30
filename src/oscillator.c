@@ -31,10 +31,13 @@ typedef struct {
 	float phase;
 	frequency frequency;
 	float wavelength;
-	float last_random;
+	float sample_hold_last;
+	uint8_t sample_hold_index;
 } oscillator;
 
 #define WAVELET_LENGTH 8
+
+typedef float (*nextval_fn)(uint8_t);
 
 static float wavelet_square_25[WAVELET_LENGTH] = { 0, 1, 0.99, -1, -0.99, -0.98, -0.96, -0.94 };
 
@@ -46,15 +49,45 @@ static oscillator osc[POLYPHONY];
 
 static oscillator_type type = SQUARE;
 
-static void calculate_wavelet(lane_id lane, oscillator *o, float *wavelet) {
+static float random_nextval(uint8_t index) {
+	UNUSED(index);
+	return (double)rand() / (double)(RAND_MAX/2) - 1.0;
+}
+
+static float wavelet_square_25_nextval(uint8_t index) {
+	return wavelet_square_25[index];
+}
+
+static float wavelet_square_50_nextval(uint8_t index) {
+	return wavelet_square_50[index];
+}
+
+static float wavelet_noise_nextval(uint8_t index) {
+	return wavelet_noise[index];
+}
+
+static void sample_and_hold(lane_id lane, oscillator *o, nextval_fn nextval) {
+	float wavelength_eighth = o->wavelength / 8.0;
+	float hold = o->sample_hold_last;
+	uint8_t index = o->sample_hold_index;
+
 	for (int i = 0; i < BUFSIZE; i++) {
 		o->phase++;
-		while (o->phase >= o->wavelength) {
-			o->phase -= o->wavelength;
+		while (o->phase >= wavelength_eighth) {
+			o->phase -= wavelength_eighth;
+
+			index++;
+			if (index >= WAVELET_LENGTH) {
+				index = 0;
+			}
+
+			hold = nextval(index);
 		}
-		int idx = o->phase * WAVELET_LENGTH / o->wavelength;
-		samples[i] += wavelet[ idx ] * envelope_nextval(lane);
+		samples[i] += hold * envelope_nextval(lane);
 	}
+
+	o->sample_hold_last  = hold;
+	o->sample_hold_index = index;
 }
 
 static void run_oscillator(lane_id lane) {
@@ -117,31 +150,19 @@ static void run_oscillator(lane_id lane) {
 	}
 
 	case NOISE:
-	{
-		float wavelength_eighth = o->wavelength / 8.0;
-		float hold = o->last_random;
-		for (int i = 0; i < BUFSIZE; i++) {
-			o->phase++;
-			while (o->phase >= wavelength_eighth) {
-				o->phase -= wavelength_eighth;
-				hold = (double)rand()/(double)(RAND_MAX/2)-1.0;
-			}
-			samples[i] += hold * envelope_nextval(lane);
-		}
-		o->last_random = hold;
+		sample_and_hold(lane, o, random_nextval);
 		break;
-	}
 
 	case WAVELET_SQUARE_25:
-		calculate_wavelet(lane, o, wavelet_square_25);
+		sample_and_hold(lane, o, wavelet_square_25_nextval);
 		break;
 
 	case WAVELET_SQUARE_50:
-		calculate_wavelet(lane, o, wavelet_square_50);
+		sample_and_hold(lane, o, wavelet_square_50_nextval);
 		break;
 
 	case WAVELET_NOISE:
-		calculate_wavelet(lane, o, wavelet_noise);
+		sample_and_hold(lane, o, wavelet_noise_nextval);
 		break;
 
 	}

@@ -25,15 +25,18 @@
 
 #include <stdint.h>
 
+#define PROGRAM_NAME "syndig"
 #define POLYPHONY 16
+
+
+typedef double frequency;
 
 typedef uint8_t lane_id;
 // max id + 1 is unknown/not found
 #define NO_LANE POLYPHONY
 
-typedef double frequency;
-
-#define PROGRAM_NAME "syndig"
+// don't warn on intentionally unused variables
+#define UNUSED(x) (void)(x)
 
 // sys/param.h has these too and gets included by PulseAudio
 #ifndef MIN

@@ -20,6 +20,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdlib.h>
+
 #include "buffer.h"
 #include "envelope.h"
 #include "oscillator.h"
@@ -29,6 +31,7 @@ typedef struct {
 	float phase;
 	frequency frequency;
 	float wavelength;
+	float last_random;
 } oscillator;
 
 static oscillator osc[POLYPHONY];
@@ -94,6 +97,21 @@ static void run_oscillator(lane_id lane) {
 		break;
 	}
 
+	case NOISE:
+	{
+		float wavelength_eighth = o->wavelength / 8.0;
+		float hold = o->last_random;
+		for (int i = 0; i < BUFSIZE; i++) {
+			o->phase++;
+			while (o->phase >= wavelength_eighth) {
+				o->phase -= wavelength_eighth;
+				hold = (double)rand()/(double)(RAND_MAX/2)-1.0;
+			}
+			samples[i] += hold * envelope_nextval(lane);
+		}
+		o->last_random = hold;
+		break;
+	}
 	}
 }
 

@@ -47,6 +47,12 @@ static float wavelet_square_25[WAVELET_LENGTH] = { 0, 1, 0.99, -1, -0.99, -0.98,
 
 static float wavelet_square_50[WAVELET_LENGTH] = { 0, 1, 0.99, 0.97, 0, -1, -0.99, -0.98 };
 
+static float wavelet_saw_down[WAVELET_LENGTH] = { 1, 1-(2/7.0), 1-(4/7.0), 1-(6/7.0), 1-(8/7.0), 1-(10/7.0), 1-(12/7.0), -1};
+
+static float wavelet_saw_up[WAVELET_LENGTH] = { -1, (2/7.0)-1, (4/7.0)-1, (6/7.0)-1, (8/7.0)-1, (10/7.0)-1, (12/7.0)-1, 1};
+
+static float wavelet_triangle[WAVELET_LENGTH] = { 0, 0.5, 1, 0.5, 0, -0.5, -1, -0.5 };
+
 static float wavelet_sine[WAVELET_LENGTH] = { 0, SIN_PI_FOURTH, 1, SIN_PI_FOURTH, 0, -SIN_PI_FOURTH, -1, -SIN_PI_FOURTH };
 
 static float wavelet_noise[WAVELET_LENGTH] = { 0.751, -0.4151, 0.3319, 0.685, -0.1561, -3.786, -0.0093, -0.5787 };
@@ -66,6 +72,18 @@ static float wavelet_square_25_nextval(uint8_t index) {
 
 static float wavelet_square_50_nextval(uint8_t index) {
 	return wavelet_square_50[index];
+}
+
+static float wavelet_saw_down_nextval(uint8_t index) {
+	return wavelet_saw_down[index];
+}
+
+static float wavelet_saw_up_nextval(uint8_t index) {
+	return wavelet_saw_up[index];
+}
+
+static float wavelet_triangle_nextval(uint8_t index) {
+	return wavelet_triangle[index];
 }
 
 static float wavelet_sine_nextval(uint8_t index) {
@@ -179,6 +197,18 @@ static void run_oscillator(lane_id lane) {
 
 	case WAVELET_SQUARE_50:
 		sample_and_hold(lane, o, wavelet_square_50_nextval);
+		break;
+
+	case WAVELET_SAW_DOWN:
+		sample_and_hold(lane, o, wavelet_saw_down_nextval);
+		break;
+
+	case WAVELET_SAW_UP:
+		sample_and_hold(lane, o, wavelet_saw_up_nextval);
+		break;
+
+	case WAVELET_TRIANGLE:
+		sample_and_hold(lane, o, wavelet_triangle_nextval);
 		break;
 
 	case WAVELET_SINE:

@@ -42,19 +42,6 @@ Wavelets are small PCM samples with a length of 8 samples.
 Unmapped programs wrap to 000.
 
 
-### Polyphony mode
-
-Polyphony mode can be selected via Control Change event for
-parameter 003.  The polyphony mode chooses the note to kill
-prematurely to make room for a new note when polyphony is at maximum
-capacity:
-
-- 000: kill oldest note
-- 001: kill lowest note
-- 002: kill highest note
-- 003: kill in a round robin fashion
-
-
 ### ADSR envelope
 
 To control the ADSR envelope, send Control Change events with the
@@ -69,6 +56,19 @@ The times map non-linearly from value 000 (0 seconds/off) to value 127
 (about 5 seconds).  
 The sustain level maps linearly from value 000 (envelope off) to value
 127 (maximum envelope).
+
+
+### Polyphony mode
+
+Polyphony mode can be selected via Control Change event for
+parameter 003.  The polyphony mode chooses the note to kill
+prematurely to make room for a new note when polyphony is at maximum
+capacity:
+
+- 000: kill oldest note
+- 001: kill lowest note
+- 002: kill highest note
+- 003: kill in a round robin fashion
 
 
 copyright

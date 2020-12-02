@@ -71,6 +71,13 @@ capacity:
 - 003: kill in a round robin fashion
 
 
+### Other commands
+
+These Control Change parameters are also honored:
+
+- 123: all notes off
+
+
 copyright
 ---------
 

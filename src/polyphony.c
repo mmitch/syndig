@@ -153,3 +153,11 @@ void stop_note(uint8_t note) {
 		release_envelope(lane);
 	}
 }
+
+void stop_all_notes() {
+	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
+		if (envelope_is_running(lane)) {
+			release_envelope(lane);
+		}
+	}
+}

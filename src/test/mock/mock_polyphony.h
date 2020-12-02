@@ -27,11 +27,13 @@ DEFINE_FFF_GLOBALS
 
 FAKE_VOID_FUNC(play_note, uint8_t, float)
 FAKE_VOID_FUNC(stop_note, uint8_t)
+FAKE_VOID_FUNC(stop_all_notes)
 FAKE_VOID_FUNC(set_polyphony_mode, polyphony_mode)
 
 void reset_polyphony_mocks() {
 	RESET_FAKE(play_note)
 	RESET_FAKE(stop_note)
+	RESET_FAKE(stop_all_notes)
 	RESET_FAKE(set_polyphony_mode)
 }
 	

@@ -114,7 +114,10 @@ void receive_midi(midi_input *midi) {
 			case 80:
 				set_envelope_decay(STRETCH(value));
 				break;
-				
+
+			case 123:
+				stop_all_notes();
+				break;
 			}
 			break;
 		}

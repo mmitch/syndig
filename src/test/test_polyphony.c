@@ -36,6 +36,28 @@ static void setup() {
 	FFF_RESET_HISTORY()
 }
 
+TEST play_notes_plays_on_first_lane() {
+	// given
+	setup();
+
+	// when
+	play_note(40, 90);
+
+	// then
+	ASSERT_EQ(0, poly_history[0]);
+	ASSERT_EQ(40, last_note[0]);
+
+	ASSERT_EQ(1,         set_oscillator_frequency_fake.call_count);
+	ASSERT_EQ(0,         set_oscillator_frequency_fake.arg0_val); // lane
+	ASSERT_EQ(hertz[40], set_oscillator_frequency_fake.arg1_val); // frequency
+
+	ASSERT_EQ(1,  trigger_envelope_fake.call_count);
+	ASSERT_EQ(0,  trigger_envelope_fake.arg0_val); // lane
+	ASSERT_EQ(90, trigger_envelope_fake.arg1_val); // velocity
+
+	PASS();
+}
+
 TEST init_polyphony_resets_last_notes() {
 	// given
 	setup();
@@ -59,10 +81,27 @@ TEST init_polyphony_resets_poly_history() {
 	init_polyphony();
 
 	// then
-	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
-		ASSERT_EQ(lane, poly_history[lane]);
+	for (uint8_t i = 0; i < POLYPHONY; i++) {
+		ASSERT_EQ(i, poly_history[i]);
 	}
 	
+	PASS();
+}
+
+TEST stop_all_notes_sets_all_running_envelopes_to_release() {
+	// given
+	setup();
+	bool envelope_status[] = { true, false, false, true, false };
+	SET_RETURN_SEQ(envelope_is_running, envelope_status, 5);
+
+	// when
+	stop_all_notes();
+
+	// then
+	ASSERT_EQ(2,         release_envelope_fake.call_count);
+	ASSERT_EQ(0,         release_envelope_fake.arg0_history[0]); // lane
+	ASSERT_EQ(3,         release_envelope_fake.arg0_history[1]); // lane
+
 	PASS();
 }
 
@@ -75,8 +114,10 @@ int main(int argc, char **argv) {
 	GREATEST_MAIN_BEGIN();
 
 	SHUFFLE_TESTS(rand(), {
+			RUN_TEST(play_notes_plays_on_first_lane);
 			RUN_TEST(init_polyphony_resets_last_notes);
 			RUN_TEST(init_polyphony_resets_poly_history);
+			RUN_TEST(stop_all_notes_sets_all_running_envelopes_to_release);
 		});
 
 	GREATEST_MAIN_END();

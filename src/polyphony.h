@@ -41,5 +41,6 @@ void init_polyphony();
 void set_polyphony_mode(polyphony_mode new_mode);
 void play_note(uint8_t note, float velocity);
 void stop_note(uint8_t note);
+void stop_all_notes();
 
 #endif

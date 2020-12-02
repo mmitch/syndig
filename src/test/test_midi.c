@@ -185,6 +185,26 @@ TEST controller_3_unmapped_values_map_to_kill_oldest() {
 	PASS();
 }
 
+TEST controller_123_stops_all_notes() {
+	// given
+	setup();
+
+	event.type = CONTROL_CHANGE;
+	event.data.control_change.param = 123;
+
+	mock_incoming_midi_event(&event);
+
+	// when
+	receive_midi(&midi);
+
+	// then
+	ASSERT_EQ(2, read_midi_fake.call_count);
+
+	ASSERT_EQ(1, stop_all_notes_fake.call_count);
+
+	PASS();
+}
+
 GREATEST_MAIN_DEFS();
 
 int main(int argc, char **argv) {
@@ -201,6 +221,7 @@ int main(int argc, char **argv) {
 			RUN_TEST(program_change_unmapped_values_map_to_square);
 			RUN_TEST(controller_3_sets_polyphony_mode);
 			RUN_TEST(controller_3_unmapped_values_map_to_kill_oldest);
+			RUN_TEST(controller_123_stops_all_notes);
 		});
 
 	GREATEST_MAIN_END();

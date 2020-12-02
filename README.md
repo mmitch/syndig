@@ -17,6 +17,60 @@ choose an existing soft-synth and read a manual ;-)
 project home: https://github.com/mmitch/syndig
 
 
+MIDI implementation
+-------------------
+
+### Oscillator types
+
+Oscillator types can be selected via Program Change messages:
+
+- 000: square
+- 001: sawtooth down
+- 002: sawtooth up
+- 003: triangle
+- 004: sine
+- 005: noise
+- 006: square wavelet 25% duty
+- 007: square wavelet 50% duty
+- 008: sawtooth down wavelet
+- 009: sawtooth up wavelet
+- 010: triangle wavelet
+- 011: sine wavelet
+- 012: noise wavelet
+
+Wavelets are small PCM samples with a length of 8 samples.  
+Unmapped programs wrap to 000.
+
+
+### Polyphony mode
+
+Polyphony mode can be selected via Control Change event for
+parameter 003.  The polyphony mode chooses the note to kill
+prematurely to make room for a new note when polyphony is at maximum
+capacity:
+
+- 000: kill oldest note
+- 001: kill lowest note
+- 002: kill highest note
+- 003: kill in a round robin fashion
+
+
+### ADSR envelope
+
+To control the ADSR envelope, send Control Change events with the
+given parameter numbers to change these values:
+
+- 072: release time
+- 073: attack time
+- 075: sustain level
+- 076: decay time
+
+The times map non-linearly from value 000 (0 seconds/off) to value 127
+(about 5 seconds).  
+The sustain level maps linearly from value 000 (envelope off) to value
+127 (maximum envelope).
+
+
 copyright
 ---------
 

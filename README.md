@@ -75,6 +75,7 @@ capacity:
 
 These Control Change parameters are also honored:
 
+- 120: all sound off
 - 123: all notes off
 
 

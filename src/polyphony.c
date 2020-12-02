@@ -161,3 +161,11 @@ void stop_all_notes() {
 		}
 	}
 }
+
+void stop_all_sound() {
+	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
+		if (envelope_is_running(lane)) {
+			stop_envelope(lane);
+		}
+	}
+}

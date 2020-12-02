@@ -98,9 +98,26 @@ TEST stop_all_notes_sets_all_running_envelopes_to_release() {
 	stop_all_notes();
 
 	// then
-	ASSERT_EQ(2,         release_envelope_fake.call_count);
-	ASSERT_EQ(0,         release_envelope_fake.arg0_history[0]); // lane
-	ASSERT_EQ(3,         release_envelope_fake.arg0_history[1]); // lane
+	ASSERT_EQ(2, release_envelope_fake.call_count);
+	ASSERT_EQ(0, release_envelope_fake.arg0_history[0]); // lane
+	ASSERT_EQ(3, release_envelope_fake.arg0_history[1]); // lane
+
+	PASS();
+}
+
+TEST stop_all_sound_sets_all_running_envelopes_to_off() {
+	// given
+	setup();
+	bool envelope_status[] = { false, true, true, false };
+	SET_RETURN_SEQ(envelope_is_running, envelope_status, 4);
+
+	// when
+	stop_all_sound();
+
+	// then
+	ASSERT_EQ(2, stop_envelope_fake.call_count);
+	ASSERT_EQ(1, stop_envelope_fake.arg0_history[0]); // lane
+	ASSERT_EQ(2, stop_envelope_fake.arg0_history[1]); // lane
 
 	PASS();
 }
@@ -118,6 +135,7 @@ int main(int argc, char **argv) {
 			RUN_TEST(init_polyphony_resets_last_notes);
 			RUN_TEST(init_polyphony_resets_poly_history);
 			RUN_TEST(stop_all_notes_sets_all_running_envelopes_to_release);
+			RUN_TEST(stop_all_sound_sets_all_running_envelopes_to_off);
 		});
 
 	GREATEST_MAIN_END();

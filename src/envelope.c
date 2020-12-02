@@ -72,6 +72,10 @@ void release_envelope(lane_id lane) {
 	env[lane].state = RELEASE;
 }
 
+void stop_envelope(lane_id lane) {
+	env[lane].state = OFF;
+}
+
 float envelope_nextval(lane_id lane) {
 
 	envelope *e = &env[lane];

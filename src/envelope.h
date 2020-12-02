@@ -34,6 +34,7 @@ void  set_envelope_sustain(float sustain);
 void  set_envelope_release(uint16_t release_ms);
 void  trigger_envelope(lane_id id, float velocity);
 void  release_envelope(lane_id id);
+void  stop_envelope(lane_id id);
 float envelope_nextval(lane_id id);
 bool  envelope_is_running(lane_id id);
 

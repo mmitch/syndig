@@ -20,6 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <math.h>
 #include <stdlib.h>
 
 #include "buffer.h"
@@ -35,6 +36,9 @@ typedef struct {
 	uint8_t sample_hold_index;
 } oscillator;
 
+#define PI             3.14159265358979323846
+#define SIN_PI_FOURTH  0.70710678118654752440
+
 #define WAVELET_LENGTH 8
 
 typedef float (*nextval_fn)(uint8_t);
@@ -42,6 +46,8 @@ typedef float (*nextval_fn)(uint8_t);
 static float wavelet_square_25[WAVELET_LENGTH] = { 0, 1, 0.99, -1, -0.99, -0.98, -0.96, -0.94 };
 
 static float wavelet_square_50[WAVELET_LENGTH] = { 0, 1, 0.99, 0.97, 0, -1, -0.99, -0.98 };
+
+static float wavelet_sine[WAVELET_LENGTH] = { 0, SIN_PI_FOURTH, 1, SIN_PI_FOURTH, 0, -SIN_PI_FOURTH, -1, -SIN_PI_FOURTH };
 
 static float wavelet_noise[WAVELET_LENGTH] = { 0.751, -0.4151, 0.3319, 0.685, -0.1561, -3.786, -0.0093, -0.5787 };
 
@@ -60,6 +66,10 @@ static float wavelet_square_25_nextval(uint8_t index) {
 
 static float wavelet_square_50_nextval(uint8_t index) {
 	return wavelet_square_50[index];
+}
+
+static float wavelet_sine_nextval(uint8_t index) {
+	return wavelet_sine[index];
 }
 
 static float wavelet_noise_nextval(uint8_t index) {
@@ -149,6 +159,16 @@ static void run_oscillator(lane_id lane) {
 		break;
 	}
 
+	case SINE:
+		for (int i = 0; i < BUFSIZE; i++) {
+			o->phase++;
+			while (o->phase >= o->wavelength) {
+				o->phase -= o->wavelength;
+			}
+			samples[i] += sinf( o->phase * 2 * PI / o->wavelength ) * envelope_nextval(lane);
+		}
+		break;
+
 	case NOISE:
 		sample_and_hold(lane, o, random_nextval);
 		break;
@@ -159,6 +179,10 @@ static void run_oscillator(lane_id lane) {
 
 	case WAVELET_SQUARE_50:
 		sample_and_hold(lane, o, wavelet_square_50_nextval);
+		break;
+
+	case WAVELET_SINE:
+		sample_and_hold(lane, o, wavelet_sine_nextval);
 		break;
 
 	case WAVELET_NOISE:

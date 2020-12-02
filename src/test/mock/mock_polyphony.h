@@ -38,4 +38,3 @@ void reset_polyphony_mocks() {
 	RESET_FAKE(stop_all_sound)
 	RESET_FAKE(set_polyphony_mode)
 }
-

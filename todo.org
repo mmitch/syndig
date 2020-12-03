@@ -13,7 +13,7 @@
 - [X] switch to mono output as long as there is no stereo data
 - [X] find a better name than /synth/
 
-* [12/23] features
+* [12/24] features
 
 - [ ] variable sample rate
 - [ ] refactor duplicated code in error handling (in input and output)
@@ -44,3 +44,8 @@
 - [X] determine code coverage after tests
 - [ ] phase-shift all oscillators so they start at 0
 - [ ] provide arpeggiator instead of polyphony
+- [ ] [0/4] add filters
+  - [ ] basic FIR filter
+  - [ ] configurable low pass filter (map to brightness?)
+  - [ ] configurable high pass filter (map to ???)
+  - [ ] filter envelopes

@@ -37,6 +37,7 @@ Oscillator types can be selected via Program Change messages:
 - 010: triangle wavelet
 - 011: sine wavelet
 - 012: noise wavelet
+- 013: double pulse wavelet
 
 Wavelets are small PCM samples with a length of 8 samples.  
 Unmapped programs wrap to 000.

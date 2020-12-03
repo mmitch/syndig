@@ -63,6 +63,7 @@ static oscillator_type program_map[] = {
 	WAVELET_TRIANGLE,
 	WAVELET_SINE,
 	WAVELET_NOISE,
+	WAVELET_DOUBLE_PULSE,
 };
 
 void receive_midi(midi_input *midi) {

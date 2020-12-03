@@ -57,6 +57,8 @@ static float wavelet_sine[WAVELET_LENGTH] = { 0, SIN_PI_FOURTH, 1, SIN_PI_FOURTH
 
 static float wavelet_noise[WAVELET_LENGTH] = { 0.751, -0.4151, 0.3319, 0.685, -0.1561, -3.786, -0.0093, -0.5787 };
 
+static float wavelet_double_pulse[WAVELET_LENGTH] = { 0, 1, 0, 1, 0, -1, 0, -1 };
+
 static oscillator osc[POLYPHONY];
 
 static oscillator_type type = SQUARE;
@@ -92,6 +94,10 @@ static float wavelet_sine_nextval(uint8_t index) {
 
 static float wavelet_noise_nextval(uint8_t index) {
 	return wavelet_noise[index];
+}
+
+static float wavelet_double_pulse_nextval(uint8_t index) {
+	return wavelet_double_pulse[index];
 }
 
 static void sample_and_hold(lane_id lane, oscillator *o, nextval_fn nextval) {
@@ -217,6 +223,10 @@ static void run_oscillator(lane_id lane) {
 
 	case WAVELET_NOISE:
 		sample_and_hold(lane, o, wavelet_noise_nextval);
+		break;
+
+	case WAVELET_DOUBLE_PULSE:
+		sample_and_hold(lane, o, wavelet_double_pulse_nextval);
 		break;
 
 	}

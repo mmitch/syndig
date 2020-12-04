@@ -27,6 +27,8 @@
 #include <stdint.h>
 #include <unistd.h>
 
+#include "common.h"
+
 typedef enum {
 	NOTE_ON,
 	NOTE_OFF,
@@ -55,6 +57,7 @@ typedef struct {
 
 typedef struct {
 	midi_event_type type;
+	channel         channel;
 	union {
 		midi_data_note_on        note_on;
 		midi_data_note_off       note_off;

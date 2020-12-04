@@ -27,7 +27,9 @@
 
 #define PROGRAM_NAME "syndig"
 #define POLYPHONY 16
+#define CHANNELS  16
 
+typedef uint8_t channel;
 
 typedef double frequency;
 

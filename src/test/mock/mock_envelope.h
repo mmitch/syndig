@@ -25,11 +25,11 @@
 #include "../../thirdparty/fff.h"
 DEFINE_FFF_GLOBALS
 
-FAKE_VOID_FUNC(set_envelope_attack,  uint16_t)
-FAKE_VOID_FUNC(set_envelope_release, uint16_t)
-FAKE_VOID_FUNC(set_envelope_decay,   uint16_t)
-FAKE_VOID_FUNC(set_envelope_sustain, float)
-FAKE_VOID_FUNC(trigger_envelope, lane_id, float)
+FAKE_VOID_FUNC(set_envelope_attack,  channel, uint16_t)
+FAKE_VOID_FUNC(set_envelope_release, channel, uint16_t)
+FAKE_VOID_FUNC(set_envelope_decay,   channel, uint16_t)
+FAKE_VOID_FUNC(set_envelope_sustain, channel, float)
+FAKE_VOID_FUNC(trigger_envelope, channel, lane_id, float)
 FAKE_VOID_FUNC(release_envelope, lane_id)
 FAKE_VOID_FUNC(stop_envelope, lane_id)
 FAKE_VALUE_FUNC(float, envelope_nextval, lane_id)

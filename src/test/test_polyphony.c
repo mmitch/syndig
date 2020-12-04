@@ -41,7 +41,7 @@ TEST play_notes_plays_on_first_lane() {
 	setup();
 
 	// when
-	play_note(40, 90);
+	play_note(3, 40, 90);
 
 	// then
 	ASSERT_EQ(0, poly_history[0]);
@@ -51,9 +51,14 @@ TEST play_notes_plays_on_first_lane() {
 	ASSERT_EQ(0,         set_oscillator_frequency_fake.arg0_val); // lane
 	ASSERT_EQ(hertz[40], set_oscillator_frequency_fake.arg1_val); // frequency
 
+	ASSERT_EQ(1,      set_oscillator_type_fake.call_count);
+	ASSERT_EQ(0,      set_oscillator_type_fake.arg0_val); // lane
+	ASSERT_EQ(SQUARE, set_oscillator_type_fake.arg1_val); // type
+
 	ASSERT_EQ(1,  trigger_envelope_fake.call_count);
-	ASSERT_EQ(0,  trigger_envelope_fake.arg0_val); // lane
-	ASSERT_EQ(90, trigger_envelope_fake.arg1_val); // velocity
+	ASSERT_EQ(3,  trigger_envelope_fake.arg0_val); // channel
+	ASSERT_EQ(0,  trigger_envelope_fake.arg1_val); // lane
+	ASSERT_EQ(90, trigger_envelope_fake.arg2_val); // velocity
 
 	PASS();
 }

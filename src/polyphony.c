@@ -37,6 +37,9 @@ static lane_id poly_history[POLYPHONY]; // contains every lane id exactly once; 
 static lane_id round_robin;
 
 static uint8_t last_note[POLYPHONY];
+static channel last_channel[POLYPHONY];
+
+static oscillator_type osc_type[CHANNELS];
 
 static void poly_history_set_newest(lane_id newest) {
 	lane_id found;
@@ -66,20 +69,20 @@ static lane_id find_free_lane() {
 	return NO_LANE;
 }
 
-static lane_id find_lane_with_note(uint8_t note) {
-	for (lane_id id = 0; id < POLYPHONY; id++) {
-		if (last_note[id] == note) {
-			return id;
+static lane_id find_lane_with_note(channel channel, uint8_t note) {
+	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
+		if (last_note[lane] == note && last_channel[lane] == channel) {
+			return lane;
 		}
 	}
 	return NO_LANE;
 }
 
-static lane_id find_lane_for(uint8_t note) {
+static lane_id find_lane_for(channel channel, uint8_t note) {
 
 	lane_id lane, i;
 
-	if ((lane = find_lane_with_note(note)) != NO_LANE) {
+	if ((lane = find_lane_with_note(channel, note)) != NO_LANE) {
 		return lane;
 	}
 
@@ -131,6 +134,9 @@ void init_polyphony() {
 		poly_history[lane] = lane;
 		last_note[lane] = NO_NOTE;
 	}
+	for (channel channel = 0; channel < CHANNELS; channel++) {
+		osc_type[channel] = SQUARE;
+	}
 }
 
 void set_polyphony_mode(polyphony_mode new_mode) {
@@ -138,17 +144,19 @@ void set_polyphony_mode(polyphony_mode new_mode) {
 	printf("polyphony mode set to %s\n", new_mode.name);
 }
 
-void play_note(uint8_t note, float velocity) {
-	lane_id lane = find_lane_for(note);
+void play_note(channel channel, uint8_t note, float velocity) {
+	lane_id lane = find_lane_for(channel, note);
 	poly_history_set_newest(lane);
 	last_note[lane] = note;
+        last_channel[lane] = channel;
 
 	set_oscillator_frequency(lane, hertz[note]);
-	trigger_envelope(lane, velocity);
+	set_oscillator_type(lane, osc_type[channel]);
+	trigger_envelope(channel, lane, velocity);
 }
 
-void stop_note(uint8_t note) {
-	lane_id lane = find_lane_with_note(note);
+void stop_note(channel channel, uint8_t note) {
+	lane_id lane = find_lane_with_note(channel, note);
 	if (lane != NO_LANE) {
 		release_envelope(lane);
 	}
@@ -168,4 +176,8 @@ void stop_all_sound() {
 			stop_envelope(lane);
 		}
 	}
+}
+
+void change_oscillator_type(channel channel, oscillator_type new_type) {
+	osc_type[channel] = new_type;
 }

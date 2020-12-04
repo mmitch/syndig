@@ -60,6 +60,7 @@ TEST note_on_is_passed_to_polyphony() {
 	setup();
 
 	event.type = NOTE_ON;
+	event.channel = 8;
 	event.data.note_on.note     = 37;
 	event.data.note_on.velocity = 90;
 
@@ -71,9 +72,10 @@ TEST note_on_is_passed_to_polyphony() {
 	// then
 	ASSERT_EQ(2,  read_midi_fake.call_count);
 
-	ASSERT_EQ(1,  play_note_fake.call_count);
-	ASSERT_EQ(37, play_note_fake.arg0_val);
-	ASSERT_IN_RANGE(90 / MAX_MIDI, play_note_fake.arg1_val, 0.0001);
+	ASSERT_EQ( 1, play_note_fake.call_count);
+	ASSERT_EQ( 8, play_note_fake.arg0_val); // channel
+	ASSERT_EQ(37, play_note_fake.arg1_val); // note
+	ASSERT_IN_RANGE(90 / MAX_MIDI, play_note_fake.arg2_val, 0.0001); // hertz
 
 	PASS();
 }
@@ -83,6 +85,7 @@ TEST note_off_is_passed_to_polyphony() {
 	setup();
 
 	event.type = NOTE_OFF;
+	event.channel = 3;
 	event.data.note_off.note = 76;
 
 	mock_incoming_midi_event(&event);
@@ -93,17 +96,19 @@ TEST note_off_is_passed_to_polyphony() {
 	// then
 	ASSERT_EQ(2,  read_midi_fake.call_count);
 
-	ASSERT_EQ(1,  stop_note_fake.call_count);
-	ASSERT_EQ(76, stop_note_fake.arg0_val);
+	ASSERT_EQ( 1, stop_note_fake.call_count);
+	ASSERT_EQ( 3, stop_note_fake.arg0_val); // channel
+	ASSERT_EQ(76, stop_note_fake.arg1_val); // note
 
 	PASS();
 }
 
-TEST program_change_is_passed_to_oscillator() {
+TEST program_change_is_passed_to_polyphony() {
 	// given
 	setup();
 
-	event.type = PROGRAM_CHANGE;
+	event.type    = PROGRAM_CHANGE;
+	event.channel = 3;
 	event.data.program_change.program = 2;
 
 	mock_incoming_midi_event(&event);
@@ -115,7 +120,8 @@ TEST program_change_is_passed_to_oscillator() {
 	ASSERT_EQ(2,      read_midi_fake.call_count);
 
 	ASSERT_EQ(1,      change_oscillator_type_fake.call_count);
-	ASSERT_EQ(SAW_UP, change_oscillator_type_fake.arg0_val);
+	ASSERT_EQ(3,      change_oscillator_type_fake.arg0_val); // channel
+	ASSERT_EQ(SAW_UP, change_oscillator_type_fake.arg1_val); // type
 
 	PASS();
 }
@@ -125,6 +131,7 @@ TEST program_change_unmapped_values_map_to_square() {
 	setup();
 
 	event.type = PROGRAM_CHANGE;
+	event.channel = 1;
 	event.data.program_change.program = 99;
 
 	mock_incoming_midi_event(&event);
@@ -136,7 +143,8 @@ TEST program_change_unmapped_values_map_to_square() {
 	ASSERT_EQ(2,      read_midi_fake.call_count);
 
 	ASSERT_EQ(1,      change_oscillator_type_fake.call_count);
-	ASSERT_EQ(SQUARE, change_oscillator_type_fake.arg0_val);
+	ASSERT_EQ(1,      change_oscillator_type_fake.arg0_val); // channel
+	ASSERT_EQ(SQUARE, change_oscillator_type_fake.arg1_val); // type
 
 	PASS();
 }
@@ -237,7 +245,7 @@ int main(int argc, char **argv) {
 			RUN_TEST(empty_event_does_nothing);
 			RUN_TEST(note_on_is_passed_to_polyphony);
 			RUN_TEST(note_off_is_passed_to_polyphony);
-			RUN_TEST(program_change_is_passed_to_oscillator);
+			RUN_TEST(program_change_is_passed_to_polyphony);
 			RUN_TEST(program_change_unmapped_values_map_to_square);
 			RUN_TEST(controller_3_sets_polyphony_mode);
 			RUN_TEST(controller_3_unmapped_values_map_to_kill_oldest);

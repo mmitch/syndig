@@ -61,8 +61,6 @@ static float wavelet_double_pulse[WAVELET_LENGTH] = { 0, 1, 0, 1, 0, -1, 0, -1 }
 
 static oscillator osc[POLYPHONY];
 
-static oscillator_type type = SQUARE;
-
 static float random_nextval(uint8_t index) {
 	UNUSED(index);
 	return (double)rand() / (double)(RAND_MAX/2) - 1.0;
@@ -131,7 +129,7 @@ static void run_oscillator(lane_id lane) {
 
 	oscillator *o = &osc[lane];
 
-	switch (type) {
+	switch (o->type) {
 
 	case SQUARE:
 	{
@@ -234,7 +232,7 @@ static void run_oscillator(lane_id lane) {
 
 void init_oscillators() {
 	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
-		osc[lane].type       = type;
+		osc[lane].type       = SQUARE;
 		osc[lane].wavelength = 1;
 		set_oscillator_frequency(lane, 440);
 	}
@@ -247,8 +245,8 @@ void set_oscillator_frequency(lane_id lane, frequency new_frequency) {
 	osc[lane].phase = relative_phase * osc[lane].wavelength;
 }
 
-void change_oscillator_type(oscillator_type new_type) {
-	type = new_type;
+void set_oscillator_type(lane_id lane, oscillator_type new_type) { // FIXME combine with set frequency?
+	osc[lane].type = new_type;
 }
 
 void run_oscillators() {

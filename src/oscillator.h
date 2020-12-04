@@ -44,7 +44,7 @@ typedef enum {
 
 void init_oscillators();
 void set_oscillator_frequency(lane_id id, frequency new_frequency);
-void change_oscillator_type(oscillator_type new_type);
+void set_oscillator_type(lane_id id, oscillator_type new_type);
 void run_oscillators();
 
 #endif

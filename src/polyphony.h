@@ -24,6 +24,7 @@
 #define _POLYPHONY_H_
 
 #include "common.h"
+#include "oscillator.h"
 
 typedef enum {
 	KILL_OLDEST,
@@ -39,8 +40,9 @@ typedef struct {
 
 void init_polyphony();
 void set_polyphony_mode(polyphony_mode new_mode);
-void play_note(uint8_t note, float velocity);
-void stop_note(uint8_t note);
+void play_note(channel channel, uint8_t note, float velocity);
+void stop_note(channel channel, uint8_t note);
+void change_oscillator_type(channel channel, oscillator_type new_type); // FIXME find a better place for this
 void stop_all_notes();
 void stop_all_sound();
 

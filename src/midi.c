@@ -73,13 +73,16 @@ void receive_midi(midi_input *midi) {
 
 		case NOTE_ON:
 		{
-			play_note(event->data.note_on.note, event->data.note_on.velocity / MAX_MIDI);
+			play_note(
+				event->channel,
+				event->data.note_on.note,
+				event->data.note_on.velocity / MAX_MIDI);
 			break;
 		}
 
 		case NOTE_OFF:
 		{
-			stop_note(event->data.note_on.note);
+			stop_note(event->channel, event->data.note_on.note);
 			break;
 		}
 
@@ -87,7 +90,7 @@ void receive_midi(midi_input *midi) {
 		{
 			uint8_t program = event->data.program_change.program;
 			CLAMP_TO_MAP(program, program_map);
-			change_oscillator_type(program_map[program]);
+			change_oscillator_type(event->channel, program_map[program]);
 			break;
 		}
 
@@ -101,19 +104,19 @@ void receive_midi(midi_input *midi) {
 				break;
 
 			case 72:
-				set_envelope_release(STRETCH(value));
+				set_envelope_release(event->channel, STRETCH(value));
 				break;
 				
 			case 73:
-				set_envelope_attack(STRETCH(value));
+				set_envelope_attack(event->channel, STRETCH(value));
 				break;
 				
 			case 75:
-				set_envelope_sustain(value / MAX_MIDI);
+				set_envelope_sustain(event->channel, value / MAX_MIDI);
 				break;
 
 			case 80:
-				set_envelope_decay(STRETCH(value));
+				set_envelope_decay(event->channel, STRETCH(value));
 				break;
 
 			case 120:

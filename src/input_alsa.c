@@ -25,7 +25,6 @@
 
 #include <alsa/asoundlib.h>
 
-#include "common.h"
 #include "input.h"
 
 static snd_seq_t *sequencer;
@@ -85,29 +84,32 @@ static midi_event* alsa_read()
 		return NULL;
 	}
 
-	// FIXME: this listens on all MIDI channels
 	// all types: https://www.alsa-project.org/alsa-doc/alsa-lib/group___seq_events.html#gaef39e1f267006faf7abc91c3cb32ea40
 	switch (alsa_event->type) {
 
 	case SND_SEQ_EVENT_NOTEON:
 		event.type = NOTE_ON;
+		event.channel               = alsa_event->data.note.channel;
 		event.data.note_on.note     = alsa_event->data.note.note;
 		event.data.note_on.velocity = alsa_event->data.note.velocity;
 		return &event;
 
 	case SND_SEQ_EVENT_NOTEOFF:
 		event.type = NOTE_OFF;
+		event.channel                = alsa_event->data.note.channel;
 		event.data.note_off.note     = alsa_event->data.note.note;
 		event.data.note_off.velocity = alsa_event->data.note.velocity;
 		return &event;
 
 	case SND_SEQ_EVENT_PGMCHANGE:
 		event.type = PROGRAM_CHANGE;
+		event.channel                     = alsa_event->data.control.channel;
 		event.data.program_change.program = alsa_event->data.control.value;
 		return &event;
 
 	case SND_SEQ_EVENT_CONTROLLER:
 		event.type = CONTROL_CHANGE;
+		event.channel                   = alsa_event->data.control.channel;
 		event.data.control_change.param = alsa_event->data.control.param;
 		event.data.control_change.value = alsa_event->data.control.value;
 		return &event;

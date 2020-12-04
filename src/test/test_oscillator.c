@@ -28,59 +28,20 @@
 
 BUFTYPE samples[BUFSIZE];
 
-static void reset_oscillator()
-{
-	type = SQUARE;
-}
-
 static void setup() {
-	reset_oscillator();
+	init_oscillators();
 
 	reset_envelope_mocks();
 	FFF_RESET_HISTORY()
 }
 
-TEST default_oscillator_type_is_square() {
-	// given
-
-	// when
-	setup();
-
-	// then
-	ASSERT_EQ(SQUARE, type);
-
-	PASS();
-}
-
-TEST change_oscillator_type_works() {
-	// given
-	setup();
-
-	// when
-	change_oscillator_type(SAW_DOWN);
-
-	// then
-	ASSERT_EQ(SAW_DOWN, type);
-
-	PASS();
-}
-
-TEST change_oscillator_type_does_not_change_type_on_lanes() {
-	// given
-	setup();
-
-	// when
-	change_oscillator_type(SAW_UP);
-
-	// then
-	ASSERT_EQ(SQUARE, osc[0].type);
-
-	PASS();
-}
-
 TEST init_oscillators_resets_all_lanes() {
 	// given
 	setup();
+
+	osc[2].frequency = 13;
+	osc[1].wavelength = 17;
+	osc[0].type = SAW_DOWN;
 
 	// when
 	init_oscillators();
@@ -95,18 +56,18 @@ TEST init_oscillators_resets_all_lanes() {
 	PASS();
 }
 
-TEST init_oscillators_changes_type_on_all_lanes() {
+TEST set_oscillator_type_affects_only_given_lane() {
 	// given
 	setup();
-	change_oscillator_type(SAW_DOWN);
 
 	// when
-	init_oscillators();
+	set_oscillator_type(CHANNELS - 1, SAW_DOWN);
 
 	// then
-	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
-		ASSERT_EQ(SAW_DOWN, osc[lane].type);
+	for (lane_id lane = 0; lane < POLYPHONY - 1; lane++) {
+		ASSERT_EQ(SQUARE, osc[lane].type);
 	}
+	ASSERT_EQ(SAW_DOWN, osc[POLYPHONY - 1].type);
 
 	PASS();
 }
@@ -120,11 +81,8 @@ int main(int argc, char **argv) {
 	GREATEST_MAIN_BEGIN();
 
 	SHUFFLE_TESTS(rand(), {
-			RUN_TEST(default_oscillator_type_is_square);
-			RUN_TEST(change_oscillator_type_works);
-			RUN_TEST(change_oscillator_type_does_not_change_type_on_lanes);
 			RUN_TEST(init_oscillators_resets_all_lanes);
-			RUN_TEST(init_oscillators_changes_type_on_all_lanes);
+			RUN_TEST(set_oscillator_type_affects_only_given_lane);
 		});
 
 	GREATEST_MAIN_END();

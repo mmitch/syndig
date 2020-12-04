@@ -30,10 +30,12 @@
 
 #define MS_TO_TICKS(x)  ((x) * SAMPLERATE / 1000.0)
 
-static float  attack_rate;
-static float  decay_rate;
-static float  sustain_level;
-static float  release_rate;
+typedef struct {
+	float attack_rate;
+	float decay_rate;
+	float sustain_level;
+	float release_rate;
+} adsr;
 
 typedef enum {
 	ATTACK,
@@ -47,8 +49,10 @@ typedef struct {
 	state state;
 	float value;
 	float velocity;
+	adsr  *params;
 } envelope;
 
+static adsr     params[CHANNELS];
 static envelope env[POLYPHONY];
 
 void init_envelopes() {
@@ -57,15 +61,18 @@ void init_envelopes() {
 		env[lane].value    = 0;
 		env[lane].velocity = 0;
 	}
-	set_envelope_attack(30);
-	set_envelope_decay(50);
-	sustain_level = 0.5;
-	set_envelope_release(30);
+	for (channel channel = 0; channel < CHANNELS; channel++) {
+		set_envelope_attack(channel, 30);
+		set_envelope_decay(channel, 50);
+		set_envelope_sustain(channel, 0.5);
+		set_envelope_release(channel, 30);
+	}
 }
 
-void trigger_envelope(lane_id lane, float velocity) {
+void trigger_envelope(channel channel, lane_id lane, float velocity) {
 	env[lane].state    = ATTACK;
 	env[lane].velocity = velocity;
+	env[lane].params   = &params[channel];
 }
 
 void release_envelope(lane_id lane) {
@@ -77,35 +84,35 @@ void stop_envelope(lane_id lane) {
 }
 
 float envelope_nextval(lane_id lane) {
-
 	envelope *e = &env[lane];
+	adsr     *p = e->params;
 	
 	if (e->state == OFF) {
 		return 0;
 	}
 
 	if (e->state == ATTACK) {
-		if (attack_rate == 0 || e->value >= e->velocity) {
+		if (p->attack_rate == 0 || e->value >= e->velocity) {
 			e->value = e->velocity;
 			e->state = DECAY;
 		} else {
-			e->value = MIN( e->value + (attack_rate * e->velocity), e->velocity);
+			e->value = MIN( e->value + (p->attack_rate * e->velocity), e->velocity);
 		}
 	}
 	if (e->state == DECAY) {
-		if (decay_rate == 0 || e->value <= sustain_level * e->velocity) {
-			e->value = sustain_level * e->velocity;
+		if (p->decay_rate == 0 || e->value <= p->sustain_level * e->velocity) {
+			e->value = p->sustain_level * e->velocity;
 			e->state = SUSTAIN;
 		} else {
-			e->value = MAX( e->value - (decay_rate  * e->velocity), sustain_level * e->velocity);
+			e->value = MAX( e->value - (p->decay_rate  * e->velocity), p->sustain_level * e->velocity);
 		}
 	}
 	if (e->state == RELEASE) {
-		if (release_rate == 0 || e->value <= 0) {
+		if (p->release_rate == 0 || e->value <= 0) {
 			e->value = 0;
 			e->state = OFF;
 		} else {
-			e->value = MAX( e->value - (release_rate * e->velocity), 0);
+			e->value = MAX( e->value - (p->release_rate * e->velocity), 0);
 		}
 	}
 
@@ -121,30 +128,30 @@ bool envelope_is_running(lane_id lane) {
  *  rate = -----
  *         ticks
  */
-void set_envelope_attack(uint16_t attack_ms) {
+void set_envelope_attack(channel channel, uint16_t attack_ms) {
 	if (attack_ms == 0) {
-		attack_rate = 0;
+		params[channel].attack_rate = 0;
 	} else {
-		attack_rate = 1.0 / MS_TO_TICKS(attack_ms);
+		params[channel].attack_rate = 1.0 / MS_TO_TICKS(attack_ms);
 	}
 }
 
-void set_envelope_decay(uint16_t decay_ms) {
+void set_envelope_decay(channel channel, uint16_t decay_ms) {
 	if (decay_ms == 0) {
-		decay_rate = 0;
+		params[channel].decay_rate = 0;
 	} else {
-		decay_rate = 1.0 / MS_TO_TICKS(decay_ms);
+		params[channel].decay_rate = 1.0 / MS_TO_TICKS(decay_ms);
 	}
 }
 
-void set_envelope_sustain(float sustain) {
-	sustain_level = sustain;
+void set_envelope_sustain(channel channel, float sustain) {
+	params[channel].sustain_level = sustain;
 }
 
-void set_envelope_release(uint16_t release_ms) {
+void set_envelope_release(channel channel, uint16_t release_ms) {
 	if (release_ms == 0) {
-		release_rate = 0;
+		params[channel].release_rate = 0;
 	} else {
-		release_rate = 1.0 / MS_TO_TICKS(release_ms);
+		params[channel].release_rate = 1.0 / MS_TO_TICKS(release_ms);
 	}
 }

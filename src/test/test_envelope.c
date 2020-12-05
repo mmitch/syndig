@@ -85,7 +85,7 @@ TEST trigger_envelope_sets_channel_and_state() {
 	channel_id channel = 3;
 
 	// when
-	trigger_envelope(channel, lane);
+	trigger_envelope(lane, channel);
 
 	// then
 	ASSERT_EQ(ATTACK,  env[lane].state);

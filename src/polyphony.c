@@ -146,7 +146,7 @@ void play_note(channel_id channel, uint8_t note, float velocity) {
 	last_note[lane] = note;
         last_channel[lane] = channel;
 
-	trigger_lane(lane, channel, hertz[note], velocity);
+	trigger_lane(channel, lane, hertz[note], velocity);
 }
 
 void stop_note(channel_id channel, uint8_t note) {

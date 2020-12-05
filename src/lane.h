@@ -28,6 +28,6 @@
 
 void init_lanes();
 void run_lanes();
-void trigger_lane(lane_id lane, channel_id channel, frequency frequency, float velocity);
+void trigger_lane(channel_id channel, lane_id lane, frequency frequency, float velocity);
 
 #endif

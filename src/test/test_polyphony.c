@@ -50,8 +50,8 @@ TEST play_notes_plays_on_first_lane() {
 	ASSERT_EQ(40, last_note[0]);
 
 	ASSERT_EQ( 1,        trigger_lane_fake.call_count);
-	ASSERT_EQ( 0,        trigger_lane_fake.arg0_val); // lane
-	ASSERT_EQ( 3,        trigger_lane_fake.arg1_val); // channel
+	ASSERT_EQ( 3,        trigger_lane_fake.arg0_val); // channel
+	ASSERT_EQ( 0,        trigger_lane_fake.arg1_val); // lane
 	ASSERT_EQ(hertz[40], trigger_lane_fake.arg2_val); // frequency
 	ASSERT_EQ(90,        trigger_lane_fake.arg3_val); // velocity
 

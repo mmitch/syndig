@@ -63,7 +63,7 @@ void init_envelopes() {
 	}
 }
 
-void trigger_envelope(channel_id channel, lane_id lane) {
+void trigger_envelope(lane_id lane, channel_id channel) {
 	env[lane].state   = ATTACK;
 	env[lane].channel = channel;
 }

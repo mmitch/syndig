@@ -55,12 +55,12 @@ void init_lanes() {
 	}
 }
 
-void trigger_lane(lane_id lane, channel_id channel, frequency frequency, float velocity) {
+void trigger_lane(channel_id channel, lane_id lane, frequency frequency, float velocity) {
 	l[lane].velocity = velocity;
 	l[lane].channel  = channel;
+	set_oscillator_channel(lane, channel);
 	set_oscillator_frequency(lane, frequency);
-	set_oscillator_type(lane, ch_config[channel].osc);
-	trigger_envelope(channel, lane);
+	trigger_envelope(lane, channel);
 }
 
 void run_lanes() {

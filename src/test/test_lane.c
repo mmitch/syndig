@@ -76,7 +76,7 @@ TEST trigger_lane_sets_velocity_and_channel() {
 	float      vel  = 0.5;
 
 	// when
-	trigger_lane(lane, ch, freq, vel);
+	trigger_lane(ch, lane, freq, vel);
 
 	// then
 	ASSERT_EQ(vel, l[lane].velocity);
@@ -94,19 +94,17 @@ TEST trigger_lane_configures_oscillator() {
 	float      freq = 335;
 	float      vel  = 0.8;
 
-	ch_config[ch].osc = TRIANGLE;
-
 	// when
-	trigger_lane(lane, ch, freq, vel);
+	trigger_lane(ch, lane, freq, vel);
 
 	// then
 	ASSERT_EQ(   1, set_oscillator_frequency_fake.call_count);
 	ASSERT_EQ(lane, set_oscillator_frequency_fake.arg0_val); // lane
 	ASSERT_EQ(freq, set_oscillator_frequency_fake.arg1_val); // frequency
 
-	ASSERT_EQ(       1, set_oscillator_type_fake.call_count);
-	ASSERT_EQ(    lane, set_oscillator_type_fake.arg0_val); // lane
-	ASSERT_EQ(TRIANGLE, set_oscillator_type_fake.arg1_val); // oscillator type
+	ASSERT_EQ(   1, set_oscillator_channel_fake.call_count);
+	ASSERT_EQ(lane, set_oscillator_channel_fake.arg0_val); // lane
+	ASSERT_EQ(  ch, set_oscillator_channel_fake.arg1_val); // channel
 
 	PASS();
 }
@@ -121,12 +119,12 @@ TEST trigger_lane_triggers_envelope() {
 	float      vel  = 0.3;
 
 	// when
-	trigger_lane(lane, ch, freq, vel);
+	trigger_lane(ch, lane, freq, vel);
 
 	// then
 	ASSERT_EQ(   1, trigger_envelope_fake.call_count);
-	ASSERT_EQ(  ch, trigger_envelope_fake.arg0_val); // channel
-	ASSERT_EQ(lane, trigger_envelope_fake.arg1_val); // lane
+	ASSERT_EQ(lane, trigger_envelope_fake.arg0_val); // lane
+	ASSERT_EQ(  ch, trigger_envelope_fake.arg1_val); // channel
 
 	PASS();
 }

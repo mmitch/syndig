@@ -40,7 +40,7 @@ void  set_envelope_attack(channel_id channel, uint16_t attack_ms);
 void  set_envelope_decay(channel_id channel, uint16_t decay_ms);
 void  set_envelope_sustain(channel_id channel, float sustain);
 void  set_envelope_release(channel_id channel, uint16_t release_ms);
-void  trigger_envelope(channel_id channel, lane_id id);
+void  trigger_envelope(lane_id id, channel_id channel);
 void  release_envelope(lane_id id);
 void  stop_envelope(lane_id id);
 BUFTYPE* run_envelope(lane_id id);

@@ -34,6 +34,7 @@ typedef struct {
 	float wavelength;
 	float sample_hold_last;
 	uint8_t sample_hold_index;
+	BUFTYPE samples[BUFSIZE];
 } oscillator;
 
 #define PI             3.14159265358979323846
@@ -98,7 +99,7 @@ static float wavelet_double_pulse_nextval(uint8_t index) {
 	return wavelet_double_pulse[index];
 }
 
-static void sample_and_hold(lane_id lane, oscillator *o, nextval_fn nextval) {
+static void sample_and_hold(oscillator *o, nextval_fn nextval) {
 	float wavelength_eighth = o->wavelength / 8.0;
 	float hold = o->sample_hold_last;
 	uint8_t index = o->sample_hold_index;
@@ -115,18 +116,14 @@ static void sample_and_hold(lane_id lane, oscillator *o, nextval_fn nextval) {
 
 			hold = nextval(index);
 		}
-		samples[i] += hold * envelope_nextval(lane);
+		o->samples[i] = hold;
 	}
 
 	o->sample_hold_last  = hold;
 	o->sample_hold_index = index;
 }
 
-static void run_oscillator(lane_id lane) {
-	if (! envelope_is_running(lane)) {
-		return;
-	}
-
+BUFTYPE* run_oscillator(lane_id lane) {
 	oscillator *o = &osc[lane];
 
 	switch (o->type) {
@@ -139,7 +136,7 @@ static void run_oscillator(lane_id lane) {
 			while (o->phase >= o->wavelength) {
 				o->phase -= o->wavelength;
 			}
-			samples[i] += ((o->phase < wavelength_half) ? 1 : -1) * envelope_nextval(lane);
+			o->samples[i] = (o->phase < wavelength_half) ? 1 : -1;
 		}
 		break;
 	}
@@ -150,7 +147,7 @@ static void run_oscillator(lane_id lane) {
 			while (o->phase >= o->wavelength) {
 				o->phase -= o->wavelength;
 			}
-			samples[i] += (1 - (o->phase / o->wavelength) * 2) * envelope_nextval(lane);
+			o->samples[i] = 1 - (2 * o->phase / o->wavelength);
 		}
 		break;
 
@@ -160,7 +157,7 @@ static void run_oscillator(lane_id lane) {
 			while (o->phase >= o->wavelength) {
 				o->phase -= o->wavelength;
 			}
-			samples[i] += (-1 + (o->phase / o->wavelength) * 2) * envelope_nextval(lane);
+			o->samples[i] = -1 + (2 * o->phase / o->wavelength);
 		}
 		break;
 
@@ -173,9 +170,9 @@ static void run_oscillator(lane_id lane) {
 				o->phase -= o->wavelength;
 			}
 			if (o->phase < wavelength_half) {
-				samples[i] += (1 - (o->phase / o->wavelength) * 4) * envelope_nextval(lane);
+				o->samples[i] =  1 - (4 * o->phase / o->wavelength);
 			} else {
-				samples[i] += (-1 + ((o->phase - wavelength_half) / o->wavelength) * 4) * envelope_nextval(lane);
+				o->samples[i] = -1 + (4 * (o->phase - wavelength_half) / o->wavelength);
 			}
 		}
 		break;
@@ -187,47 +184,49 @@ static void run_oscillator(lane_id lane) {
 			while (o->phase >= o->wavelength) {
 				o->phase -= o->wavelength;
 			}
-			samples[i] += sinf( o->phase * 2 * PI / o->wavelength ) * envelope_nextval(lane);
+			o->samples[i] = sinf( o->phase * 2 * PI / o->wavelength );
 		}
 		break;
 
 	case NOISE:
-		sample_and_hold(lane, o, random_nextval);
+		sample_and_hold(o, random_nextval);
 		break;
 
 	case WAVELET_SQUARE_25:
-		sample_and_hold(lane, o, wavelet_square_25_nextval);
+		sample_and_hold(o, wavelet_square_25_nextval);
 		break;
 
 	case WAVELET_SQUARE_50:
-		sample_and_hold(lane, o, wavelet_square_50_nextval);
+		sample_and_hold(o, wavelet_square_50_nextval);
 		break;
 
 	case WAVELET_SAW_DOWN:
-		sample_and_hold(lane, o, wavelet_saw_down_nextval);
+		sample_and_hold(o, wavelet_saw_down_nextval);
 		break;
 
 	case WAVELET_SAW_UP:
-		sample_and_hold(lane, o, wavelet_saw_up_nextval);
+		sample_and_hold(o, wavelet_saw_up_nextval);
 		break;
 
 	case WAVELET_TRIANGLE:
-		sample_and_hold(lane, o, wavelet_triangle_nextval);
+		sample_and_hold(o, wavelet_triangle_nextval);
 		break;
 
 	case WAVELET_SINE:
-		sample_and_hold(lane, o, wavelet_sine_nextval);
+		sample_and_hold(o, wavelet_sine_nextval);
 		break;
 
 	case WAVELET_NOISE:
-		sample_and_hold(lane, o, wavelet_noise_nextval);
+		sample_and_hold(o, wavelet_noise_nextval);
 		break;
 
 	case WAVELET_DOUBLE_PULSE:
-		sample_and_hold(lane, o, wavelet_double_pulse_nextval);
+		sample_and_hold(o, wavelet_double_pulse_nextval);
 		break;
 
 	}
+
+	return o->samples;
 }
 
 void init_oscillators() {
@@ -247,10 +246,4 @@ void set_oscillator_frequency(lane_id lane, frequency new_frequency) {
 
 void set_oscillator_type(lane_id lane, oscillator_type new_type) { // FIXME combine with set frequency?
 	osc[lane].type = new_type;
-}
-
-void run_oscillators() {
-	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
-		run_oscillator(lane);
-	}
 }

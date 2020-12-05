@@ -23,10 +23,11 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "polyphony.h"
+
 #include "envelope.h"
 #include "hertz.h"
-#include "oscillator.h"
-#include "polyphony.h"
+#include "lane.h"
 
 #define NO_NOTE      255
 #define LOWEST_NOTE  0
@@ -150,9 +151,7 @@ void play_note(channel channel, uint8_t note, float velocity) {
 	last_note[lane] = note;
         last_channel[lane] = channel;
 
-	set_oscillator_frequency(lane, hertz[note]);
-	set_oscillator_type(lane, osc_type[channel]);
-	trigger_envelope(channel, lane, velocity);
+	trigger_lane(lane, osc_type[channel], hertz[note], channel, velocity);
 }
 
 void stop_note(channel channel, uint8_t note) {

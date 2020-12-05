@@ -31,9 +31,9 @@ void init_sample_buffer() {
 	for (int i = 0; i < BUFSIZE; i++) {
 		silence[i] = 0;
 	}
-	clear_sample_buffer();
+	clear_sample_buffer(samples);
 }
 
-void clear_sample_buffer() {
-	memcpy(samples, silence, BUFBYTES);
+void clear_sample_buffer(BUFTYPE *buffer) {
+	memcpy(buffer, silence, BUFBYTES);
 }

@@ -27,6 +27,7 @@
 #include "common.h"
 #include "compressor.h"
 #include "midi.h"
+#include "lane.h"
 #include "oscillator.h"
 #include "output.h"
 #include "polyphony.h"
@@ -61,11 +62,12 @@ int main() {
 	init_oscillators();
 	puts("oscillator initialized");
 
+	init_lanes();
+	puts("lanes initialized");
+
 	while(1) {
 		receive_midi(midi);
-		clear_sample_buffer();
-		run_oscillators();
-		compress_buffer();
+		run_lanes();
 		sound->write();
 	}
 

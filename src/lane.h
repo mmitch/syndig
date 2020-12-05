@@ -1,5 +1,5 @@
 /*
- * oscillator.h - oscillator interface
+ * lane.h - lane interface
  *
  * Copyright (C) 2020  Christian Garbs <mitch@cgarbs.de>
  * Licensed under GNU GPL v3 (or later)
@@ -20,32 +20,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _OSCILLATOR_H_
-#define _OSCILLATOR_H_
+#ifndef _LANE_H_
+#define _LANE_H_
 
-#include "buffer.h"
 #include "common.h"
+#include "oscillator.h"
 
-typedef enum {
-	SQUARE,
-	SAW_DOWN,
-	SAW_UP,
-	TRIANGLE,
-	SINE,
-	NOISE,
-	WAVELET_SQUARE_25,
-	WAVELET_SQUARE_50,
-	WAVELET_SAW_DOWN,
-	WAVELET_SAW_UP,
-	WAVELET_TRIANGLE,
-	WAVELET_SINE,
-	WAVELET_NOISE,
-	WAVELET_DOUBLE_PULSE,
-} oscillator_type;
-
-void init_oscillators();
-void set_oscillator_frequency(lane_id id, frequency new_frequency);
-void set_oscillator_type(lane_id id, oscillator_type new_type);
-BUFTYPE* run_oscillator(lane_id id);
+void init_lanes();
+void run_lanes();
+void trigger_lane(lane_id lane, oscillator_type osc_type, frequency frequency, channel channel, float velocity);
 
 #endif

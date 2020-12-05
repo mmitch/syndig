@@ -44,7 +44,7 @@ TEST clear_sample_buffer_sets_buffer_to_zero() {
 	samples[0] = 1337;
 
 	// when
-	clear_sample_buffer();
+	clear_sample_buffer(samples);
 
 	// then
 	for (int i=0; i<BUFSIZE; i++) {

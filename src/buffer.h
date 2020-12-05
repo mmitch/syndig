@@ -31,6 +31,6 @@ extern BUFTYPE samples[BUFSIZE];
 #define SAMPLERATE 44100.0
 
 void init_sample_buffer();
-void clear_sample_buffer();
+void clear_sample_buffer(BUFTYPE *buffer);
 
 #endif

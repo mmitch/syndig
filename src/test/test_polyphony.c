@@ -25,12 +25,14 @@
 #include "../thirdparty/greatest.h"
 
 #include "mock/mock_envelope.h"
+#include "mock/mock_lane.h"
 #include "mock/mock_oscillator.h"
 
 const double hertz[128] = { 111.0, 222.0, 333.0 };
 
 static void setup() {
 	reset_envelope_mocks();
+	reset_lane_mocks();
 	reset_oscillator_mocks();
 		
 	FFF_RESET_HISTORY()
@@ -47,18 +49,12 @@ TEST play_notes_plays_on_first_lane() {
 	ASSERT_EQ(0, poly_history[0]);
 	ASSERT_EQ(40, last_note[0]);
 
-	ASSERT_EQ(1,         set_oscillator_frequency_fake.call_count);
-	ASSERT_EQ(0,         set_oscillator_frequency_fake.arg0_val); // lane
-	ASSERT_EQ(hertz[40], set_oscillator_frequency_fake.arg1_val); // frequency
-
-	ASSERT_EQ(1,      set_oscillator_type_fake.call_count);
-	ASSERT_EQ(0,      set_oscillator_type_fake.arg0_val); // lane
-	ASSERT_EQ(SQUARE, set_oscillator_type_fake.arg1_val); // type
-
-	ASSERT_EQ(1,  trigger_envelope_fake.call_count);
-	ASSERT_EQ(3,  trigger_envelope_fake.arg0_val); // channel
-	ASSERT_EQ(0,  trigger_envelope_fake.arg1_val); // lane
-	ASSERT_EQ(90, trigger_envelope_fake.arg2_val); // velocity
+	ASSERT_EQ( 1,        trigger_lane_fake.call_count);
+	ASSERT_EQ( 0,        trigger_lane_fake.arg0_val); // lane
+	ASSERT_EQ(SQUARE,    trigger_lane_fake.arg1_val); // osc_type
+	ASSERT_EQ(hertz[40], trigger_lane_fake.arg2_val); // frequency
+	ASSERT_EQ( 3,        trigger_lane_fake.arg3_val); // channel
+	ASSERT_EQ(90,        trigger_lane_fake.arg4_val); // velocity
 
 	PASS();
 }

@@ -25,6 +25,7 @@
 
 #include <stdbool.h>
 
+#include "buffer.h"
 #include "common.h"
 
 void  init_envelopes();
@@ -32,10 +33,10 @@ void  set_envelope_attack(channel channel, uint16_t attack_ms);
 void  set_envelope_decay(channel channel, uint16_t decay_ms);
 void  set_envelope_sustain(channel channel, float sustain);
 void  set_envelope_release(channel channel, uint16_t release_ms);
-void  trigger_envelope(channel channel, lane_id id, float velocity);
+void  trigger_envelope(channel channel, lane_id id);
 void  release_envelope(lane_id id);
 void  stop_envelope(lane_id id);
-float envelope_nextval(lane_id id);
+BUFTYPE* run_envelope(lane_id id);
 bool  envelope_is_running(lane_id id);
 
 #endif

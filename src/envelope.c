@@ -46,10 +46,10 @@ typedef enum {
 } state;
 
 typedef struct {
-	state state;
-	float value;
-	float velocity;
-	adsr  *params;
+	state   state;
+	float   value;
+	adsr   *params;
+	BUFTYPE values[BUFSIZE];
 } envelope;
 
 static adsr     params[CHANNELS];
@@ -59,7 +59,6 @@ void init_envelopes() {
 	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
 		env[lane].state    = OFF;
 		env[lane].value    = 0;
-		env[lane].velocity = 0;
 	}
 	for (channel channel = 0; channel < CHANNELS; channel++) {
 		set_envelope_attack(channel, 30);
@@ -69,9 +68,8 @@ void init_envelopes() {
 	}
 }
 
-void trigger_envelope(channel channel, lane_id lane, float velocity) {
+void trigger_envelope(channel channel, lane_id lane) {
 	env[lane].state    = ATTACK;
-	env[lane].velocity = velocity;
 	env[lane].params   = &params[channel];
 }
 
@@ -83,40 +81,56 @@ void stop_envelope(lane_id lane) {
 	env[lane].state = OFF;
 }
 
-float envelope_nextval(lane_id lane) {
+BUFTYPE* run_envelope(lane_id lane) {
 	envelope *e = &env[lane];
 	adsr     *p = e->params;
+
+	float value = e->value;
+	float state = e->state;
+	BUFTYPE *values = e->values;
 	
-	if (e->state == OFF) {
-		return 0;
+	for (int i = 0; i < BUFSIZE; i++) {
+
+		if (state == OFF) {
+
+			value = 0;
+
+		} else {
+
+			if (state == ATTACK) {
+				if (p->attack_rate == 0 || value >= 1) {
+					value = 1;
+					state = DECAY;
+				} else {
+					value = MIN(value + p->attack_rate, 1);
+				}
+			}
+
+			if (state == DECAY) {
+				if (p->decay_rate == 0 || value <= p->sustain_level) {
+					value = p->sustain_level;
+					state = SUSTAIN;
+				} else {
+					value = MAX(value - p->decay_rate, p->sustain_level);
+				}
+			}
+			if (state == RELEASE) {
+				if (p->release_rate == 0 || value <= 0) {
+					value = 0;
+					state = OFF;
+				} else {
+					value = MAX(value - p->release_rate, 0);
+				}
+			}
+		}
+
+		values[i] = value;
 	}
 
-	if (e->state == ATTACK) {
-		if (p->attack_rate == 0 || e->value >= e->velocity) {
-			e->value = e->velocity;
-			e->state = DECAY;
-		} else {
-			e->value = MIN( e->value + (p->attack_rate * e->velocity), e->velocity);
-		}
-	}
-	if (e->state == DECAY) {
-		if (p->decay_rate == 0 || e->value <= p->sustain_level * e->velocity) {
-			e->value = p->sustain_level * e->velocity;
-			e->state = SUSTAIN;
-		} else {
-			e->value = MAX( e->value - (p->decay_rate  * e->velocity), p->sustain_level * e->velocity);
-		}
-	}
-	if (e->state == RELEASE) {
-		if (p->release_rate == 0 || e->value <= 0) {
-			e->value = 0;
-			e->state = OFF;
-		} else {
-			e->value = MAX( e->value - (p->release_rate * e->velocity), 0);
-		}
-	}
+	e->value = value;
+	e->state = state;
 
-	return e->value;
+	return values;
 }
 
 bool envelope_is_running(lane_id lane) {

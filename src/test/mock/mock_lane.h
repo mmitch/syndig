@@ -1,5 +1,5 @@
 /*
- * mock_envelope.h - mocks of envelope.h
+ * mock_lane.h - mocks of lane.h
  *
  * Copyright (C) 2020  Christian Garbs <mitch@cgarbs.de>
  * Licensed under GNU GPL v3 (or later)
@@ -20,29 +20,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../../envelope.h"
+#include "../../lane.h"
 
 #include "../../thirdparty/fff.h"
 DEFINE_FFF_GLOBALS
 
-FAKE_VOID_FUNC(set_envelope_attack,  channel, uint16_t)
-FAKE_VOID_FUNC(set_envelope_release, channel, uint16_t)
-FAKE_VOID_FUNC(set_envelope_decay,   channel, uint16_t)
-FAKE_VOID_FUNC(set_envelope_sustain, channel, float)
-FAKE_VOID_FUNC(trigger_envelope, channel, lane_id)
-FAKE_VOID_FUNC(release_envelope, lane_id)
-FAKE_VOID_FUNC(stop_envelope, lane_id)
-FAKE_VALUE_FUNC(float, envelope_nextval, lane_id)
-FAKE_VALUE_FUNC(bool, envelope_is_running, lane_id)
+FAKE_VOID_FUNC(trigger_lane, lane_id, oscillator_type, frequency, channel, float)
 
-void reset_envelope_mocks() {
-	RESET_FAKE(set_envelope_attack)
-	RESET_FAKE(set_envelope_release)
-	RESET_FAKE(set_envelope_decay)
-	RESET_FAKE(set_envelope_sustain)
-	RESET_FAKE(trigger_envelope)
-	RESET_FAKE(release_envelope)
-	RESET_FAKE(stop_envelope)
-	RESET_FAKE(envelope_nextval)
-	RESET_FAKE(envelope_is_running)
+void reset_lane_mocks() {
+	RESET_FAKE(trigger_lane)
 }

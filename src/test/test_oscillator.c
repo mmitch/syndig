@@ -96,7 +96,7 @@ TEST run_oscillator_square_at_half_rate() {
 	channel_id channel = 7;
 	set_oscillator_type(channel, SQUARE);
 	set_oscillator_channel(lane, channel);
-	set_oscillator_frequency(lane, SAMPLERATE / 2);
+	set_oscillator_frequency(lane, SAMPLERATE / 2.0);
 
 	// when
 	BUFTYPE *buffer = run_oscillator(lane);
@@ -104,6 +104,30 @@ TEST run_oscillator_square_at_half_rate() {
 	// then
 	for (uint8_t i = 0; i < BUFSIZE; i++) {
 		float expected = i % 2 ? 1 : -1;
+		ASSERT_EQ(expected, buffer[i]);
+	}
+
+	PASS();
+}
+
+#include "../debug.h"
+
+TEST run_oscillator_wavelet_square_50_at_eigth_rate() {
+	// given
+	setup();
+
+	lane_id    lane    = 3;
+	channel_id channel = 7;
+	set_oscillator_type(channel, WAVELET_SQUARE_50);
+	set_oscillator_channel(lane, channel);
+	set_oscillator_frequency(lane, SAMPLERATE / 8.0);
+
+	// when
+	BUFTYPE *buffer = run_oscillator(lane);
+
+	// then
+	for (uint8_t i = 0; i < BUFSIZE; i++) {
+		float expected = wavelet_square_50[(i+1) % WAVELET_LENGTH];
 		ASSERT_EQ(expected, buffer[i]);
 	}
 
@@ -123,6 +147,7 @@ int main(int argc, char **argv) {
 			RUN_TEST(init_oscillators_resets_oscillators_in_channel_configuration);
 			RUN_TEST(set_oscillator_type_affects_only_given_channel);
 			RUN_TEST(run_oscillator_square_at_half_rate);
+			RUN_TEST(run_oscillator_wavelet_square_50_at_eigth_rate);
 		});
 
 	GREATEST_MAIN_END();

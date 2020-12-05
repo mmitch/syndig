@@ -100,16 +100,17 @@ static float wavelet_double_pulse_nextval(uint8_t index) {
 	return wavelet_double_pulse[index];
 }
 
-static void sample_and_hold(oscillator *o, nextval_fn nextval) {
-	float wavelength_eighth = o->wavelength / 8.0;
-	float hold       = o->sample_hold_last;
-	uint8_t index    = o->sample_hold_index;
-	BUFTYPE *buffer  = o->buffer;
+static float sample_and_hold(oscillator *o, nextval_fn nextval) {
+	float   wavelength_eighth = o->wavelength / 8.0;
+	float   hold       = o->sample_hold_last;
+	uint8_t index      = o->sample_hold_index;
+	float   phase      = o->phase;
+	BUFTYPE *buffer    = o->buffer;
 
 	for (int i = 0; i < BUFSIZE; i++) {
-		o->phase++;
-		while (o->phase >= wavelength_eighth) {
-			o->phase -= wavelength_eighth;
+		phase++;
+		while (phase >= wavelength_eighth) {
+			phase -= wavelength_eighth;
 
 			index++;
 			if (index >= WAVELET_LENGTH) {
@@ -123,6 +124,8 @@ static void sample_and_hold(oscillator *o, nextval_fn nextval) {
 
 	o->sample_hold_last  = hold;
 	o->sample_hold_index = index;
+
+	return phase;
 }
 
 BUFTYPE* run_oscillator(lane_id lane) {
@@ -195,39 +198,39 @@ BUFTYPE* run_oscillator(lane_id lane) {
 		break;
 
 	case NOISE:
-		sample_and_hold(o, random_nextval);
+		phase = sample_and_hold(o, random_nextval);
 		break;
 
 	case WAVELET_SQUARE_25:
-		sample_and_hold(o, wavelet_square_25_nextval);
+		phase = sample_and_hold(o, wavelet_square_25_nextval);
 		break;
 
 	case WAVELET_SQUARE_50:
-		sample_and_hold(o, wavelet_square_50_nextval);
+		phase = sample_and_hold(o, wavelet_square_50_nextval);
 		break;
 
 	case WAVELET_SAW_DOWN:
-		sample_and_hold(o, wavelet_saw_down_nextval);
+		phase = sample_and_hold(o, wavelet_saw_down_nextval);
 		break;
 
 	case WAVELET_SAW_UP:
-		sample_and_hold(o, wavelet_saw_up_nextval);
+		phase = sample_and_hold(o, wavelet_saw_up_nextval);
 		break;
 
 	case WAVELET_TRIANGLE:
-		sample_and_hold(o, wavelet_triangle_nextval);
+		phase = sample_and_hold(o, wavelet_triangle_nextval);
 		break;
 
 	case WAVELET_SINE:
-		sample_and_hold(o, wavelet_sine_nextval);
+		phase = sample_and_hold(o, wavelet_sine_nextval);
 		break;
 
 	case WAVELET_NOISE:
-		sample_and_hold(o, wavelet_noise_nextval);
+		phase = sample_and_hold(o, wavelet_noise_nextval);
 		break;
 
 	case WAVELET_DOUBLE_PULSE:
-		sample_and_hold(o, wavelet_double_pulse_nextval);
+		phase = sample_and_hold(o, wavelet_double_pulse_nextval);
 		break;
 
 	}

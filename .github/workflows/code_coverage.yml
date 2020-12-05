@@ -30,4 +30,4 @@ jobs:
         gcov build/*.o build/test/*.o
     - name: Upload coverage
       run: |
-        bash <(curl -s https://codecov.io/bash)
+        bash <( curl -s https://codecov.io/bash )

@@ -53,6 +53,7 @@ void init_envelopes() {
 	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
 		env[lane].state    = OFF;
 		env[lane].value    = 0;
+		env[lane].channel  = 0;
 	}
 	for (channel_id channel = 0; channel < CHANNELS; channel++) {
 		set_envelope_attack(channel, 30);

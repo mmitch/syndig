@@ -76,6 +76,7 @@ capacity:
 
 These Control Change parameters are also honored:
 
+- 007: channel volume
 - 120: all sound off
 - 123: all notes off
 

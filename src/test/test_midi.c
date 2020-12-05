@@ -29,15 +29,36 @@
 #include "mock/mock_oscillator.h"
 #include "mock/mock_polyphony.h"
 
+#include "../channel.c" // contains no code, so no mock needed
+
 static midi_event event;
 
 static void setup() {
+	init_midi();
+
 	reset_envelope_mocks();
 	reset_input_mocks();
 	reset_oscillator_mocks();
 	reset_polyphony_mocks();
 		
 	FFF_RESET_HISTORY()
+}
+
+TEST init_midi_sets_channel_volumes() {
+	// given
+	setup();
+
+	ch_config[5].vol = 0.13;
+
+	// when
+	init_midi();
+
+	// then
+	for (channel_id channel = 0; channel < CHANNELS; channel++) {
+		ASSERT_EQ(0.75, ch_config[channel].vol);
+	}
+
+	PASS();
 }
 
 TEST empty_event_does_nothing() {
@@ -193,6 +214,28 @@ TEST controller_3_unmapped_values_map_to_kill_oldest() {
 	PASS();
 }
 
+TEST controller_7_sets_channel_volume() {
+	// given
+	setup();
+
+	event.type = CONTROL_CHANGE;
+	event.channel = 3;
+	event.data.control_change.param = 7;
+	event.data.control_change.value = 127;
+
+	mock_incoming_midi_event(&event);
+
+	// when
+	receive_midi(&midi);
+
+	// then
+	ASSERT_EQ(2, read_midi_fake.call_count);
+
+	ASSERT_EQ(1, ch_config[3].vol);
+
+	PASS();
+}
+
 TEST controller_120_stops_all_sound() {
 	// given
 	setup();
@@ -242,6 +285,7 @@ int main(int argc, char **argv) {
 	GREATEST_MAIN_BEGIN();
 
 	SHUFFLE_TESTS(rand(), {
+			RUN_TEST(init_midi_sets_channel_volumes);
 			RUN_TEST(empty_event_does_nothing);
 			RUN_TEST(note_on_is_passed_to_polyphony);
 			RUN_TEST(note_off_is_passed_to_polyphony);
@@ -249,6 +293,7 @@ int main(int argc, char **argv) {
 			RUN_TEST(program_change_unmapped_values_map_to_square);
 			RUN_TEST(controller_3_sets_polyphony_mode);
 			RUN_TEST(controller_3_unmapped_values_map_to_kill_oldest);
+			RUN_TEST(controller_7_sets_channel_volume);
 			RUN_TEST(controller_120_stops_all_sound);
 			RUN_TEST(controller_123_stops_all_notes);
 		});

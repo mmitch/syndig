@@ -28,7 +28,12 @@
 #include "envelope.h"
 #include "oscillator.h"
 
-static float velocity[POLYPHONY];
+typedef struct {
+	channel_id channel;
+	float      velocity;
+} lane_t;
+
+static lane_t l[POLYPHONY];
 
 static void run_lane(lane_id lane) {
 
@@ -36,7 +41,7 @@ static void run_lane(lane_id lane) {
 	BUFTYPE *env = run_envelope(lane);
 
 	// FIXME: extract mixer and amplifier
-	float amp = velocity[lane];
+	float amp = l[lane].velocity * ch_config[l[lane].channel].vol;
 	for (int i = 0; i < BUFSIZE; i++) {
 		BUFTYPE val = osc[i] * env[i] * amp;
 		samples[i] += val;
@@ -45,12 +50,14 @@ static void run_lane(lane_id lane) {
 
 void init_lanes() {
 	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
-		velocity[lane] = 0;
+		l[lane].velocity = 0;
+		l[lane].channel  = 0;
 	}
 }
 
-void trigger_lane(lane_id lane, channel_id channel, frequency frequency, float new_velocity) {
-	velocity[lane] = new_velocity;
+void trigger_lane(lane_id lane, channel_id channel, frequency frequency, float velocity) {
+	l[lane].velocity = velocity;
+	l[lane].channel  = channel;
 	set_oscillator_frequency(lane, frequency);
 	set_oscillator_type(lane, ch_config[channel].osc);
 	trigger_envelope(channel, lane);

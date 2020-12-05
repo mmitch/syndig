@@ -51,20 +51,22 @@ TEST init_lanes_resets_all_lanes() {
 	// given
 	setup();
 
-	velocity[3] = 0.5;
+	l[3].velocity = 0.5;
+	l[2].channel  = 9;
 
 	// when
 	init_lanes();
 
 	// then
 	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
-		ASSERT_EQ(0, velocity[lane]);
+		ASSERT_EQ(0, l[lane].velocity);
+		ASSERT_EQ(0, l[lane].channel);
 	}
 
 	PASS();
 }
 
-TEST trigger_lane_sets_velocity() {
+TEST trigger_lane_sets_velocity_and_channel() {
 	// given
 	setup();
 
@@ -77,7 +79,8 @@ TEST trigger_lane_sets_velocity() {
 	trigger_lane(lane, ch, freq, vel);
 
 	// then
-	ASSERT_EQ(vel, velocity[lane]);
+	ASSERT_EQ(vel, l[lane].velocity);
+	ASSERT_EQ( ch, l[lane].channel);
 
 	PASS();
 }
@@ -138,7 +141,7 @@ int main(int argc, char **argv) {
 
 	SHUFFLE_TESTS(rand(), {
 			RUN_TEST(init_lanes_resets_all_lanes);
-			RUN_TEST(trigger_lane_sets_velocity);
+			RUN_TEST(trigger_lane_sets_velocity_and_channel);
 			RUN_TEST(trigger_lane_configures_oscillator);
 			RUN_TEST(trigger_lane_triggers_envelope);
 		});

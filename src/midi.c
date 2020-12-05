@@ -23,6 +23,7 @@
 #include <math.h>
 
 #include "common.h"
+#include "channel.h"
 #include "envelope.h"
 #include "input.h"
 #include "oscillator.h"
@@ -66,6 +67,12 @@ static oscillator_type program_map[] = {
 	WAVELET_DOUBLE_PULSE,
 };
 
+void init_midi() {
+	for (channel_id channel = 0; channel < CHANNELS; channel++) {
+		ch_config[channel].vol = 0.75;
+	}
+}
+
 void receive_midi(midi_input *midi) {
 	midi_event *event;
 	while ((event = midi->read()) != NULL) {
@@ -101,6 +108,10 @@ void receive_midi(midi_input *midi) {
 			case 3:
 				CLAMP_TO_MAP(value, poly_map);
 				set_polyphony_mode(poly_map[value]);
+				break;
+
+			case 7:
+				ch_config[event->channel].vol = value / MAX_MIDI;
 				break;
 
 			case 72:

@@ -62,6 +62,9 @@ int main() {
 	init_oscillators();
 	puts("oscillator initialized");
 
+	init_midi();
+	puts("midi initialized");
+
 	init_lanes();
 	puts("lanes initialized");
 

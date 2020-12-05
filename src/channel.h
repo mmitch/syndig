@@ -32,6 +32,7 @@
 typedef struct {
 	oscillator_type osc;
 	adsr            env;
+	float           vol;
 } channel_config;
 
 extern channel_config ch_config[CHANNELS];

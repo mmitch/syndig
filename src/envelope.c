@@ -22,20 +22,15 @@
 
 #include <stdint.h>
 
+#include "envelope.h"
+
 #include "buffer.h"
 #include "common.h"
-#include "envelope.h"
+#include "channel.h"
 
 #define STRETCH   10
 
 #define MS_TO_TICKS(x)  ((x) * SAMPLERATE / 1000.0)
-
-typedef struct {
-	float attack_rate;
-	float decay_rate;
-	float sustain_level;
-	float release_rate;
-} adsr;
 
 typedef enum {
 	ATTACK,
@@ -46,13 +41,12 @@ typedef enum {
 } state;
 
 typedef struct {
-	state   state;
-	float   value;
-	adsr   *params;
-	BUFTYPE values[BUFSIZE];
+	state      state;
+	float      value;
+	channel_id channel;
+	BUFTYPE    values[BUFSIZE];
 } envelope;
 
-static adsr     params[CHANNELS];
 static envelope env[POLYPHONY];
 
 void init_envelopes() {
@@ -60,7 +54,7 @@ void init_envelopes() {
 		env[lane].state    = OFF;
 		env[lane].value    = 0;
 	}
-	for (channel channel = 0; channel < CHANNELS; channel++) {
+	for (channel_id channel = 0; channel < CHANNELS; channel++) {
 		set_envelope_attack(channel, 30);
 		set_envelope_decay(channel, 50);
 		set_envelope_sustain(channel, 0.5);
@@ -68,9 +62,9 @@ void init_envelopes() {
 	}
 }
 
-void trigger_envelope(channel channel, lane_id lane) {
-	env[lane].state    = ATTACK;
-	env[lane].params   = &params[channel];
+void trigger_envelope(channel_id channel, lane_id lane) {
+	env[lane].state   = ATTACK;
+	env[lane].channel = channel;
 }
 
 void release_envelope(lane_id lane) {
@@ -83,7 +77,7 @@ void stop_envelope(lane_id lane) {
 
 BUFTYPE* run_envelope(lane_id lane) {
 	envelope *e = &env[lane];
-	adsr     *p = e->params;
+	adsr     *p = &ch_config[e->channel].env;
 
 	float value = e->value;
 	float state = e->state;
@@ -142,30 +136,30 @@ bool envelope_is_running(lane_id lane) {
  *  rate = -----
  *         ticks
  */
-void set_envelope_attack(channel channel, uint16_t attack_ms) {
+void set_envelope_attack(channel_id channel, uint16_t attack_ms) {
 	if (attack_ms == 0) {
-		params[channel].attack_rate = 0;
+		ch_config[channel].env.attack_rate = 0;
 	} else {
-		params[channel].attack_rate = 1.0 / MS_TO_TICKS(attack_ms);
+		ch_config[channel].env.attack_rate = 1.0 / MS_TO_TICKS(attack_ms);
 	}
 }
 
-void set_envelope_decay(channel channel, uint16_t decay_ms) {
+void set_envelope_decay(channel_id channel, uint16_t decay_ms) {
 	if (decay_ms == 0) {
-		params[channel].decay_rate = 0;
+		ch_config[channel].env.decay_rate = 0;
 	} else {
-		params[channel].decay_rate = 1.0 / MS_TO_TICKS(decay_ms);
+		ch_config[channel].env.decay_rate = 1.0 / MS_TO_TICKS(decay_ms);
 	}
 }
 
-void set_envelope_sustain(channel channel, float sustain) {
-	params[channel].sustain_level = sustain;
+void set_envelope_sustain(channel_id channel, float sustain) {
+	ch_config[channel].env.sustain_level = sustain;
 }
 
-void set_envelope_release(channel channel, uint16_t release_ms) {
+void set_envelope_release(channel_id channel, uint16_t release_ms) {
 	if (release_ms == 0) {
-		params[channel].release_rate = 0;
+		ch_config[channel].env.release_rate = 0;
 	} else {
-		params[channel].release_rate = 1.0 / MS_TO_TICKS(release_ms);
+		ch_config[channel].env.release_rate = 1.0 / MS_TO_TICKS(release_ms);
 	}
 }

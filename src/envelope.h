@@ -28,12 +28,19 @@
 #include "buffer.h"
 #include "common.h"
 
+typedef struct {
+	float attack_rate;
+	float decay_rate;
+	float sustain_level;
+	float release_rate;
+} adsr;
+
 void  init_envelopes();
-void  set_envelope_attack(channel channel, uint16_t attack_ms);
-void  set_envelope_decay(channel channel, uint16_t decay_ms);
-void  set_envelope_sustain(channel channel, float sustain);
-void  set_envelope_release(channel channel, uint16_t release_ms);
-void  trigger_envelope(channel channel, lane_id id);
+void  set_envelope_attack(channel_id channel, uint16_t attack_ms);
+void  set_envelope_decay(channel_id channel, uint16_t decay_ms);
+void  set_envelope_sustain(channel_id channel, float sustain);
+void  set_envelope_release(channel_id channel, uint16_t release_ms);
+void  trigger_envelope(channel_id channel, lane_id id);
 void  release_envelope(lane_id id);
 void  stop_envelope(lane_id id);
 BUFTYPE* run_envelope(lane_id id);

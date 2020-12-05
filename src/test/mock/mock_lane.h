@@ -25,7 +25,7 @@
 #include "../../thirdparty/fff.h"
 DEFINE_FFF_GLOBALS
 
-FAKE_VOID_FUNC(trigger_lane, lane_id, oscillator_type, frequency, channel, float)
+FAKE_VOID_FUNC(trigger_lane, lane_id, channel_id, frequency, float)
 
 void reset_lane_mocks() {
 	RESET_FAKE(trigger_lane)

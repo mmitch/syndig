@@ -90,7 +90,7 @@ void receive_midi(midi_input *midi) {
 		{
 			uint8_t program = event->data.program_change.program;
 			CLAMP_TO_MAP(program, program_map);
-			change_oscillator_type(event->channel, program_map[program]);
+			set_oscillator_type(event->channel, program_map[program]);
 			break;
 		}
 

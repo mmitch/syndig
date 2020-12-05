@@ -26,7 +26,7 @@
 
 #include "mock/mock_envelope.h"
 
-BUFTYPE samples[BUFSIZE];
+#include "../channel.c" // contains no code, so no mock needed
 
 static void setup() {
 	init_oscillators();
@@ -35,20 +35,18 @@ static void setup() {
 	FFF_RESET_HISTORY()
 }
 
-TEST init_oscillators_resets_all_lanes() {
+TEST init_oscillators_resets_all_oscillators() {
 	// given
 	setup();
 
 	osc[2].frequency = 13;
 	osc[1].wavelength = 17;
-	osc[0].type = SAW_DOWN;
 
 	// when
 	init_oscillators();
 
 	// then
 	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
-		ASSERT_EQ(SQUARE, osc[lane].type);
 		ASSERT_EQ(440.0,  osc[lane].frequency);
 		ASSERT_IN_RANGE(SAMPLERATE/440.0, osc[lane].wavelength, 0.0001);
 	}
@@ -56,7 +54,25 @@ TEST init_oscillators_resets_all_lanes() {
 	PASS();
 }
 
-TEST set_oscillator_type_affects_only_given_lane() {
+TEST init_oscillators_resets_oscillators_in_channel_configuration() {
+	// given
+	setup();
+
+	ch_config[3].osc = SAW_DOWN;
+	ch_config[7].osc = TRIANGLE;
+
+	// when
+	init_oscillators();
+
+	// then
+	for (channel_id channel = 0; channel < CHANNELS; channel++) {
+		ASSERT_EQ(SQUARE,  ch_config[channel].osc);
+	}
+
+	PASS();
+}
+
+TEST set_oscillator_type_affects_only_given_channel() {
 	// given
 	setup();
 
@@ -64,10 +80,32 @@ TEST set_oscillator_type_affects_only_given_lane() {
 	set_oscillator_type(CHANNELS - 1, SAW_DOWN);
 
 	// then
-	for (lane_id lane = 0; lane < POLYPHONY - 1; lane++) {
-		ASSERT_EQ(SQUARE, osc[lane].type);
+	for (channel_id channel = 0; channel < CHANNELS - 1; channel++) {
+		ASSERT_EQ(SQUARE, ch_config[channel].osc);
 	}
-	ASSERT_EQ(SAW_DOWN, osc[POLYPHONY - 1].type);
+	ASSERT_EQ(SAW_DOWN, ch_config[CHANNELS - 1].osc);
+
+	PASS();
+}
+
+TEST run_oscillator_square_at_half_rate() {
+	// given
+	setup();
+
+	lane_id    lane    = 3;
+	channel_id channel = 7;
+	set_oscillator_type(channel, SQUARE);
+	set_oscillator_channel(lane, channel);
+	set_oscillator_frequency(lane, SAMPLERATE / 2);
+
+	// when
+	BUFTYPE *buffer = run_oscillator(lane);
+
+	// then
+	for (uint8_t i = 0; i < BUFSIZE; i++) {
+		float expected = i % 2 ? 1 : -1;
+		ASSERT_EQ(expected, buffer[i]);
+	}
 
 	PASS();
 }
@@ -81,8 +119,10 @@ int main(int argc, char **argv) {
 	GREATEST_MAIN_BEGIN();
 
 	SHUFFLE_TESTS(rand(), {
-			RUN_TEST(init_oscillators_resets_all_lanes);
-			RUN_TEST(set_oscillator_type_affects_only_given_lane);
+			RUN_TEST(init_oscillators_resets_all_oscillators);
+			RUN_TEST(init_oscillators_resets_oscillators_in_channel_configuration);
+			RUN_TEST(set_oscillator_type_affects_only_given_channel);
+			RUN_TEST(run_oscillator_square_at_half_rate);
 		});
 
 	GREATEST_MAIN_END();

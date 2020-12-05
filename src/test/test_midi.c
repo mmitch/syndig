@@ -103,7 +103,7 @@ TEST note_off_is_passed_to_polyphony() {
 	PASS();
 }
 
-TEST program_change_is_passed_to_polyphony() {
+TEST program_change_is_passed_to_oscillator() {
 	// given
 	setup();
 
@@ -119,9 +119,9 @@ TEST program_change_is_passed_to_polyphony() {
 	// then
 	ASSERT_EQ(2,      read_midi_fake.call_count);
 
-	ASSERT_EQ(1,      change_oscillator_type_fake.call_count);
-	ASSERT_EQ(3,      change_oscillator_type_fake.arg0_val); // channel
-	ASSERT_EQ(SAW_UP, change_oscillator_type_fake.arg1_val); // type
+	ASSERT_EQ(1,      set_oscillator_type_fake.call_count);
+	ASSERT_EQ(3,      set_oscillator_type_fake.arg0_val); // channel
+	ASSERT_EQ(SAW_UP, set_oscillator_type_fake.arg1_val); // type
 
 	PASS();
 }
@@ -142,9 +142,9 @@ TEST program_change_unmapped_values_map_to_square() {
 	// then
 	ASSERT_EQ(2,      read_midi_fake.call_count);
 
-	ASSERT_EQ(1,      change_oscillator_type_fake.call_count);
-	ASSERT_EQ(1,      change_oscillator_type_fake.arg0_val); // channel
-	ASSERT_EQ(SQUARE, change_oscillator_type_fake.arg1_val); // type
+	ASSERT_EQ(1,      set_oscillator_type_fake.call_count);
+	ASSERT_EQ(1,      set_oscillator_type_fake.arg0_val); // channel
+	ASSERT_EQ(SQUARE, set_oscillator_type_fake.arg1_val); // type
 
 	PASS();
 }
@@ -245,7 +245,7 @@ int main(int argc, char **argv) {
 			RUN_TEST(empty_event_does_nothing);
 			RUN_TEST(note_on_is_passed_to_polyphony);
 			RUN_TEST(note_off_is_passed_to_polyphony);
-			RUN_TEST(program_change_is_passed_to_polyphony);
+			RUN_TEST(program_change_is_passed_to_oscillator);
 			RUN_TEST(program_change_unmapped_values_map_to_square);
 			RUN_TEST(controller_3_sets_polyphony_mode);
 			RUN_TEST(controller_3_unmapped_values_map_to_kill_oldest);

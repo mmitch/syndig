@@ -24,10 +24,10 @@
 #define _LANE_H_
 
 #include "common.h"
-#include "oscillator.h"
+#include "channel.h"
 
 void init_lanes();
 void run_lanes();
-void trigger_lane(lane_id lane, oscillator_type osc_type, frequency frequency, channel channel, float velocity);
+void trigger_lane(lane_id lane, channel_id channel, frequency frequency, float velocity);
 
 #endif

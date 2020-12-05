@@ -45,7 +45,8 @@ typedef enum {
 
 void init_oscillators();
 void set_oscillator_frequency(lane_id id, frequency new_frequency);
-void set_oscillator_type(lane_id id, oscillator_type new_type);
+void set_oscillator_channel(lane_id id, channel_id channel);
+void set_oscillator_type(channel_id channel, oscillator_type type);
 BUFTYPE* run_oscillator(lane_id id);
 
 #endif

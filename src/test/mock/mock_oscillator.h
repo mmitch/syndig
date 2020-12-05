@@ -27,8 +27,10 @@ DEFINE_FFF_GLOBALS
 
 FAKE_VOID_FUNC(set_oscillator_type, lane_id, oscillator_type)
 FAKE_VOID_FUNC(set_oscillator_frequency, lane_id, frequency)
+FAKE_VALUE_FUNC(BUFTYPE*, run_oscillator, lane_id)
 
 void reset_oscillator_mocks() {
 	RESET_FAKE(set_oscillator_type)
 	RESET_FAKE(set_oscillator_frequency)
+	RESET_FAKE(run_oscillator)
 }

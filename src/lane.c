@@ -23,6 +23,7 @@
 #include "lane.h"
 
 #include "buffer.h"
+#include "channel.h"
 #include "compressor.h"
 #include "envelope.h"
 #include "oscillator.h"
@@ -48,10 +49,10 @@ void init_lanes() {
 	}
 }
 
-void trigger_lane(lane_id lane, oscillator_type osc_type, frequency frequency, channel channel, float new_velocity) {
+void trigger_lane(lane_id lane, channel_id channel, frequency frequency, float new_velocity) {
 	velocity[lane] = new_velocity;
 	set_oscillator_frequency(lane, frequency);
-	set_oscillator_type(lane, osc_type);
+	set_oscillator_type(lane, ch_config[channel].osc);
 	trigger_envelope(channel, lane);
 }
 

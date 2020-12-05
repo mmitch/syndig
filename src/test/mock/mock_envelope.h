@@ -25,15 +25,16 @@
 #include "../../thirdparty/fff.h"
 DEFINE_FFF_GLOBALS
 
-FAKE_VOID_FUNC(set_envelope_attack,  channel, uint16_t)
-FAKE_VOID_FUNC(set_envelope_release, channel, uint16_t)
-FAKE_VOID_FUNC(set_envelope_decay,   channel, uint16_t)
-FAKE_VOID_FUNC(set_envelope_sustain, channel, float)
-FAKE_VOID_FUNC(trigger_envelope, channel, lane_id)
+FAKE_VOID_FUNC(set_envelope_attack,  channel_id, uint16_t)
+FAKE_VOID_FUNC(set_envelope_release, channel_id, uint16_t)
+FAKE_VOID_FUNC(set_envelope_decay,   channel_id, uint16_t)
+FAKE_VOID_FUNC(set_envelope_sustain, channel_id, float)
+FAKE_VOID_FUNC(trigger_envelope, channel_id, lane_id)
 FAKE_VOID_FUNC(release_envelope, lane_id)
 FAKE_VOID_FUNC(stop_envelope, lane_id)
 FAKE_VALUE_FUNC(float, envelope_nextval, lane_id)
 FAKE_VALUE_FUNC(bool, envelope_is_running, lane_id)
+FAKE_VALUE_FUNC(BUFTYPE*, run_envelope, lane_id)
 
 void reset_envelope_mocks() {
 	RESET_FAKE(set_envelope_attack)
@@ -45,4 +46,5 @@ void reset_envelope_mocks() {
 	RESET_FAKE(stop_envelope)
 	RESET_FAKE(envelope_nextval)
 	RESET_FAKE(envelope_is_running)
+	RESET_FAKE(run_envelope)
 }

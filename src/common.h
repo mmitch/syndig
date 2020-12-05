@@ -29,9 +29,9 @@
 #define POLYPHONY 16
 #define CHANNELS  16
 
-typedef uint8_t channel;
-
 typedef double frequency;
+
+typedef uint8_t channel_id;
 
 typedef uint8_t lane_id;
 // max id + 1 is unknown/not found

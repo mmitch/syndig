@@ -57,7 +57,7 @@ typedef struct {
 
 typedef struct {
 	midi_event_type type;
-	channel         channel;
+	channel_id      channel;
 	union {
 		midi_data_note_on        note_on;
 		midi_data_note_off       note_off;

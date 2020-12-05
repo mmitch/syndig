@@ -24,17 +24,18 @@
 #include <stdlib.h>
 
 #include "buffer.h"
+#include "channel.h"
 #include "envelope.h"
 #include "oscillator.h"
 
 typedef struct {
-	oscillator_type type;
+	channel_id channel;
 	float phase;
 	frequency frequency;
 	float wavelength;
 	float sample_hold_last;
 	uint8_t sample_hold_index;
-	BUFTYPE samples[BUFSIZE];
+	BUFTYPE buffer[BUFSIZE];
 } oscillator;
 
 #define PI             3.14159265358979323846
@@ -101,8 +102,9 @@ static float wavelet_double_pulse_nextval(uint8_t index) {
 
 static void sample_and_hold(oscillator *o, nextval_fn nextval) {
 	float wavelength_eighth = o->wavelength / 8.0;
-	float hold = o->sample_hold_last;
-	uint8_t index = o->sample_hold_index;
+	float hold       = o->sample_hold_last;
+	uint8_t index    = o->sample_hold_index;
+	BUFTYPE *buffer  = o->buffer;
 
 	for (int i = 0; i < BUFSIZE; i++) {
 		o->phase++;
@@ -116,7 +118,7 @@ static void sample_and_hold(oscillator *o, nextval_fn nextval) {
 
 			hold = nextval(index);
 		}
-		o->samples[i] = hold;
+		buffer[i] = hold;
 	}
 
 	o->sample_hold_last  = hold;
@@ -126,53 +128,57 @@ static void sample_and_hold(oscillator *o, nextval_fn nextval) {
 BUFTYPE* run_oscillator(lane_id lane) {
 	oscillator *o = &osc[lane];
 
-	switch (o->type) {
+	BUFTYPE *buffer  = o->buffer;
+	float phase      = o->phase;
+	float wavelength = o->wavelength;
+
+	switch (ch_config[o->channel].osc) {
 
 	case SQUARE:
 	{
-		float wavelength_half = o->wavelength / 2.0;
+		float wavelength_half = wavelength / 2.0;
 		for (int i = 0; i < BUFSIZE; i++) {
-			o->phase++;
-			while (o->phase >= o->wavelength) {
-				o->phase -= o->wavelength;
+			phase++;
+			while (phase >= wavelength) {
+				phase -= wavelength;
 			}
-			o->samples[i] = (o->phase < wavelength_half) ? 1 : -1;
+			buffer[i] = (phase < wavelength_half) ? 1 : -1;
 		}
 		break;
 	}
 
 	case SAW_DOWN:
 		for (int i = 0; i < BUFSIZE; i++) {
-			o->phase++;
-			while (o->phase >= o->wavelength) {
-				o->phase -= o->wavelength;
+			phase++;
+			while (phase >= wavelength) {
+				phase -= wavelength;
 			}
-			o->samples[i] = 1 - (2 * o->phase / o->wavelength);
+			buffer[i] = 1 - (2 * phase / wavelength);
 		}
 		break;
 
 	case SAW_UP:
 		for (int i = 0; i < BUFSIZE; i++) {
-			o->phase++;
-			while (o->phase >= o->wavelength) {
-				o->phase -= o->wavelength;
+			phase++;
+			while (phase >= wavelength) {
+				phase -= wavelength;
 			}
-			o->samples[i] = -1 + (2 * o->phase / o->wavelength);
+			buffer[i] = -1 + (2 * phase / wavelength);
 		}
 		break;
 
 	case TRIANGLE:
 	{
-		float wavelength_half = o->wavelength / 2.0;
+		float wavelength_half = wavelength / 2.0;
 		for (int i = 0; i < BUFSIZE; i++) {
-			o->phase++;
-			while (o->phase >= o->wavelength) {
-				o->phase -= o->wavelength;
+			phase++;
+			while (phase >= wavelength) {
+				phase -= wavelength;
 			}
-			if (o->phase < wavelength_half) {
-				o->samples[i] =  1 - (4 * o->phase / o->wavelength);
+			if (phase < wavelength_half) {
+				buffer[i] =  1 - (4 * phase / wavelength);
 			} else {
-				o->samples[i] = -1 + (4 * (o->phase - wavelength_half) / o->wavelength);
+				buffer[i] = -1 + (4 * (phase - wavelength_half) / wavelength);
 			}
 		}
 		break;
@@ -180,11 +186,11 @@ BUFTYPE* run_oscillator(lane_id lane) {
 
 	case SINE:
 		for (int i = 0; i < BUFSIZE; i++) {
-			o->phase++;
-			while (o->phase >= o->wavelength) {
-				o->phase -= o->wavelength;
+			phase++;
+			while (phase >= wavelength) {
+				phase -= wavelength;
 			}
-			o->samples[i] = sinf( o->phase * 2 * PI / o->wavelength );
+			buffer[i] = sinf( phase * 2 * PI / wavelength );
 		}
 		break;
 
@@ -226,14 +232,18 @@ BUFTYPE* run_oscillator(lane_id lane) {
 
 	}
 
-	return o->samples;
+	o->phase = phase;
+
+	return buffer;
 }
 
 void init_oscillators() {
 	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
-		osc[lane].type       = SQUARE;
 		osc[lane].wavelength = 1;
 		set_oscillator_frequency(lane, 440);
+	}
+	for (channel_id channel = 0; channel < CHANNELS; channel++) {
+		ch_config[channel].osc = SQUARE;
 	}
 }
 
@@ -244,6 +254,10 @@ void set_oscillator_frequency(lane_id lane, frequency new_frequency) {
 	osc[lane].phase = relative_phase * osc[lane].wavelength;
 }
 
-void set_oscillator_type(lane_id lane, oscillator_type new_type) { // FIXME combine with set frequency?
-	osc[lane].type = new_type;
+void set_oscillator_channel(lane_id lane, channel_id channel) {
+	osc[lane].channel = channel;
+}
+
+void set_oscillator_type(channel_id channel, oscillator_type type) {
+	ch_config[channel].osc = type;
 }

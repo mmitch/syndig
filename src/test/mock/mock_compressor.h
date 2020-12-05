@@ -1,5 +1,5 @@
 /*
- * polyphony.h - polyphony interface
+ * mock_compressor.h - mocks of compressor.h
  *
  * Copyright (C) 2020  Christian Garbs <mitch@cgarbs.de>
  * Licensed under GNU GPL v3 (or later)
@@ -20,29 +20,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _POLYPHONY_H_
-#define _POLYPHONY_H_
+#include "../../compressor.h"
 
-#include "common.h"
-#include "oscillator.h"
+#include "../../thirdparty/fff.h"
+DEFINE_FFF_GLOBALS
 
-typedef enum {
-	KILL_OLDEST,
-	KILL_LOWEST,
-	KILL_HIGHEST,
-	ROUND_ROBIN,
-} polyphony_mode_t;
+FAKE_VOID_FUNC0(compress_buffer)
 
-typedef struct {
-	polyphony_mode_t mode;
-	char*            name;
-} polyphony_mode;
-
-void init_polyphony();
-void set_polyphony_mode(polyphony_mode new_mode);
-void play_note(channel_id channel, uint8_t note, float velocity);
-void stop_note(channel_id channel, uint8_t note);
-void stop_all_notes();
-void stop_all_sound();
-
-#endif
+void reset_compressor_mocks() {
+	RESET_FAKE(compress_buffer)
+}

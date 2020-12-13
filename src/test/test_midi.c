@@ -255,6 +255,75 @@ TEST controller_7_sets_channel_volume() {
 	PASS();
 }
 
+TEST controller_10_sets_channel_pan_hard_left() {
+	// given
+	setup();
+
+	event.type = CONTROL_CHANGE;
+	event.channel = 4;
+	event.data.control_change.param = 10;
+	event.data.control_change.value = 0;
+
+	mock_incoming_midi_event(&event);
+
+	// when
+	receive_midi(&midi);
+
+	// then
+	ASSERT_EQ(2,           read_midi_fake.call_count);
+
+	ASSERT_EQ(1, ch_config[4].vol_left);
+	ASSERT_EQ(0, ch_config[4].vol_right);
+
+	PASS();
+}
+
+TEST controller_10_sets_channel_pan_center() {
+	// given
+	setup();
+
+	event.type = CONTROL_CHANGE;
+	event.channel = 11;
+	event.data.control_change.param = 10;
+	event.data.control_change.value = 64;
+
+	mock_incoming_midi_event(&event);
+
+	// when
+	receive_midi(&midi);
+
+	// then
+	ASSERT_EQ(2,           read_midi_fake.call_count);
+
+	ASSERT_EQ(1, ch_config[11].vol_left);
+	ASSERT_EQ(1, ch_config[11].vol_right);
+
+	PASS();
+}
+
+TEST controller_10_sets_channel_pan_right() {
+	// given
+	setup();
+
+	event.type = CONTROL_CHANGE;
+	event.channel = 11;
+	event.data.control_change.param = 10;
+	event.data.control_change.value = 96;
+
+	mock_incoming_midi_event(&event);
+
+	// when
+	receive_midi(&midi);
+
+	// then
+	ASSERT_EQ(2, read_midi_fake.call_count);
+
+	ASSERT_IN_RANGE(31.0/63.0, ch_config[11].vol_left, 0.00001);
+	ASSERT_EQ(1, ch_config[11].vol_right);
+
+	PASS();
+}
+
 TEST controller_120_stops_all_sound() {
 	// given
 	setup();
@@ -314,6 +383,9 @@ int main(int argc, char **argv) {
 			RUN_TEST(controller_3_sets_polyphony_mode);
 			RUN_TEST(controller_3_unmapped_values_map_to_kill_oldest);
 			RUN_TEST(controller_7_sets_channel_volume);
+			RUN_TEST(controller_10_sets_channel_pan_hard_left);
+			RUN_TEST(controller_10_sets_channel_pan_center);
+			RUN_TEST(controller_10_sets_channel_pan_right);
 			RUN_TEST(controller_120_stops_all_sound);
 			RUN_TEST(controller_123_stops_all_notes);
 		});

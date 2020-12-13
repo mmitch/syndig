@@ -116,6 +116,19 @@ void receive_midi(midi_input *midi) {
 				ch_config[event->channel].vol = value / MAX_MIDI;
 				break;
 
+			case 10:
+				if (value < 63) {
+					ch_config[event->channel].vol_right = value / 63.0;
+				} else {
+					ch_config[event->channel].vol_right = 1;
+				}
+				if (value > 64) {
+					ch_config[event->channel].vol_left = (127 - value) / 63.0;
+				} else {
+					ch_config[event->channel].vol_left = 1;
+				}
+				break;
+
 			case 72:
 				set_envelope_release(event->channel, STRETCH(value));
 				break;

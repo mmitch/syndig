@@ -39,7 +39,7 @@ static void run_lane(lane_id lane) {
 
 	lane_t         *la = &l[lane];
 	channel_config *ch = &ch_config[la->channel];
-	
+
 	BUFTYPE *osc = run_oscillator(lane);
 	BUFTYPE *env = run_envelope(lane);
 

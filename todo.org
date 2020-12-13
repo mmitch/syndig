@@ -13,7 +13,7 @@
 - [X] switch to mono output as long as there is no stereo data
 - [X] find a better name than /synth/
 
-* [12/24] features
+* [13/24] features
 
 - [ ] variable sample rate
 - [ ] refactor duplicated code in error handling (in input and output)
@@ -29,7 +29,7 @@
 - [X] polyphony
 - [X] switch stop oldest/newest note on polyphony overflow
 - [ ] phazor effect?  find out how to make atmospheric strings
-- [ ] stereo output?
+- [X] stereo output
 - [X] ADSR envelope
 - [X] configure ADSR parameters via MIDI controls
 - [X] support velocity on note on/note off

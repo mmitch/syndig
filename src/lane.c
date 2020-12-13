@@ -37,14 +37,22 @@ static lane_t l[POLYPHONY];
 
 static void run_lane(lane_id lane) {
 
+	lane_t         *la = &l[lane];
+	channel_config *ch = &ch_config[la->channel];
+	
 	BUFTYPE *osc = run_oscillator(lane);
 	BUFTYPE *env = run_envelope(lane);
 
 	// FIXME: extract mixer and amplifier
-	float amp = l[lane].velocity * ch_config[l[lane].channel].vol;
-	for (int i = 0; i < BUFSIZE_MONO; i++) {
-		BUFTYPE val = osc[i] * env[i] * amp;
-		stereo_out[i] += val;
+	float amp = la->velocity * ch->vol;
+	float amp_l = amp * ch->vol_left;
+	float amp_r = amp * ch->vol_right;
+	uint8_t i;
+	uint16_t j;
+	for (i = j = 0; i < BUFSIZE_MONO; i++) {
+		BUFTYPE val = osc[i] * env[i];
+		stereo_out[j++] += val * amp_l;
+		stereo_out[j++] += val * amp_r;
 	}
 }
 

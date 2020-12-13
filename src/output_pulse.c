@@ -37,7 +37,7 @@ static int pulse_open()
 	pa_sample_spec pulse_spec;
 	pulse_spec.format = PA_SAMPLE_FLOAT32;
 	pulse_spec.rate = SAMPLERATE;
-	pulse_spec.channels = 1;
+	pulse_spec.channels = 2;
 
 	int err;
 	pulse_handle = pa_simple_new(NULL, PROGRAM_NAME, PA_STREAM_PLAYBACK, NULL, PROGRAM_NAME, &pulse_spec, NULL, NULL, &err);
@@ -51,7 +51,7 @@ static int pulse_open()
 
 static ssize_t pulse_write()
 {
-	return pa_simple_write(pulse_handle, &stereo_out, BUFBYTES_MONO, NULL);
+	return pa_simple_write(pulse_handle, &stereo_out, BUFBYTES_STEREO, NULL);
 }
 
 static int pulse_close()

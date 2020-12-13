@@ -50,7 +50,7 @@ int main() {
 	}
 	puts("MIDI input opened");
 
-	init_sample_buffer();
+	init_buffer();
 	puts("buffer initialized");
 
 	init_polyphony();

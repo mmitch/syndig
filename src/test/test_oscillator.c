@@ -102,7 +102,7 @@ TEST run_oscillator_square_at_half_rate() {
 	BUFTYPE *buffer = run_oscillator(lane);
 
 	// then
-	for (uint8_t i = 0; i < BUFSIZE; i++) {
+	for (uint8_t i = 0; i < BUFSIZE_MONO; i++) {
 		float expected = i % 2 ? 1 : -1;
 		ASSERT_EQ(expected, buffer[i]);
 	}
@@ -126,7 +126,7 @@ TEST run_oscillator_wavelet_square_50_at_eigth_rate() {
 	BUFTYPE *buffer = run_oscillator(lane);
 
 	// then
-	for (uint8_t i = 0; i < BUFSIZE; i++) {
+	for (uint8_t i = 0; i < BUFSIZE_MONO; i++) {
 		float expected = wavelet_square_50[(i+1) % WAVELET_LENGTH];
 		ASSERT_EQ(expected, buffer[i]);
 	}

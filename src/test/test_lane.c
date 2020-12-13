@@ -31,12 +31,12 @@
 
 #include "../channel.c" // contains no code, so no mock needed
 
-BUFTYPE stereo_out[BUFSIZE * 2];
+BUFTYPE stereo_out[BUFSIZE_STEREO];
 
 static void setup() {
 	init_lanes();
 
-	for (uint8_t i = 0; i < BUFSIZE; i++) {
+	for (uint16_t i = 0; i < BUFSIZE_STEREO; i++) {
 		stereo_out[i] = 0;
 	}
 

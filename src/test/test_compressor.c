@@ -24,12 +24,12 @@
 
 #include "../thirdparty/greatest.h"
 
-BUFTYPE stereo_out[BUFSIZE * 2];
+BUFTYPE stereo_out[BUFSIZE_STEREO];
 
 static void reset_compressor() {
 	compressing = false;
 	compression = NEUTRAL;
-	for (uint16_t i = 0; i < BUFSIZE * 2; i++) {
+	for (uint16_t i = 0; i < BUFSIZE_STEREO; i++) {
 		stereo_out[i] = 0;
 	}
 }
@@ -42,7 +42,7 @@ TEST compression_of_empty_buffer_does_nothing() {
 	compress_buffer();
 
 	// then
-	for (uint16_t i = 0; i < BUFSIZE; i++) {
+	for (uint16_t i = 0; i < BUFSIZE_STEREO; i++) {
 		ASSERT_EQ(0.0, stereo_out[i]);
 	}
 
@@ -97,7 +97,7 @@ TEST compression_kicks_in_with_overflown_values() {
 TEST compression_normalizes_the_whole_buffer() {
 	// given
 	reset_compressor();
-	for (uint16_t i = 0; i < BUFSIZE * 2; i++) {
+	for (uint16_t i = 0; i < BUFSIZE_STEREO; i++) {
 		stereo_out[i] = i;
 	}
 
@@ -105,7 +105,7 @@ TEST compression_normalizes_the_whole_buffer() {
 	compress_buffer();
 
 	// then
-	for (uint16_t i = 0; i < BUFSIZE * 2; i++) {
+	for (uint16_t i = 0; i < BUFSIZE_STEREO; i++) {
 		ASSERT(stereo_out[i] <= 1.0);
 	}
 

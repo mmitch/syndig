@@ -25,20 +25,16 @@
 
 #include "buffer.h"
 
-BUFTYPE stereo_out[BUFSIZE * 2];
-BUFTYPE silence[BUFSIZE * 2];
+BUFTYPE stereo_out[BUFSIZE_STEREO];
+BUFTYPE silence[BUFSIZE_STEREO];
 
-void init_sample_buffer() {
-	for (uint16_t i = 0; i < BUFSIZE * 2; i++) {
+void init_buffer() {
+	for (uint16_t i = 0; i < BUFSIZE_STEREO; i++) {
 		silence[i] = 0;
 	}
-	clear_stereo_buffer(stereo_out);
+	clear_buffer(stereo_out);
 }
 
-void clear_mono_buffer(BUFTYPE *buffer) {
-	memcpy(buffer, silence, BUFBYTES_MONO);
-}
-
-void clear_stereo_buffer(BUFTYPE *buffer) {
+void clear_buffer(BUFTYPE *buffer) {
 	memcpy(buffer, silence, BUFBYTES_STEREO);
 }

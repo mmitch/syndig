@@ -42,7 +42,7 @@ static void run_lane(lane_id lane) {
 
 	// FIXME: extract mixer and amplifier
 	float amp = l[lane].velocity * ch_config[l[lane].channel].vol;
-	for (int i = 0; i < BUFSIZE; i++) {
+	for (int i = 0; i < BUFSIZE_MONO; i++) {
 		BUFTYPE val = osc[i] * env[i] * amp;
 		stereo_out[i] += val;
 	}
@@ -64,7 +64,7 @@ void trigger_lane(channel_id channel, lane_id lane, frequency frequency, float v
 }
 
 void run_lanes() {
-	clear_mono_buffer(stereo_out);
+	clear_buffer(stereo_out);
 	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
 		if (envelope_is_running(lane)) {
 			run_lane(lane);

@@ -44,7 +44,7 @@ typedef struct {
 	state      state;
 	float      value;
 	channel_id channel;
-	BUFTYPE    values[BUFSIZE];
+	BUFTYPE    values[BUFSIZE_MONO];
 } envelope;
 
 static envelope env[POLYPHONY];
@@ -84,7 +84,7 @@ BUFTYPE* run_envelope(lane_id lane) {
 	float state = e->state;
 	BUFTYPE *values = e->values;
 	
-	for (int i = 0; i < BUFSIZE; i++) {
+	for (int i = 0; i < BUFSIZE_MONO; i++) {
 
 		if (state == OFF) {
 

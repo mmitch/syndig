@@ -25,10 +25,8 @@
 #include "../../thirdparty/fff.h"
 DEFINE_FFF_GLOBALS
 
-FAKE_VOID_FUNC(clear_mono_buffer, BUFTYPE*)
-FAKE_VOID_FUNC(clear_stereo_buffer, BUFTYPE*)
+FAKE_VOID_FUNC(clear_buffer, BUFTYPE*)
 
 void reset_buffer_mocks() {
-	RESET_FAKE(clear_mono_buffer)
-	RESET_FAKE(clear_stereo_buffer)
+	RESET_FAKE(clear_buffer)
 }

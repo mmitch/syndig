@@ -35,7 +35,7 @@ typedef struct {
 	float wavelength;
 	float sample_hold_last;
 	uint8_t sample_hold_index;
-	BUFTYPE buffer[BUFSIZE];
+	BUFTYPE buffer[BUFSIZE_MONO];
 } oscillator;
 
 #define PI             3.14159265358979323846
@@ -107,7 +107,7 @@ static float sample_and_hold(oscillator *o, nextval_fn nextval) {
 	float   phase      = o->phase;
 	BUFTYPE *buffer    = o->buffer;
 
-	for (int i = 0; i < BUFSIZE; i++) {
+	for (int i = 0; i < BUFSIZE_MONO; i++) {
 		phase++;
 		while (phase >= wavelength_eighth) {
 			phase -= wavelength_eighth;
@@ -140,7 +140,7 @@ BUFTYPE* run_oscillator(lane_id lane) {
 	case SQUARE:
 	{
 		float wavelength_half = wavelength / 2.0;
-		for (int i = 0; i < BUFSIZE; i++) {
+		for (int i = 0; i < BUFSIZE_MONO; i++) {
 			phase++;
 			while (phase >= wavelength) {
 				phase -= wavelength;
@@ -151,7 +151,7 @@ BUFTYPE* run_oscillator(lane_id lane) {
 	}
 
 	case SAW_DOWN:
-		for (int i = 0; i < BUFSIZE; i++) {
+		for (int i = 0; i < BUFSIZE_MONO; i++) {
 			phase++;
 			while (phase >= wavelength) {
 				phase -= wavelength;
@@ -161,7 +161,7 @@ BUFTYPE* run_oscillator(lane_id lane) {
 		break;
 
 	case SAW_UP:
-		for (int i = 0; i < BUFSIZE; i++) {
+		for (int i = 0; i < BUFSIZE_MONO; i++) {
 			phase++;
 			while (phase >= wavelength) {
 				phase -= wavelength;
@@ -173,7 +173,7 @@ BUFTYPE* run_oscillator(lane_id lane) {
 	case TRIANGLE:
 	{
 		float wavelength_half = wavelength / 2.0;
-		for (int i = 0; i < BUFSIZE; i++) {
+		for (int i = 0; i < BUFSIZE_MONO; i++) {
 			phase++;
 			while (phase >= wavelength) {
 				phase -= wavelength;
@@ -188,7 +188,7 @@ BUFTYPE* run_oscillator(lane_id lane) {
 	}
 
 	case SINE:
-		for (int i = 0; i < BUFSIZE; i++) {
+		for (int i = 0; i < BUFSIZE_MONO; i++) {
 			phase++;
 			while (phase >= wavelength) {
 				phase -= wavelength;

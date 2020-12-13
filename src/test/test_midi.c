@@ -110,7 +110,7 @@ TEST note_on_is_passed_to_polyphony() {
 	receive_midi(&midi);
 
 	// then
-	ASSERT_EQ(2,  read_midi_fake.call_count);
+	ASSERT_EQ(2, read_midi_fake.call_count);
 
 	ASSERT_EQ( 1, play_note_fake.call_count);
 	ASSERT_EQ( 8, play_note_fake.arg0_val); // channel
@@ -134,7 +134,7 @@ TEST note_off_is_passed_to_polyphony() {
 	receive_midi(&midi);
 
 	// then
-	ASSERT_EQ(2,  read_midi_fake.call_count);
+	ASSERT_EQ(2, read_midi_fake.call_count);
 
 	ASSERT_EQ( 1, stop_note_fake.call_count);
 	ASSERT_EQ( 3, stop_note_fake.arg0_val); // channel
@@ -157,7 +157,7 @@ TEST program_change_is_passed_to_oscillator() {
 	receive_midi(&midi);
 
 	// then
-	ASSERT_EQ(2,      read_midi_fake.call_count);
+	ASSERT_EQ(2, read_midi_fake.call_count);
 
 	ASSERT_EQ(1,      set_oscillator_type_fake.call_count);
 	ASSERT_EQ(3,      set_oscillator_type_fake.arg0_val); // channel
@@ -180,7 +180,7 @@ TEST program_change_unmapped_values_map_to_square() {
 	receive_midi(&midi);
 
 	// then
-	ASSERT_EQ(2,      read_midi_fake.call_count);
+	ASSERT_EQ(2, read_midi_fake.call_count);
 
 	ASSERT_EQ(1,      set_oscillator_type_fake.call_count);
 	ASSERT_EQ(1,      set_oscillator_type_fake.arg0_val); // channel
@@ -203,7 +203,7 @@ TEST controller_3_sets_polyphony_mode() {
 	receive_midi(&midi);
 
 	// then
-	ASSERT_EQ(2,           read_midi_fake.call_count);
+	ASSERT_EQ(2, read_midi_fake.call_count);
 
 	ASSERT_EQ(1,           set_polyphony_mode_fake.call_count);
 	ASSERT_EQ(ROUND_ROBIN, set_polyphony_mode_fake.arg0_val.mode);
@@ -225,7 +225,7 @@ TEST controller_3_unmapped_values_map_to_kill_oldest() {
 	receive_midi(&midi);
 
 	// then
-	ASSERT_EQ(2,           read_midi_fake.call_count);
+	ASSERT_EQ(2, read_midi_fake.call_count);
 
 	ASSERT_EQ(1,           set_polyphony_mode_fake.call_count);
 	ASSERT_EQ(KILL_OLDEST, set_polyphony_mode_fake.arg0_val.mode);
@@ -270,7 +270,7 @@ TEST controller_10_sets_channel_pan_hard_left() {
 	receive_midi(&midi);
 
 	// then
-	ASSERT_EQ(2,           read_midi_fake.call_count);
+	ASSERT_EQ(2, read_midi_fake.call_count);
 
 	ASSERT_EQ(1, ch_config[4].vol_left);
 	ASSERT_EQ(0, ch_config[4].vol_right);
@@ -293,7 +293,7 @@ TEST controller_10_sets_channel_pan_center() {
 	receive_midi(&midi);
 
 	// then
-	ASSERT_EQ(2,           read_midi_fake.call_count);
+	ASSERT_EQ(2, read_midi_fake.call_count);
 
 	ASSERT_EQ(1, ch_config[11].vol_left);
 	ASSERT_EQ(1, ch_config[11].vol_right);

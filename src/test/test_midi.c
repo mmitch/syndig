@@ -61,6 +61,25 @@ TEST init_midi_sets_channel_volumes() {
 	PASS();
 }
 
+TEST init_midi_sets_channel_panning() {
+	// given
+	setup();
+
+	ch_config[11].vol =  0.3;
+	ch_config[15].vol = -0.7;
+
+	// when
+	init_midi();
+
+	// then
+	for (channel_id channel = 0; channel < CHANNELS; channel++) {
+		ASSERT_EQ(1, ch_config[channel].vol_left);
+		ASSERT_EQ(1, ch_config[channel].vol_right);
+	}
+
+	PASS();
+}
+
 TEST empty_event_does_nothing() {
 	// given
 	setup();
@@ -286,6 +305,7 @@ int main(int argc, char **argv) {
 
 	SHUFFLE_TESTS(rand(), {
 			RUN_TEST(init_midi_sets_channel_volumes);
+			RUN_TEST(init_midi_sets_channel_panning);
 			RUN_TEST(empty_event_does_nothing);
 			RUN_TEST(note_on_is_passed_to_polyphony);
 			RUN_TEST(note_off_is_passed_to_polyphony);

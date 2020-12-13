@@ -69,7 +69,9 @@ static oscillator_type program_map[] = {
 
 void init_midi() {
 	for (channel_id channel = 0; channel < CHANNELS; channel++) {
-		ch_config[channel].vol = 0.75;
+		ch_config[channel].vol       = 0.75;
+		ch_config[channel].vol_left  = 1;
+		ch_config[channel].vol_right = 1;
 	}
 }
 

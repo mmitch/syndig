@@ -24,13 +24,13 @@
 
 #include "../thirdparty/greatest.h"
 
-BUFTYPE samples[BUFSIZE];
+BUFTYPE stereo_out[BUFSIZE * 2];
 
 static void reset_compressor() {
 	compressing = false;
 	compression = NEUTRAL;
-	for (int i=0; i<BUFSIZE; i++) {
-		samples[i] = 0;
+	for (uint16_t i = 0; i < BUFSIZE * 2; i++) {
+		stereo_out[i] = 0;
 	}
 }
 
@@ -42,8 +42,8 @@ TEST compression_of_empty_buffer_does_nothing() {
 	compress_buffer();
 
 	// then
-	for (int i=0; i<BUFSIZE; i++) {
-		ASSERT_EQ(0.0, samples[i]);
+	for (uint16_t i = 0; i < BUFSIZE; i++) {
+		ASSERT_EQ(0.0, stereo_out[i]);
 	}
 
 	ASSERT_EQ(NEUTRAL, compression);
@@ -56,16 +56,16 @@ TEST compression_does_not_kick_in_with_max_values() {
 	// given
 	reset_compressor();
 
-	samples[0] =  1.0;
-	samples[1] = -1.0;
+	stereo_out[0] =  1.0;
+	stereo_out[1] = -1.0;
 
 	// when
 	compress_buffer();
 
 	// then
-	ASSERT_EQ( 1.0, samples[0]);
-	ASSERT_EQ(-1.0, samples[1]);
-	ASSERT_EQ( 0.0, samples[2]);
+	ASSERT_EQ( 1.0, stereo_out[0]);
+	ASSERT_EQ(-1.0, stereo_out[1]);
+	ASSERT_EQ( 0.0, stereo_out[2]);
 
 	ASSERT_EQ(NEUTRAL, compression);
 	ASSERT_EQ(false,   compressing);
@@ -77,16 +77,16 @@ TEST compression_kicks_in_with_overflown_values() {
 	// given
 	reset_compressor();
 
-	samples[0] =  2.0;
-	samples[1] = -1.0;
+	stereo_out[0] =  2.0;
+	stereo_out[1] = -1.0;
 
 	// when
 	compress_buffer();
 
 	// then
-	ASSERT_EQ( 1.0, samples[0]);
-	ASSERT_EQ(-0.5, samples[1]);
-	ASSERT_EQ( 0.0, samples[2]);
+	ASSERT_EQ( 1.0, stereo_out[0]);
+	ASSERT_EQ(-0.5, stereo_out[1]);
+	ASSERT_EQ( 0.0, stereo_out[2]);
 
 	ASSERT_EQ(2.0,  compression);
 	ASSERT_EQ(true, compressing);
@@ -97,16 +97,16 @@ TEST compression_kicks_in_with_overflown_values() {
 TEST compression_normalizes_the_whole_buffer() {
 	// given
 	reset_compressor();
-	for (int i=0; i<BUFSIZE; i++) {
-		samples[i] = i;
+	for (uint16_t i = 0; i < BUFSIZE * 2; i++) {
+		stereo_out[i] = i;
 	}
 
 	// when
 	compress_buffer();
 
 	// then
-	for (int i=0; i<BUFSIZE; i++) {
-		ASSERT(samples[i] <= 1.0);
+	for (uint16_t i = 0; i < BUFSIZE * 2; i++) {
+		ASSERT(stereo_out[i] <= 1.0);
 	}
 
 	PASS();
@@ -116,12 +116,12 @@ TEST compression_continues_on_next_call_but_reduced() {
 	// given
 	reset_compressor();
 
-	samples[0] =  2.0;
-	samples[1] =  1.0;
+	stereo_out[0] =  2.0;
+	stereo_out[1] =  1.0;
 	compress_buffer();
 
-	samples[0] =  1.0;
-	samples[1] = -1.0;
+	stereo_out[0] =  1.0;
+	stereo_out[1] = -1.0;
 
 	// when
 	compress_buffer();
@@ -129,8 +129,8 @@ TEST compression_continues_on_next_call_but_reduced() {
 	// then
 	const float expected_compression = (2.0 - FALLOFF);       // == 1.99
 	const float expected_sample = 1.0 / expected_compression; // =~ 0.502513
-	ASSERT_EQ( expected_sample, samples[0]);
-	ASSERT_EQ(-expected_sample, samples[1]);
+	ASSERT_EQ( expected_sample, stereo_out[0]);
+	ASSERT_EQ(-expected_sample, stereo_out[1]);
 
 	ASSERT_EQ(expected_compression, compression);
 	ASSERT_EQ(true,                 compressing);
@@ -142,19 +142,19 @@ TEST active_compression_can_raise_compression_level_if_needed() {
 	// given
 	reset_compressor();
 
-	samples[0] =  2.0;
-	samples[1] =  1.0;
+	stereo_out[0] =  2.0;
+	stereo_out[1] =  1.0;
 	compress_buffer();
 
-	samples[0] =  4.0;
-	samples[1] = -1.0;
+	stereo_out[0] =  4.0;
+	stereo_out[1] = -1.0;
 
 	// when
 	compress_buffer();
 
 	// then
-	ASSERT_EQ( 1.0,  samples[0]);
-	ASSERT_EQ(-0.25, samples[1]);
+	ASSERT_EQ( 1.0,  stereo_out[0]);
+	ASSERT_EQ(-0.25, stereo_out[1]);
 
 	ASSERT_EQ(4.0,  compression);
 	ASSERT_EQ(true, compressing);
@@ -166,17 +166,17 @@ TEST compression_can_run_out() {
 	// given
 	reset_compressor();
 
-	samples[0] =  1.02;
+	stereo_out[0] =  1.02;
 	compress_buffer();
 	compress_buffer();
 	
-	samples[0] =  1.0;
+	stereo_out[0] =  1.0;
 
 	// when
 	compress_buffer();
 
 	// then
-	ASSERT_EQ(1.0, samples[0]);
+	ASSERT_EQ(1.0, stereo_out[0]);
 
 	ASSERT_EQ(NEUTRAL, compression);
 	ASSERT_EQ(false,   compressing);

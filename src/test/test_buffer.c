@@ -31,24 +31,48 @@ TEST init_sample_buffer_sets_buffer_to_zero() {
 	init_sample_buffer();
 
 	// then
-	for (int i=0; i<BUFSIZE; i++) {
-		ASSERT_EQ(0.0, samples[i]);
+	for (uint16_t i = 0; i < BUFSIZE * 2; i++) {
+		ASSERT_EQ(0.0, stereo_out[i]);
 	}
 
 	PASS();
 }
 
-TEST clear_sample_buffer_sets_buffer_to_zero() {
+TEST clear_mono_buffer_sets_half_buffer_to_zero() {
 	// given
 	init_sample_buffer();
-	samples[0] = 1337;
+	stereo_out[0]               = 1337;
+	stereo_out[BUFSIZE - 1]     = 27;
+	stereo_out[BUFSIZE]         = 53;
+	stereo_out[BUFSIZE * 2 - 1] = -9;
 
 	// when
-	clear_sample_buffer(samples);
+	clear_mono_buffer(stereo_out);
 
 	// then
-	for (int i=0; i<BUFSIZE; i++) {
-		ASSERT_EQ(0.0, samples[i]);
+	for (uint16_t i = 0; i < BUFSIZE; i++) {
+		ASSERT_EQ(0.0, stereo_out[i]);
+	}
+	ASSERT_EQ(53, stereo_out[BUFSIZE]);
+	ASSERT_EQ(-9, stereo_out[BUFSIZE * 2 - 1]);
+
+	PASS();
+}
+
+TEST clear_stereo_buffer_sets_whole_buffer_to_zero() {
+	// given
+	init_sample_buffer();
+	stereo_out[0]               = 1337;
+	stereo_out[BUFSIZE - 1]     = 27;
+	stereo_out[BUFSIZE]         = 53;
+	stereo_out[BUFSIZE * 2 - 1] = -9;
+
+	// when
+	clear_stereo_buffer(stereo_out);
+
+	// then
+	for (uint16_t i = 0; i < BUFSIZE * 2; i++) {
+		ASSERT_EQ(0.0, stereo_out[i]);
 	}
 
 	PASS();
@@ -64,7 +88,8 @@ int main(int argc, char **argv) {
 
 	SHUFFLE_TESTS(rand(), {
 			RUN_TEST(init_sample_buffer_sets_buffer_to_zero);
-			RUN_TEST(clear_sample_buffer_sets_buffer_to_zero);
+			RUN_TEST(clear_mono_buffer_sets_half_buffer_to_zero);
+			RUN_TEST(clear_stereo_buffer_sets_whole_buffer_to_zero);
 		});
 
 	GREATEST_MAIN_END();

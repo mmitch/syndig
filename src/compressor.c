@@ -36,12 +36,12 @@ static BUFTYPE compression = NEUTRAL;
 void compress_buffer() {
 	BUFTYPE min = 0;
 	BUFTYPE max = 0;
-	for (uint8_t i = 0; i < BUFSIZE; i++) {
-		if (samples[i] < min) {
-			min = samples[i];
+	for (uint16_t i = 0; i < BUFSIZE * 2; i++) {
+		if (stereo_out[i] < min) {
+			min = stereo_out[i];
 		}
-		if (samples[i] > max) {
-			max = samples[i];
+		if (stereo_out[i] > max) {
+			max = stereo_out[i];
 		}
 	}
 	max = MAX(max, -min);
@@ -62,8 +62,8 @@ void compress_buffer() {
 	}
 
 	if (compressing) {
-		for (uint8_t i = 0; i < BUFSIZE; i++) {
-			samples[i] /= compression;
+		for (uint16_t i = 0; i < BUFSIZE * 2; i++) {
+			stereo_out[i] /= compression;
 		}
 	}
 }

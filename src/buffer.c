@@ -20,20 +20,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdint.h>
 #include <string.h>
 
 #include "buffer.h"
 
-BUFTYPE samples[BUFSIZE];
-BUFTYPE silence[BUFSIZE];
+BUFTYPE stereo_out[BUFSIZE * 2];
+BUFTYPE silence[BUFSIZE * 2];
 
 void init_sample_buffer() {
-	for (int i = 0; i < BUFSIZE; i++) {
+	for (uint16_t i = 0; i < BUFSIZE * 2; i++) {
 		silence[i] = 0;
 	}
-	clear_sample_buffer(samples);
+	clear_stereo_buffer(stereo_out);
 }
 
-void clear_sample_buffer(BUFTYPE *buffer) {
-	memcpy(buffer, silence, BUFBYTES);
+void clear_mono_buffer(BUFTYPE *buffer) {
+	memcpy(buffer, silence, BUFBYTES_MONO);
+}
+
+void clear_stereo_buffer(BUFTYPE *buffer) {
+	memcpy(buffer, silence, BUFBYTES_STEREO);
 }

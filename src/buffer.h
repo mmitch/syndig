@@ -25,12 +25,14 @@
 
 #define BUFSIZE 128
 #define BUFTYPE float
-#define BUFBYTES (BUFSIZE * sizeof(BUFTYPE))
-extern BUFTYPE samples[BUFSIZE];
+#define BUFBYTES_MONO   (BUFSIZE * sizeof(BUFTYPE))
+#define BUFBYTES_STEREO (BUFSIZE * sizeof(BUFTYPE) * 2)
+extern BUFTYPE stereo_out[BUFSIZE * 2];
 
 #define SAMPLERATE 44100.0
 
 void init_sample_buffer();
-void clear_sample_buffer(BUFTYPE *buffer);
+void clear_mono_buffer(BUFTYPE *buffer);
+void clear_stereo_buffer(BUFTYPE *buffer);
 
 #endif

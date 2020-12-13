@@ -31,13 +31,13 @@
 
 #include "../channel.c" // contains no code, so no mock needed
 
-BUFTYPE samples[BUFSIZE];
+BUFTYPE stereo_out[BUFSIZE * 2];
 
 static void setup() {
 	init_lanes();
 
 	for (uint8_t i = 0; i < BUFSIZE; i++) {
-		samples[i] = 0;
+		stereo_out[i] = 0;
 	}
 
 	reset_buffer_mocks();

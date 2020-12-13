@@ -44,7 +44,7 @@ static void run_lane(lane_id lane) {
 	float amp = l[lane].velocity * ch_config[l[lane].channel].vol;
 	for (int i = 0; i < BUFSIZE; i++) {
 		BUFTYPE val = osc[i] * env[i] * amp;
-		samples[i] += val;
+		stereo_out[i] += val;
 	}
 }
 
@@ -64,7 +64,7 @@ void trigger_lane(channel_id channel, lane_id lane, frequency frequency, float v
 }
 
 void run_lanes() {
-	clear_sample_buffer(samples);
+	clear_mono_buffer(stereo_out);
 	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
 		if (envelope_is_running(lane)) {
 			run_lane(lane);

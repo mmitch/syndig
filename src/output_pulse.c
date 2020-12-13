@@ -51,7 +51,7 @@ static int pulse_open()
 
 static ssize_t pulse_write()
 {
-	return pa_simple_write(pulse_handle, &samples, BUFBYTES, NULL);
+	return pa_simple_write(pulse_handle, &stereo_out, BUFBYTES_MONO, NULL);
 }
 
 static int pulse_close()

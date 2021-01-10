@@ -57,6 +57,7 @@ static oscillator_type program_map[] = {
 	TRIANGLE,
 	SINE,
 	NOISE,
+	IMPULSE,
 	WAVELET_SQUARE_25,
 	WAVELET_SQUARE_50,
 	WAVELET_SAW_DOWN,

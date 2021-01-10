@@ -30,14 +30,15 @@ Oscillator types can be selected via Program Change messages:
 - 003: triangle
 - 004: sine
 - 005: noise
-- 006: square wavelet 25% duty
-- 007: square wavelet 50% duty
-- 008: sawtooth down wavelet
-- 009: sawtooth up wavelet
-- 010: triangle wavelet
-- 011: sine wavelet
-- 012: noise wavelet
-- 013: double pulse wavelet
+- 006: impulse
+- 007: square wavelet 25% duty
+- 008: square wavelet 50% duty
+- 009: sawtooth down wavelet
+- 010: sawtooth up wavelet
+- 011: triangle wavelet
+- 012: sine wavelet
+- 013: noise wavelet
+- 014: double pulse wavelet
 
 Wavelets are small PCM samples with a length of 8 samples.  
 Unmapped programs wrap to 000.

@@ -197,6 +197,26 @@ BUFTYPE* run_oscillator(lane_id lane) {
 		}
 		break;
 
+	case IMPULSE:
+	{
+		static float last_impulse;
+		float wavelength_half = wavelength / 2.0;
+		for (int i = 0; i < BUFSIZE_MONO; i++) {
+			phase++;
+			while (phase >= wavelength) {
+				phase -= wavelength;
+			}
+			float impulse = (phase < wavelength_half) ? 1 : -1;
+			if (impulse != last_impulse) {
+				last_impulse = impulse;
+				buffer[i] = impulse;
+			} else {
+				buffer[i] = 0;
+			}
+		}
+		break;
+	}
+
 	case NOISE:
 		phase = sample_and_hold(o, random_nextval);
 		break;

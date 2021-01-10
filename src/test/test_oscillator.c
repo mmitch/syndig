@@ -110,8 +110,6 @@ TEST run_oscillator_square_at_half_rate() {
 	PASS();
 }
 
-#include "../debug.h"
-
 TEST run_oscillator_wavelet_square_50_at_eigth_rate() {
 	// given
 	setup();
@@ -134,6 +132,41 @@ TEST run_oscillator_wavelet_square_50_at_eigth_rate() {
 	PASS();
 }
 
+TEST run_oscillator_impulse_at_eigth_rate() {
+	// given
+	setup();
+
+	lane_id    lane    = 3;
+	channel_id channel = 7;
+	set_oscillator_type(channel, IMPULSE);
+	set_oscillator_channel(lane, channel);
+	set_oscillator_frequency(lane, SAMPLERATE / 8.0);
+
+	// when
+	BUFTYPE *buffer = run_oscillator(lane);
+
+	// then
+
+	ASSERT_EQ(1.0, buffer[0]); // first sample ever triggers impulse; that is 1 sample late
+
+	for (uint8_t i = 1; i < BUFSIZE_MONO; i++) {
+		float expected;
+		switch (i % 8) {
+		case 3:
+			expected = -1;
+			break;
+		case 7:
+			expected = 1;
+			break;
+		default:
+			expected = 0;
+		}
+		ASSERT_EQ(expected, buffer[i]);
+	}
+
+	PASS();
+}
+
 GREATEST_MAIN_DEFS();
 
 int main(int argc, char **argv) {
@@ -148,6 +181,7 @@ int main(int argc, char **argv) {
 			RUN_TEST(set_oscillator_type_affects_only_given_channel);
 			RUN_TEST(run_oscillator_square_at_half_rate);
 			RUN_TEST(run_oscillator_wavelet_square_50_at_eigth_rate);
+			RUN_TEST(run_oscillator_impulse_at_eigth_rate);
 		});
 
 	GREATEST_MAIN_END();

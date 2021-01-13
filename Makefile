@@ -30,8 +30,8 @@ LDFLAGS += $(shell pkg-config --libs $(pkgconfigs)) -lm
 # auto-optimize only when no other optimization level is given
 # this enables -O0 to be set for coverage builds
 ifeq (,$(findstring -O,$(CFLAGS)))
-	CFLAGS  += -O3 -fPIC
-	LDFLAGS += -fPIC
+  CFLAGS  += -O3 -fPIC
+  LDFLAGS += -fPIC
 endif
 
 srcdir   := ./src

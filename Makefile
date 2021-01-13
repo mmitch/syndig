@@ -25,6 +25,10 @@ pkgconfigs := libpulse-simple alsa
 warnings   := -Wall -Wextra -Wpedantic -Werror
 libs       := -lm
 
+ifeq ($(shell command -v pkg-config),)
+  $(error pkg-config not found)
+endif
+
 CFLAGS  += $(shell pkg-config --cflags $(pkgconfigs)) $(warnings)
 LDFLAGS += $(shell pkg-config --libs $(pkgconfigs)) $(libs)
 

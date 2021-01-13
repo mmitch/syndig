@@ -23,9 +23,10 @@ SHELL := bash
 
 pkgconfigs := libpulse-simple alsa
 warnings   := -Wall -Wextra -Wpedantic -Werror
+libs       := -lm
 
 CFLAGS  += $(shell pkg-config --cflags $(pkgconfigs)) $(warnings)
-LDFLAGS += $(shell pkg-config --libs $(pkgconfigs)) -lm
+LDFLAGS += $(shell pkg-config --libs $(pkgconfigs)) $(libs)
 
 # auto-optimize only when no other optimization level is given
 # this enables -O0 to be set for coverage builds

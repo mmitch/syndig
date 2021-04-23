@@ -1,3 +1,4 @@
+---
 # This workflow will determine the code coverage of a build and upload it to CodeCov.io
 
 name: Code Coverage

@@ -1,7 +1,7 @@
 /*
  * input_alsa.c - ALSA MIDI input driver
  *
- * Copyright (C) 2020  Christian Garbs <mitch@cgarbs.de>
+ * Copyright (C) 2020-2021  Christian Garbs <mitch@cgarbs.de>
  * Licensed under GNU GPL v3 (or later)
  *
  * This file is part of syndig, a simple software synthesizer written in C.
@@ -124,12 +124,12 @@ static int alsa_close()
 
 	if ((err = snd_seq_delete_simple_port(sequencer, port)) != 0) {
 		fprintf(stderr, "alsa: could not close sequencer port: %s\n", snd_strerror(err));
-		return 0;
+		return 1;
 	}
 
 	if ((err = snd_seq_close(sequencer)) != 0) {
 		fprintf(stderr, "alsa: could not close sequencer: %s\n", snd_strerror(err));
-		return 0;
+		return 1;
 	}
 
 	return 0;

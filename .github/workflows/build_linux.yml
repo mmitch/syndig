@@ -1,4 +1,4 @@
-# This workflow will build and test gbsplay in various configurations on Linux.
+# This workflow will build and test syndig in various configurations on Linux.
 
 name: Linux Build
 

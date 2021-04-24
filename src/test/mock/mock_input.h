@@ -25,7 +25,7 @@
 #include "../../thirdparty/fff.h"
 DEFINE_FFF_GLOBALS
 
-FAKE_VALUE_FUNC0(midi_event *, read_midi)
+FAKE_VALUE_FUNC(midi_event *, read_midi)
 
 static midi_event* events[] = { NULL, NULL };
 

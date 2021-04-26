@@ -29,6 +29,10 @@ ifeq ($(shell command -v pkg-config),)
   $(error pkg-config not found)
 endif
 
+ifneq ($(shell pkg-config --print-errors --short-errors --exists $(pkgconfigs) || echo failed),)
+  $(error missing packages, check installation prerequisites)
+endif
+
 CFLAGS  += $(shell pkg-config --cflags $(pkgconfigs)) $(warnings)
 LDFLAGS += $(shell pkg-config --libs $(pkgconfigs)) $(libs)
 

@@ -13,7 +13,7 @@
 - [X] switch to mono output as long as there is no stereo data
 - [X] find a better name than /synth/
 
-* [13/24] features
+* [13/25] features
 
 - [ ] variable sample rate
 - [ ] refactor duplicated code in error handling (in input and output)
@@ -49,3 +49,6 @@
   - [ ] configurable low pass filter (map to brightness?)
   - [ ] configurable high pass filter (map to ???)
   - [ ] filter envelopes
+- [ ] prevent DC offsets on on non-50% pulsewidth square waved by spreading energy
+  - make the 25% wavelet 'flatter' on the 75% part
+  - think of this if the pulsewidth modulation feature gets implemented

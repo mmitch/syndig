@@ -49,7 +49,7 @@ static void poly_history_set_newest(lane_id newest) {
 	}
 	if (found) {
 		// move existing entry to front of queue
-		bcopy(&poly_history[0], &poly_history[1], sizeof(lane_id) * found);
+		memmove(&poly_history[1], &poly_history[0], sizeof(lane_id) * found);
 		poly_history[0] = newest;
 	}
 }

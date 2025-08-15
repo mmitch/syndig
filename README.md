@@ -1,9 +1,9 @@
 a simple software synthesizer in C
 ==================================
 
-[![Code coverage status](https://codecov.io/github/mmitch/syndig/coverage.svg?branch=master)](https://codecov.io/github/mmitch/syndig?branch=master)
-[![Linux Build status](https://github.com/mmitch/syndig/workflows/Linux%20Build/badge.svg?branch=master)](https://github.com/mmitch/syndig/actions?query=workflow%3A%22Linux+Build%22)
-[![CodeQL status](https://github.com/mmitch/syndig/workflows/CodeQL/badge.svg?branch=master)](https://github.com/mmitch/syndig/actions?query=workflow%3ACodeQL)
+[![Code coverage status](https://codecov.io/github/mmitch/syndig/coverage.svg)](https://codecov.io/github/mmitch/syndig?branch=master)
+[![Linux Build status](https://github.com/mmitch/syndig/workflows/Linux%20Build/badge.svg)](https://github.com/mmitch/syndig/actions?query=workflow%3A%22Linux+Build%22)
+[![CodeQL status](https://github.com/mmitch/syndig/workflows/CodeQL/badge.svg)](https://github.com/mmitch/syndig/actions?query=workflow%3ACodeQL)
 
 I started to make some music using (analog) synths, but I only have
 monophonic synthesizers and a drum machine.  I still need something

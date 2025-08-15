@@ -30,7 +30,7 @@ FAKE_VOID_FUNC(set_oscillator_channel, lane_id, channel_id)
 FAKE_VOID_FUNC(set_oscillator_frequency, lane_id, frequency)
 FAKE_VALUE_FUNC(BUFTYPE*, run_oscillator, lane_id)
 
-void reset_oscillator_mocks() {
+void reset_oscillator_mocks(void) {
 	RESET_FAKE(set_oscillator_type)
 	RESET_FAKE(set_oscillator_channel)
 	RESET_FAKE(set_oscillator_frequency)

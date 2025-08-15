@@ -28,14 +28,14 @@
 
 #include "../channel.c" // contains no code, so no mock needed
 
-static void setup() {
+static void setup(void) {
 	init_oscillators();
 
 	reset_envelope_mocks();
 	FFF_RESET_HISTORY()
 }
 
-TEST init_oscillators_resets_all_oscillators() {
+TEST init_oscillators_resets_all_oscillators(void) {
 	// given
 	setup();
 
@@ -54,7 +54,7 @@ TEST init_oscillators_resets_all_oscillators() {
 	PASS();
 }
 
-TEST init_oscillators_resets_oscillators_in_channel_configuration() {
+TEST init_oscillators_resets_oscillators_in_channel_configuration(void) {
 	// given
 	setup();
 
@@ -72,7 +72,7 @@ TEST init_oscillators_resets_oscillators_in_channel_configuration() {
 	PASS();
 }
 
-TEST set_oscillator_type_affects_only_given_channel() {
+TEST set_oscillator_type_affects_only_given_channel(void) {
 	// given
 	setup();
 
@@ -88,7 +88,7 @@ TEST set_oscillator_type_affects_only_given_channel() {
 	PASS();
 }
 
-TEST run_oscillator_square_at_half_rate() {
+TEST run_oscillator_square_at_half_rate(void) {
 	// given
 	setup();
 
@@ -110,7 +110,7 @@ TEST run_oscillator_square_at_half_rate() {
 	PASS();
 }
 
-TEST run_oscillator_wavelet_square_50_at_eigth_rate() {
+TEST run_oscillator_wavelet_square_50_at_eigth_rate(void) {
 	// given
 	setup();
 
@@ -132,7 +132,7 @@ TEST run_oscillator_wavelet_square_50_at_eigth_rate() {
 	PASS();
 }
 
-TEST run_oscillator_impulse_at_eigth_rate() {
+TEST run_oscillator_impulse_at_eigth_rate(void) {
 	// given
 	setup();
 

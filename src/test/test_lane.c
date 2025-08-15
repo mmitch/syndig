@@ -33,7 +33,7 @@
 
 BUFTYPE stereo_out[BUFSIZE_STEREO];
 
-static void setup() {
+static void setup(void) {
 	init_lanes();
 
 	for (uint16_t i = 0; i < BUFSIZE_STEREO; i++) {
@@ -47,7 +47,7 @@ static void setup() {
 	FFF_RESET_HISTORY()
 }
 
-TEST init_lanes_resets_all_lanes() {
+TEST init_lanes_resets_all_lanes(void) {
 	// given
 	setup();
 
@@ -66,7 +66,7 @@ TEST init_lanes_resets_all_lanes() {
 	PASS();
 }
 
-TEST trigger_lane_sets_velocity_and_channel() {
+TEST trigger_lane_sets_velocity_and_channel(void) {
 	// given
 	setup();
 
@@ -85,7 +85,7 @@ TEST trigger_lane_sets_velocity_and_channel() {
 	PASS();
 }
 
-TEST trigger_lane_configures_oscillator() {
+TEST trigger_lane_configures_oscillator(void) {
 	// given
 	setup();
 
@@ -109,7 +109,7 @@ TEST trigger_lane_configures_oscillator() {
 	PASS();
 }
 
-TEST trigger_lane_triggers_envelope() {
+TEST trigger_lane_triggers_envelope(void) {
 	// given
 	setup();
 

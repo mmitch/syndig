@@ -76,6 +76,6 @@ typedef struct {
 	midi_close_fn close;
 } midi_input;
 
-midi_input* get_midi_input();
+midi_input* get_midi_input(void);
 
 #endif

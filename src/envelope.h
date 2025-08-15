@@ -35,7 +35,7 @@ typedef struct {
 	float release_rate;
 } adsr;
 
-void  init_envelopes();
+void  init_envelopes(void);
 void  set_envelope_attack(channel_id channel, uint16_t attack_ms);
 void  set_envelope_decay(channel_id channel, uint16_t decay_ms);
 void  set_envelope_sustain(channel_id channel, float sustain);

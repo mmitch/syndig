@@ -38,11 +38,11 @@ typedef struct {
 	char*            name;
 } polyphony_mode;
 
-void init_polyphony();
+void init_polyphony(void);
 void set_polyphony_mode(polyphony_mode new_mode);
 void play_note(channel_id channel, uint8_t note, float velocity);
 void stop_note(channel_id channel, uint8_t note);
-void stop_all_notes();
-void stop_all_sound();
+void stop_all_notes(void);
+void stop_all_sound(void);
 
 #endif

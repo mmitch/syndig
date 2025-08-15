@@ -32,7 +32,7 @@ extern BUFTYPE stereo_out[BUFSIZE_STEREO];
 
 #define SAMPLERATE 44100.0
 
-void init_buffer();
+void init_buffer(void);
 void clear_buffer(BUFTYPE *buffer);
 
 #endif

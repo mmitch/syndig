@@ -26,8 +26,8 @@
 #include "common.h"
 #include "channel.h"
 
-void init_lanes();
-void run_lanes();
+void init_lanes(void);
+void run_lanes(void);
 void trigger_lane(channel_id channel, lane_id lane, frequency frequency, float velocity);
 
 #endif

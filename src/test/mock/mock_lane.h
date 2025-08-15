@@ -27,6 +27,6 @@ DEFINE_FFF_GLOBALS
 
 FAKE_VOID_FUNC(trigger_lane, channel_id, lane_id, frequency, float)
 
-void reset_lane_mocks() {
+void reset_lane_mocks(void) {
 	RESET_FAKE(trigger_lane)
 }

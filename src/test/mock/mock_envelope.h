@@ -36,7 +36,7 @@ FAKE_VALUE_FUNC(float, envelope_nextval, lane_id)
 FAKE_VALUE_FUNC(bool, envelope_is_running, lane_id)
 FAKE_VALUE_FUNC(BUFTYPE*, run_envelope, lane_id)
 
-void reset_envelope_mocks() {
+void reset_envelope_mocks(void) {
 	RESET_FAKE(set_envelope_attack)
 	RESET_FAKE(set_envelope_release)
 	RESET_FAKE(set_envelope_decay)

@@ -56,7 +56,7 @@ static void run_lane(lane_id lane) {
 	}
 }
 
-void init_lanes() {
+void init_lanes(void) {
 	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
 		l[lane].velocity = 0;
 		l[lane].channel  = 0;
@@ -71,7 +71,7 @@ void trigger_lane(channel_id channel, lane_id lane, frequency frequency, float v
 	trigger_envelope(lane, channel);
 }
 
-void run_lanes() {
+void run_lanes(void) {
 	clear_buffer(stereo_out);
 	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
 		if (envelope_is_running(lane)) {

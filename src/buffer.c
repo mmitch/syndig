@@ -28,7 +28,7 @@
 BUFTYPE stereo_out[BUFSIZE_STEREO];
 BUFTYPE silence[BUFSIZE_STEREO];
 
-void init_buffer() {
+void init_buffer(void) {
 	for (uint16_t i = 0; i < BUFSIZE_STEREO; i++) {
 		silence[i] = 0;
 	}

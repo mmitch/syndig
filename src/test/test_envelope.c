@@ -29,11 +29,11 @@
 #define RATE(x) ( 1.0 / MS_TO_TICKS((x)) )
 #define ASSERT_RATE_EQ(x, y) ASSERT_IN_RANGE( RATE(x), (y), 0.0001 )
 
-static void setup() {
+static void setup(void) {
 	init_envelopes();
 }
 
-TEST init_envelopes_resets_lane_envelopes() {
+TEST init_envelopes_resets_lane_envelopes(void) {
 	// given
 	setup();
 
@@ -54,7 +54,7 @@ TEST init_envelopes_resets_lane_envelopes() {
 	PASS();
 }
 
-TEST init_envelopes_resets_channel_envelopes() {
+TEST init_envelopes_resets_channel_envelopes(void) {
 	// given
 	setup();
 
@@ -77,7 +77,7 @@ TEST init_envelopes_resets_channel_envelopes() {
 	PASS();
 }
 
-TEST trigger_envelope_sets_channel_and_state() {
+TEST trigger_envelope_sets_channel_and_state(void) {
 	// given
 	setup();
 
@@ -94,7 +94,7 @@ TEST trigger_envelope_sets_channel_and_state() {
 	PASS();
 }
 
-TEST release_envelope_sets_state() {
+TEST release_envelope_sets_state(void) {
 	// given
 	setup();
 
@@ -109,7 +109,7 @@ TEST release_envelope_sets_state() {
 	PASS();
 }
 
-TEST stop_envelope_sets_state() {
+TEST stop_envelope_sets_state(void) {
 	// given
 	setup();
 
@@ -126,7 +126,7 @@ TEST stop_envelope_sets_state() {
 	PASS();
 }
 
-TEST envelope_is_running_checks_state() {
+TEST envelope_is_running_checks_state(void) {
 	// given
 	setup();
 
@@ -147,7 +147,7 @@ TEST envelope_is_running_checks_state() {
 }
 
 
-TEST set_envelope_sustain_updates_channel_sustain() {
+TEST set_envelope_sustain_updates_channel_sustain(void) {
 	// given
 	setup();
 

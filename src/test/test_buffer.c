@@ -24,7 +24,7 @@
 
 #include "../thirdparty/greatest.h"
 
-TEST init_sample_buffer_sets_buffer_to_zero() {
+TEST init_sample_buffer_sets_buffer_to_zero(void) {
 	// given
 
 	// when
@@ -38,7 +38,7 @@ TEST init_sample_buffer_sets_buffer_to_zero() {
 	PASS();
 }
 
-TEST clear_buffer_sets_buffer_to_zero() {
+TEST clear_buffer_sets_buffer_to_zero(void) {
 	// given
 	init_buffer();
 	stereo_out[0]                  = 1337;

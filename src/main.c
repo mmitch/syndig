@@ -32,7 +32,7 @@
 #include "output.h"
 #include "polyphony.h"
 
-int main() {
+int main(void) {
 	sound_output *sound = NULL;
 	midi_input *midi = NULL;
 

@@ -33,7 +33,7 @@
 
 static midi_event event;
 
-static void setup() {
+static void setup(void) {
 	init_midi();
 
 	reset_envelope_mocks();
@@ -44,7 +44,7 @@ static void setup() {
 	FFF_RESET_HISTORY()
 }
 
-TEST init_midi_sets_channel_volumes() {
+TEST init_midi_sets_channel_volumes(void) {
 	// given
 	setup();
 
@@ -61,7 +61,7 @@ TEST init_midi_sets_channel_volumes() {
 	PASS();
 }
 
-TEST init_midi_sets_channel_panning() {
+TEST init_midi_sets_channel_panning(void) {
 	// given
 	setup();
 
@@ -80,7 +80,7 @@ TEST init_midi_sets_channel_panning() {
 	PASS();
 }
 
-TEST empty_event_does_nothing() {
+TEST empty_event_does_nothing(void) {
 	// given
 	setup();
 
@@ -95,7 +95,7 @@ TEST empty_event_does_nothing() {
 	PASS();
 }
 
-TEST note_on_is_passed_to_polyphony() {
+TEST note_on_is_passed_to_polyphony(void) {
 	// given
 	setup();
 
@@ -120,7 +120,7 @@ TEST note_on_is_passed_to_polyphony() {
 	PASS();
 }
 
-TEST note_off_is_passed_to_polyphony() {
+TEST note_off_is_passed_to_polyphony(void) {
 	// given
 	setup();
 
@@ -143,7 +143,7 @@ TEST note_off_is_passed_to_polyphony() {
 	PASS();
 }
 
-TEST program_change_is_passed_to_oscillator() {
+TEST program_change_is_passed_to_oscillator(void) {
 	// given
 	setup();
 
@@ -166,7 +166,7 @@ TEST program_change_is_passed_to_oscillator() {
 	PASS();
 }
 
-TEST program_change_unmapped_values_map_to_square() {
+TEST program_change_unmapped_values_map_to_square(void) {
 	// given
 	setup();
 
@@ -189,7 +189,7 @@ TEST program_change_unmapped_values_map_to_square() {
 	PASS();
 }
 
-TEST controller_3_sets_polyphony_mode() {
+TEST controller_3_sets_polyphony_mode(void) {
 	// given
 	setup();
 
@@ -211,7 +211,7 @@ TEST controller_3_sets_polyphony_mode() {
 	PASS();
 }
 
-TEST controller_3_unmapped_values_map_to_kill_oldest() {
+TEST controller_3_unmapped_values_map_to_kill_oldest(void) {
 	// given
 	setup();
 
@@ -233,7 +233,7 @@ TEST controller_3_unmapped_values_map_to_kill_oldest() {
 	PASS();
 }
 
-TEST controller_7_sets_channel_volume() {
+TEST controller_7_sets_channel_volume(void) {
 	// given
 	setup();
 
@@ -255,7 +255,7 @@ TEST controller_7_sets_channel_volume() {
 	PASS();
 }
 
-TEST controller_10_sets_channel_pan_hard_left() {
+TEST controller_10_sets_channel_pan_hard_left(void) {
 	// given
 	setup();
 
@@ -278,7 +278,7 @@ TEST controller_10_sets_channel_pan_hard_left() {
 	PASS();
 }
 
-TEST controller_10_sets_channel_pan_center() {
+TEST controller_10_sets_channel_pan_center(void) {
 	// given
 	setup();
 
@@ -301,7 +301,7 @@ TEST controller_10_sets_channel_pan_center() {
 	PASS();
 }
 
-TEST controller_10_sets_channel_pan_right() {
+TEST controller_10_sets_channel_pan_right(void) {
 	// given
 	setup();
 
@@ -324,7 +324,7 @@ TEST controller_10_sets_channel_pan_right() {
 	PASS();
 }
 
-TEST controller_120_stops_all_sound() {
+TEST controller_120_stops_all_sound(void) {
 	// given
 	setup();
 
@@ -344,7 +344,7 @@ TEST controller_120_stops_all_sound() {
 	PASS();
 }
 
-TEST controller_123_stops_all_notes() {
+TEST controller_123_stops_all_notes(void) {
 	// given
 	setup();
 

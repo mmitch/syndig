@@ -49,7 +49,7 @@ typedef struct {
 
 static envelope env[POLYPHONY];
 
-void init_envelopes() {
+void init_envelopes(void) {
 	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
 		env[lane].state    = OFF;
 		env[lane].value    = 0;

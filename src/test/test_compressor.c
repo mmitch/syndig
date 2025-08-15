@@ -26,7 +26,7 @@
 
 BUFTYPE stereo_out[BUFSIZE_STEREO];
 
-static void reset_compressor() {
+static void reset_compressor(void) {
 	compressing = false;
 	compression = NEUTRAL;
 	for (uint16_t i = 0; i < BUFSIZE_STEREO; i++) {
@@ -34,7 +34,7 @@ static void reset_compressor() {
 	}
 }
 
-TEST compression_of_empty_buffer_does_nothing() {
+TEST compression_of_empty_buffer_does_nothing(void) {
 	// given
 	reset_compressor();
 
@@ -52,7 +52,7 @@ TEST compression_of_empty_buffer_does_nothing() {
 	PASS();
 }
 
-TEST compression_does_not_kick_in_with_max_values() {
+TEST compression_does_not_kick_in_with_max_values(void) {
 	// given
 	reset_compressor();
 
@@ -73,7 +73,7 @@ TEST compression_does_not_kick_in_with_max_values() {
 	PASS();
 }
 
-TEST compression_kicks_in_with_overflown_values() {
+TEST compression_kicks_in_with_overflown_values(void) {
 	// given
 	reset_compressor();
 
@@ -94,7 +94,7 @@ TEST compression_kicks_in_with_overflown_values() {
 	PASS();
 }
 
-TEST compression_normalizes_the_whole_buffer() {
+TEST compression_normalizes_the_whole_buffer(void) {
 	// given
 	reset_compressor();
 	for (uint16_t i = 0; i < BUFSIZE_STEREO; i++) {
@@ -112,7 +112,7 @@ TEST compression_normalizes_the_whole_buffer() {
 	PASS();
 }
 
-TEST compression_continues_on_next_call_but_reduced() {
+TEST compression_continues_on_next_call_but_reduced(void) {
 	// given
 	reset_compressor();
 
@@ -138,7 +138,7 @@ TEST compression_continues_on_next_call_but_reduced() {
 	PASS();
 }
 
-TEST active_compression_can_raise_compression_level_if_needed() {
+TEST active_compression_can_raise_compression_level_if_needed(void) {
 	// given
 	reset_compressor();
 
@@ -162,7 +162,7 @@ TEST active_compression_can_raise_compression_level_if_needed() {
 	PASS();
 }
 
-TEST compression_can_run_out() {
+TEST compression_can_run_out(void) {
 	// given
 	reset_compressor();
 

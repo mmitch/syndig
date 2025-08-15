@@ -27,6 +27,6 @@ DEFINE_FFF_GLOBALS
 
 FAKE_VOID_FUNC(clear_buffer, BUFTYPE*)
 
-void reset_buffer_mocks() {
+void reset_buffer_mocks(void) {
 	RESET_FAKE(clear_buffer)
 }

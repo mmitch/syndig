@@ -27,6 +27,6 @@ DEFINE_FFF_GLOBALS
 
 FAKE_VOID_FUNC0(compress_buffer)
 
-void reset_compressor_mocks() {
+void reset_compressor_mocks(void) {
 	RESET_FAKE(compress_buffer)
 }

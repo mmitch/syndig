@@ -54,11 +54,11 @@ static void poly_history_set_newest(lane_id newest) {
 	}
 }
 
-static lane_id poly_history_get_oldest() {
+static lane_id poly_history_get_oldest(void) {
 	return poly_history[POLYPHONY-1];
 }
 
-static lane_id find_free_lane() {
+static lane_id find_free_lane(void) {
 	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
 		if (! envelope_is_running(lane)) {
 			return lane;
@@ -128,7 +128,7 @@ static lane_id find_lane_for(channel_id channel, uint8_t note) {
 	return lane;
 }
 
-void init_polyphony() {
+void init_polyphony(void) {
 	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
 		poly_history[lane] = lane;
 		last_note[lane] = NO_NOTE;
@@ -156,7 +156,7 @@ void stop_note(channel_id channel, uint8_t note) {
 	}
 }
 
-void stop_all_notes() {
+void stop_all_notes(void) {
 	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
 		if (envelope_is_running(lane)) {
 			release_envelope(lane);
@@ -164,7 +164,7 @@ void stop_all_notes() {
 	}
 }
 
-void stop_all_sound() {
+void stop_all_sound(void) {
 	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
 		if (envelope_is_running(lane)) {
 			stop_envelope(lane);

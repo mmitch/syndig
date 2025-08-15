@@ -68,7 +68,7 @@ static oscillator_type program_map[] = {
 	WAVELET_DOUBLE_PULSE,
 };
 
-void init_midi() {
+void init_midi(void) {
 	for (channel_id channel = 0; channel < CHANNELS; channel++) {
 		ch_config[channel].vol       = 0.75;
 		ch_config[channel].vol_left  = 1;

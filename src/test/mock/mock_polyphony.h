@@ -32,7 +32,7 @@ FAKE_VOID_FUNC0(stop_all_sound)
 FAKE_VOID_FUNC(set_polyphony_mode, polyphony_mode)
 FAKE_VOID_FUNC(change_oscillator_type, channel_id, oscillator_type)
 	
-void reset_polyphony_mocks() {
+void reset_polyphony_mocks(void) {
 	RESET_FAKE(play_note)
 	RESET_FAKE(stop_note)
 	RESET_FAKE(stop_all_notes)

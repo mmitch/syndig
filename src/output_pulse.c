@@ -32,7 +32,7 @@
 
 static pa_simple *pulse_handle;
 
-static int pulse_open()
+static int pulse_open(void)
 {
 	pa_sample_spec pulse_spec;
 	pulse_spec.format = PA_SAMPLE_FLOAT32;
@@ -49,12 +49,12 @@ static int pulse_open()
 	return 0;
 }
 
-static ssize_t pulse_write()
+static ssize_t pulse_write(void)
 {
 	return pa_simple_write(pulse_handle, &stereo_out, BUFBYTES_STEREO, NULL);
 }
 
-static int pulse_close()
+static int pulse_close(void)
 {
 	pa_simple_free(pulse_handle);
 	return 0;

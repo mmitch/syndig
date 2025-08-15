@@ -24,6 +24,6 @@
 
 extern sound_output pulse_output;
 
-sound_output* get_sound_output() {
+sound_output* get_sound_output(void) {
 	return &pulse_output;
 }

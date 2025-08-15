@@ -24,6 +24,6 @@
 
 extern midi_input alsa_input;
 
-midi_input* get_midi_input() {
+midi_input* get_midi_input(void) {
 	return &alsa_input;
 }

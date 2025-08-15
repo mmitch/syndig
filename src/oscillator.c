@@ -260,7 +260,7 @@ BUFTYPE* run_oscillator(lane_id lane) {
 	return buffer;
 }
 
-void init_oscillators() {
+void init_oscillators(void) {
 	for (lane_id lane = 0; lane < POLYPHONY; lane++) {
 		osc[lane].wavelength = 1;
 		set_oscillator_frequency(lane, 440);

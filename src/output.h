@@ -35,6 +35,6 @@ typedef const struct {
 	sound_close_fn close;
 } sound_output;
 
-sound_output* get_sound_output();
+sound_output* get_sound_output(void);
 
 #endif

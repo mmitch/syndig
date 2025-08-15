@@ -44,7 +44,7 @@ typedef enum {
 	WAVELET_DOUBLE_PULSE,
 } oscillator_type;
 
-void init_oscillators();
+void init_oscillators(void);
 void set_oscillator_frequency(lane_id id, frequency new_frequency);
 void set_oscillator_channel(lane_id id, channel_id channel);
 void set_oscillator_type(channel_id channel, oscillator_type type);

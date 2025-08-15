@@ -26,7 +26,7 @@
 
 #define TOLERANCE 0.00000000001
 
-TEST test_some_notes() {
+TEST test_some_notes(void) {
 	ASSERT_IN_RANGE(  32.7031956626, hertz[ 24], TOLERANCE);
 	ASSERT_IN_RANGE( 110.0,          hertz[ 45], TOLERANCE);
 	ASSERT_IN_RANGE( 440.0,          hertz[ 69], TOLERANCE);

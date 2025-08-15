@@ -38,6 +38,6 @@ void mock_incoming_midi_event(midi_event *event) {
 	SET_RETURN_SEQ(read_midi, events, 2)
 }
 
-void reset_input_mocks() {
+void reset_input_mocks(void) {
 	RESET_FAKE(read_midi)
 }

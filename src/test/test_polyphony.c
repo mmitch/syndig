@@ -30,7 +30,7 @@
 
 const double hertz[128] = { 111.0, 222.0, 333.0 };
 
-static void setup() {
+static void setup(void) {
 	reset_envelope_mocks();
 	reset_lane_mocks();
 	reset_oscillator_mocks();
@@ -38,7 +38,7 @@ static void setup() {
 	FFF_RESET_HISTORY()
 }
 
-TEST play_notes_plays_on_first_lane() {
+TEST play_notes_plays_on_first_lane(void) {
 	// given
 	setup();
 
@@ -58,7 +58,7 @@ TEST play_notes_plays_on_first_lane() {
 	PASS();
 }
 
-TEST init_polyphony_resets_last_notes() {
+TEST init_polyphony_resets_last_notes(void) {
 	// given
 	setup();
 
@@ -73,7 +73,7 @@ TEST init_polyphony_resets_last_notes() {
 	PASS();
 }
 
-TEST init_polyphony_resets_poly_history() {
+TEST init_polyphony_resets_poly_history(void) {
 	// given
 	setup();
 
@@ -88,7 +88,7 @@ TEST init_polyphony_resets_poly_history() {
 	PASS();
 }
 
-TEST stop_all_notes_sets_all_running_envelopes_to_release() {
+TEST stop_all_notes_sets_all_running_envelopes_to_release(void) {
 	// given
 	setup();
 	bool envelope_status[] = { true, false, false, true, false };
@@ -105,7 +105,7 @@ TEST stop_all_notes_sets_all_running_envelopes_to_release() {
 	PASS();
 }
 
-TEST stop_all_sound_sets_all_running_envelopes_to_off() {
+TEST stop_all_sound_sets_all_running_envelopes_to_off(void) {
 	// given
 	setup();
 	bool envelope_status[] = { false, true, true, false };

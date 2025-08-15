@@ -32,7 +32,7 @@ static int port;
 
 static midi_event event;
 
-static int alsa_open()
+static int alsa_open(void)
 {
 	int err;
 	
@@ -68,7 +68,7 @@ static int alsa_open()
 	return 0;
 }
 
-static midi_event* alsa_read()
+static midi_event* alsa_read(void)
 {
 	int bytes_left;
 	snd_seq_event_t *alsa_event;
@@ -118,7 +118,7 @@ static midi_event* alsa_read()
 	return NULL;
 }
 
-static int alsa_close()
+static int alsa_close(void)
 {
 	int err;
 
